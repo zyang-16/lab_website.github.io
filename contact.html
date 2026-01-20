@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --white: #FFFFFF;
+            --light-bg: #F9FAFB;
+            --text-main: #1d1d1f;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-main);
+            line-height: 1.7;
+            background-color: var(--light-bg);
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; color: var(--academic-blue); }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem; font-weight: 800; color: #000; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 --- */
+        .contact-hero {
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover; background-position: center bottom; background-repeat: no-repeat;
+            height: 500px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--white); padding: 0 2rem; text-align: center;
+        }
+        /* 强制白色字体 + 阴影 */
+        .contact-title { 
+            color: #ffffff !important; 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            margin-bottom: 1.5rem; 
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+        }
+        .contact-subtitle { 
+            color: #ffffff !important; 
+            font-size: 1.3rem; 
+            opacity: 1; 
+            font-weight: 300; 
+            max-width: 800px; 
+            line-height: 1.6; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* --- Contact Layout --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .contact-section { padding: 5rem 0; display: grid; grid-template-columns: 1.2fr 1fr; gap: 60px; }
+
+        /* 左侧：表单 */
+        .contact-form-card {
+            background: #fff; padding: 3rem; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 1px solid #eee;
+        }
+        .form-heading { font-size: 1.8rem; margin-bottom: 1rem; color: var(--academic-blue); }
+        .form-desc { margin-bottom: 2rem; color: #666; }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; font-weight: 600; margin-bottom: 8px; color: #333; }
+        .form-input, .form-textarea {
+            width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 1rem; font-family: inherit; transition: border-color 0.3s;
+        }
+        .form-input:focus, .form-textarea:focus {
+            outline: none; border-color: var(--tsinghua-purple); box-shadow: 0 0 0 3px rgba(102,0,153,0.1);
+        }
+        .form-textarea { height: 150px; resize: vertical; }
+        
+        .btn-submit {
+            background: var(--tsinghua-purple); color: #fff; border: none; padding: 14px 30px;
+            border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 1rem; transition: background 0.3s;
+        }
+        .btn-submit:hover { background: #4b0070; }
+
+        /* 右侧：信息与地图 */
+        .info-card { display: flex; flex-direction: column; gap: 30px; }
+        
+        .info-box {
+            background: #fff; padding: 2rem; border-radius: 12px; border: 1px solid #eee;
+        }
+        .info-item { display: flex; gap: 15px; margin-bottom: 1.5rem; }
+        .info-item:last-child { margin-bottom: 0; }
+        .info-icon {
+            width: 40px; height: 40px; background: #f3e5f5; color: var(--tsinghua-purple);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0;
+        }
+        .info-text h4 { font-size: 1.1rem; margin-bottom: 5px; color: #000; }
+        .info-text p { font-size: 0.95rem; color: #666; margin: 0; }
+
+        /* 地图占位符 */
+        .map-box {
+            height: 300px; background: #eee; border-radius: 12px; overflow: hidden; position: relative;
+        }
+        .map-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); }
+        .map-overlay {
+            position: absolute; bottom: 20px; left: 20px; background: #fff; padding: 10px 15px;
+            border-radius: 8px; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* --- Join Our Community (修正字体版) --- */
+        .community-section {
+            background-color: #660099; color: #ffffff; padding: 4rem 2rem; text-align: center; 
+        } 
+        .community-container { max-width: 900px; margin: 0 auto; }
+        .community-title {
+            color: #ffffff !important; font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em;
+        }
+        .community-desc {
+            color: #ffffff !important; font-size: 1.1rem; line-height: 1.6; opacity: 0.95; margin-bottom: 3rem; max-width: 750px; margin-left: auto; margin-right: auto;
+        }
+        .community-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-community {
+            padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            background: var(--california-gold); color: var(--academic-blue);
+            border: 1px solid var(--california-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-community:hover {
+            background: #FFC107; border-color: #FFC107; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        /* --- Footer (修正字体版) --- */
+        footer {
+            background-color: #1a2b5e; color: rgba(255,255,255,0.8); padding: 5rem 2rem 2rem; font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem;
+        }
+        .footer-brand h2 { color: #ffffff !important; font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+        .footer-brand p { color: rgba(255, 255, 255, 0.75) !important; line-height: 1.6; margin-top: 1rem; }
+        
+        .footer-col h3 { color: #ffffff !important; margin-bottom: 1.5rem; font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6) !important; font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold) !important; opacity: 1; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center; font-size: 0.85rem;}
+        .footer-bottom p { color: rgba(255, 255, 255, 0.5) !important; }
+
+        @media (max-width: 900px) {
+            .navbar { flex-direction: column; height: auto; padding: 1.5rem; }
+            .navbar-menu { margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; }
+            .contact-section { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link active">Contact</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="contact-hero">
+        <h1 class="contact-title">Contact Us</h1>
+        <p class="contact-subtitle">
+            Get in touch with Tsinghua KEG. We welcome collaborations, inquiries, and future students.
+        </p>
+    </header>
+
+    <div class="container">
+        
+        <div class="contact-section">
+            
+            <div class="contact-form-card">
+                <h2 class="form-heading">Send a Message</h2>
+                <p class="form-desc">Have a question about our research or interested in joining us? Fill out the form below.</p>
+                
+                <form onsubmit="handleContact(event)">
+                    <div class="form-group">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-input" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-input" placeholder="your.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-input">
+                            <option>General Inquiry</option>
+                            <option>Research Collaboration</option>
+                            <option>Student Application</option>
+                            <option>Media & Press</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-textarea" placeholder="How can we help you?" required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Send Message</button>
+                </form>
+            </div>
+
+            <div class="info-card">
+                
+                <div class="info-box">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-text">
+                            <h4>Address</h4>
+                            <p>FIT Building, Tsinghua University<br>Haidian District, Beijing, 100084, China</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="info-text">
+                            <h4>Email</h4>
+                            <p>
+                                <a href="mailto:keg.cs.tsinghua@gmail.com" 
+                                style="color: inherit; text-decoration: none; transition: 0.3s;"
+                                onmouseover="this.style.color='#660099'" 
+                                onmouseout="this.style.color='inherit'">
+                                    keg.cs.tsinghua@gmail.com
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-share-alt"></i></div>
+                        <div class="info-text">
+                            <h4>Socials</h4>
+                            <p>
+                                <a href="https://x.com/thukeg" style="color:var(--tsinghua-purple); font-weight:600;">Twitter/X</a> &nbsp;|&nbsp; 
+                                <a href="https://github.com/thudm" style="color:var(--tsinghua-purple); font-weight:600;">GitHub</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="map-box">
+                    <iframe 
+                        src="https://maps.google.com/maps?q=清华大学信息科学技术大楼&t=&z=17&ie=UTF8&iwloc=&output=embed" 
+                        width="100%" 
+                        height="100%" 
+                        style="border:0; min-height: 400px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                    <div class="map-overlay">
+                        <i class="fas fa-university" style="color:var(--tsinghua-purple)"></i> Tsinghua University FIT Building
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area of artificial general intelligence. 
+            </p>
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="#" class="btn-community">Join Agentic AI Discord</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function handleContact(e) {
+            e.preventDefault();
+            alert("Message Sent! Thank you for contacting Tsinghua KEG.");
+        }
+    </script>
+
+</body>
+</html>

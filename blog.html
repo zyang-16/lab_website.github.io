@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --white: #FFFFFF;
+            --light-bg: #F9FAFB;
+            --text-main: #1d1d1f;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-main);
+            line-height: 1.7;
+            background-color: var(--light-bg);
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3 { font-weight: 800; letter-spacing: -0.02em; color: var(--academic-blue); }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem; font-weight: 800; color: #000; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 --- */
+        .blog-hero {
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover; background-position: center bottom; background-repeat: no-repeat;
+            height: 500px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--white); padding: 0 2rem; text-align: center;
+        }
+        .blog-title { 
+            color: #ffffff !important; 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            margin-bottom: 1.5rem; 
+            text-shadow: 0 4px 15px rgba(0,0,0,0.5); 
+        }
+        .blog-subtitle { 
+            color: #ffffff !important; 
+            font-size: 1.3rem; 
+            opacity: 1; 
+            font-weight: 300; 
+            max-width: 800px; 
+            line-height: 1.6; 
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        /* --- 页面容器 --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        
+        /* --- Top Control Section --- */
+        .top-controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin-top: 4rem;
+            margin-bottom: 4rem;
+        }
+
+        /* 左侧：搜索和分类 */
+        .filter-panel {
+            background: #fff; padding: 2rem; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        
+        .search-row { display: flex; gap: 10px; margin-bottom: 1.5rem; }
+        .search-input {
+            flex: 1; padding: 12px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;
+        }
+        .search-input:focus { outline: none; border-color: var(--tsinghua-purple); }
+        .search-btn {
+            background: var(--academic-blue); color: #fff; border: none; padding: 0 20px;
+            border-radius: 6px; cursor: pointer; font-size: 1.1rem;
+        }
+
+        .category-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .cat-label { font-weight: 700; color: #888; font-size: 0.9rem; margin-right: 5px; }
+        
+        .cat-pill {
+            padding: 6px 16px; background: #f0f0f0; border-radius: 20px; font-size: 0.9rem; 
+            color: #555; cursor: pointer; font-weight: 500; transition: all 0.2s; user-select: none;
+        }
+        .cat-pill:hover, .cat-pill.active {
+            background: var(--tsinghua-purple); color: #fff;
+        }
+
+        /* 右侧：订阅卡片 */
+        .subscribe-card-top {
+            background: #fff; 
+            padding: 2rem; 
+            border-radius: 12px;
+            border: 1px solid #eee;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            color: var(--academic-blue);
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .sub-top-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--academic-blue); }
+        .sub-top-desc { font-size: 0.95rem; margin-bottom: 1rem; color: #333; line-height: 1.4; opacity: 0.9; }
+        
+        .sub-top-form { display: flex; gap: 8px; }
+        
+        .sub-top-input {
+            flex: 1; 
+            padding: 12px 15px;      
+            border-radius: 6px;      
+            border: 1px solid #ddd;   
+            background-color: #fff;  
+            outline: none;
+            color: #333;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        .sub-top-input:focus { border-color: var(--tsinghua-purple); }
+
+        .sub-top-btn {
+            background: var(--academic-blue); color: #fff; border: none; padding: 0 15px;
+            border-radius: 4px; font-weight: 700; cursor: pointer;
+        }
+        .sub-top-btn:hover { background: var(--tsinghua-purple); }
+
+
+        /* --- Blog Grid Layout --- */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 3rem; /* 减小一点，留给分页 */
+        }
+
+        .blog-card {
+            background: #fff; border-radius: 12px; overflow: hidden;
+            border: 1px solid #eee; transition: transform 0.3s, box-shadow 0.3s;
+            display: flex; flex-direction: column;
+        }
+        .blog-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+
+        .blog-img-wrap { height: 200px; background: #eee; }
+        .blog-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .blog-content { padding: 1.5rem; flex: 1; display: flex; flex-direction: column; }
+        
+        .meta-line { font-size: 0.85rem; color: #888; margin-bottom: 0.8rem; display: flex; justify-content: space-between; }
+        .meta-tag { color: var(--tsinghua-purple); font-weight: 700; text-transform: uppercase; }
+
+        .blog-heading { font-size: 1.35rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.35; color: #000; }
+        .blog-heading a { color: inherit; }
+        .blog-heading a:hover { color: var(--tsinghua-purple); }
+        
+        .blog-excerpt { font-size: 0.95rem; color: #666; margin-bottom: 1.5rem; flex: 1; line-height: 1.6; }
+        
+        .author-row { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 600; color: #333; padding-top: 1rem; border-top: 1px solid #f5f5f5; }
+        .author-pic { width: 32px; height: 32px; border-radius: 50%; background: #ddd; }
+
+        /* --- 👇 新增：分页样式 --- */
+        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 2rem; margin-bottom: 5rem; }
+        .page-num {
+            width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; text-decoration: none;
+            user-select: none;
+        }
+        .page-num:hover { background: #f0f0f0; color: #000; }
+        .page-num.active { background: var(--academic-blue); color: #fff; }
+
+        /* --- 👇 新增：隐藏仓库 --- */
+        #source-pool { display: none; }
+
+        /* --- Join Our Community --- */
+        .community-section {
+            background-color: #660099; color: #ffffff; padding: 4rem 2rem; text-align: center; 
+        } 
+        .community-container { max-width: 900px; margin: 0 auto; }
+        .community-title {
+            color: #ffffff !important; font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em;
+        }
+        .community-desc {
+            color: #ffffff !important; font-size: 1.1rem; line-height: 1.6; opacity: 0.95; margin-bottom: 3rem; max-width: 750px; margin-left: auto; margin-right: auto;
+        }
+        .community-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-community {
+            padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            background: var(--california-gold); color: var(--academic-blue);
+            border: 1px solid var(--california-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-community:hover {
+            background: #FFC107; border-color: #FFC107; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #1a2b5e;
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 900px) {
+            .navbar { flex-direction: column; height: auto; padding: 1.5rem; }
+            .navbar-menu { margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; }
+            
+            .top-controls { grid-template-columns: 1fr; margin-top: 2rem; gap: 20px; }
+            .blog-grid { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link active">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="blog-hero">
+        <h1 class="blog-title">Blog @ Tsinghua KEG</h1>
+        <p class="blog-subtitle">
+            Explore insights, research highlights, and thought leadership from Tsinghua KEG. Our blog features advances in artificial intelligence, agentic systems, and knowledge engineering from researchers, students, and collaborators shaping the future of intelligent systems.
+        </p>
+    </header>
+
+    <div class="container">
+        
+        <div class="top-controls">
+            <div class="filter-panel">
+                <div class="search-row">
+                    <input type="text" class="search-input" placeholder="Search articles, tutorials..." onkeyup="searchBlog()">
+                    <button class="search-btn" onclick="searchBlog()"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="category-row">
+                    <span class="cat-label">Topics:</span>
+                    <span class="cat-pill active" onclick="filterBlog(this, 'all')">All</span>
+                    <span class="cat-pill" onclick="filterBlog(this, 'research')">Research</span>
+                    <span class="cat-pill" onclick="filterBlog(this, 'tutorial')">Tutorial</span>
+                    <span class="cat-pill" onclick="filterBlog(this, 'engineering')">Engineering</span>
+                    <span class="cat-pill" onclick="filterBlog(this, 'thought-leadership')">Thought Leadership</span>
+                </div>
+            </div>
+
+            <div class="subscribe-card-top">
+                <h3 class="sub-top-title"><i class="fas fa-envelope-open-text"></i> Subscribe</h3>
+                <p class="sub-top-desc">Get the latest papers and tutorials delivered to your inbox.</p>
+                <form class="sub-top-form" action="https://your-mailchimp-url" method="POST" target="_blank">
+                    <input type="email" name="EMAIL" class="sub-top-input" placeholder="Enter Email" required>
+                    <button type="submit" class="sub-top-btn">Join</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="blog-grid" id="visible-grid"></div>
+
+        <div class="pagination" id="pagination"></div>
+
+        <div id="source-pool">
+            
+            <article class="blog-card" data-category="tutorial">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Tutorial+1" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Tutorial</span><span>Jan 12, 2026</span></div>
+                    <h2 class="blog-heading"><a href="#">How to Fine-tune ChatGLM-4 on Custom Data</a></h2>
+                    <p class="blog-excerpt">A step-by-step guide for developers on preparing data and running PEFT.</p>
+                    <div class="author-row"><span>KEG Eng Team</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="thought-leadership">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Thought+1" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Thought Leadership</span><span>Dec 20, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Knowledge Graphs in the Age of LLMs</a></h2>
+                    <p class="blog-excerpt">Professor Jie Tang discusses structured knowledge vs. hallucination.</p>
+                    <div class="author-row"><span>Jie Tang</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="engineering">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Eng+1" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Engineering</span><span>Nov 15, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Scaling AMiner: Graph DB Optimization</a></h2>
+                    <p class="blog-excerpt">Optimizing graph queries for millisecond-latency.</p>
+                    <div class="author-row"><span>AMiner Dev Team</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="research">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Research+1" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Research</span><span>Sep 10, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Understanding "Agentic" Behavior</a></h2>
+                    <p class="blog-excerpt">Analyzing multi-step reasoning and self-correction in coding tasks.</p>
+                    <div class="author-row"><span>Zhen Yang</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="tutorial">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Tutorial+2" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Tutorial</span><span>Aug 22, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Getting Started with Deep Research Agents</a></h2>
+                    <p class="blog-excerpt">A beginner's guide to our open-source agent framework.</p>
+                    <div class="author-row"><span>KEG Eng Team</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="research">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Research+2" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Research</span><span>Jul 15, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Aligning Large Models with Human Values</a></h2>
+                    <p class="blog-excerpt">Discussing RLHF and its impact on model safety.</p>
+                    <div class="author-row"><span>Research Team</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="engineering">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Eng+2" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Engineering</span><span>Jun 30, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">The Architecture of GLM-130B</a></h2>
+                    <p class="blog-excerpt">Deep dive into transformer modifications and training strategies.</p>
+                    <div class="author-row"><span>GLM Team</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="research">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Research+3" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Research</span><span>May 10, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">AI for Science: Protein Structures</a></h2>
+                    <p class="blog-excerpt">Exploring graph-based models for protein folding.</p>
+                    <div class="author-row"><span>Bio-Comp Group</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="thought-leadership">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Thought+2" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Thought Leadership</span><span>Apr 25, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Navigating GPU Shortage</a></h2>
+                    <p class="blog-excerpt">Strategies for academic labs to maximize throughput.</p>
+                    <div class="author-row"><span>Lab Director</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="research">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Research+4" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Research</span><span>Mar 18, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Zero-shot Learning in Low-resource Languages</a></h2>
+                    <p class="blog-excerpt">Improvements in translation accuracy for under-represented languages.</p>
+                    <div class="author-row"><span>NLP Group</span></div>
+                </div>
+            </article>
+
+            <article class="blog-card" data-category="engineering">
+                <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Eng+3" class="blog-img"></div>
+                <div class="blog-content">
+                    <div class="meta-line"><span class="meta-tag">Engineering</span><span>Feb 05, 2025</span></div>
+                    <h2 class="blog-heading"><a href="#">Deploying LLMs on Edge Devices</a></h2>
+                    <p class="blog-excerpt">Optimizing quantization for consumer-grade hardware.</p>
+                    <div class="author-row"><span>System Group</span></div>
+                </div>
+            </article>
+
+        </div>
+        </div>
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area of artificial general intelligence. 
+            </p>
+            
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="#" class="btn-community">Join Agentic AI Discord</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 状态管理 ---
+        let currentCategory = 'all';
+        let currentSearch = '';
+        let currentPage = 1;
+        const itemsPerPage = 6; // 每页显示 6 篇
+
+        document.addEventListener('DOMContentLoaded', () => {
+            render(); // 初始化渲染
+        });
+
+        // --- 功能 1: 筛选 ---
+        function filterBlog(element, category) {
+            // 按钮变色
+            const pills = document.querySelectorAll('.cat-pill');
+            pills.forEach(pill => pill.classList.remove('active'));
+            element.classList.add('active');
+
+            // 更新状态
+            currentCategory = category;
+            currentPage = 1; // 重置回第 1 页
+            render();
+        }
+
+        // --- 功能 2: 搜索 ---
+        function searchBlog() {
+            // 更新状态
+            currentSearch = document.querySelector('.search-input').value.toLowerCase().trim();
+            currentPage = 1; // 重置回第 1 页
+            render();
+        }
+
+        // --- 核心渲染函数 ---
+        function render() {
+            const source = document.getElementById('source-pool');
+            const items = Array.from(source.children);
+            const grid = document.getElementById('visible-grid');
+
+            // 1. 过滤 (Filter + Search)
+            const filteredItems = items.filter(item => {
+                const itemCat = item.getAttribute('data-category');
+                const title = item.querySelector('.blog-heading').innerText.toLowerCase();
+                
+                // 必须同时满足分类和搜索条件
+                const matchCategory = (currentCategory === 'all' || itemCat === currentCategory);
+                const matchSearch = (currentSearch === '' || title.includes(currentSearch));
+
+                return matchCategory && matchSearch;
+            });
+
+            // 2. 分页切片 (Slice)
+            const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageItems = filteredItems.slice(startIndex, endIndex);
+
+            // 3. 渲染文章
+            grid.innerHTML = '';
+            if (pageItems.length > 0) {
+                pageItems.forEach(item => {
+                    grid.appendChild(item.cloneNode(true));
+                });
+            } else {
+                grid.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#999; padding:3rem;">No articles found matching your criteria.</p>';
+            }
+
+            // 4. 渲染分页按钮
+            renderPagination(totalPages);
+        }
+
+        // --- 功能 3: 分页按钮 ---
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            container.innerHTML = '';
+
+            if (totalPages <= 1) return; // 只有1页时不显示
+
+            // 上一页
+            if (currentPage > 1) {
+                const prev = document.createElement('a');
+                prev.className = 'page-num';
+                prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prev.onclick = () => { currentPage--; render(); scrollToTop(); };
+                container.appendChild(prev);
+            }
+
+            // 数字页码
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('a');
+                btn.className = `page-num ${i === currentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { currentPage = i; render(); scrollToTop(); };
+                container.appendChild(btn);
+            }
+
+            // 下一页
+            if (currentPage < totalPages) {
+                const next = document.createElement('a');
+                next.className = 'page-num';
+                next.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                next.onclick = () => { currentPage++; render(); scrollToTop(); };
+                container.appendChild(next);
+            }
+        }
+
+        function scrollToTop() {
+            document.querySelector('.top-controls').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+
+</body>
+</html>

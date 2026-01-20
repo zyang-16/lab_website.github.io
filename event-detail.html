@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --text-main: #1d1d1f;
+            --bg-light: #F9FAFB;
+        }
+
+        /* --- 基础设置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", sans-serif; color: var(--text-main); line-height: 1.7; background: #fff;
+        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* --- 导航栏 (保持统一) --- */
+        .navbar {
+            background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand { font-size: 1.6rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+        .nav-link { color: #333; font-weight: 500; font-size: 0.95rem; margin-left: 32px; }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+
+        /* --- 布局容器 --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+        
+        /* --- Grid 布局 (左文右侧栏) --- */
+        .detail-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 60px;
+        }
+
+        /* --- 左侧主要内容 --- */
+        .event-header { margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 2rem; }
+        .badge-type {
+            display: inline-block; background: #E3F2FD; color: #1976D2; 
+            padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem; text-transform: uppercase;
+        }
+        .event-title { font-size: 2.5rem; font-weight: 800; color: var(--academic-blue); line-height: 1.2; margin-bottom: 1rem; }
+        
+        .content-block h3 { font-size: 1.4rem; color: #333; margin-top: 2.5rem; margin-bottom: 1rem; font-weight: 700; }
+        .content-block p { margin-bottom: 1rem; color: #555; font-size: 1.05rem; }
+        .speaker-card {
+            background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--tsinghua-purple); margin-top: 1rem;
+        }
+        .speaker-name { font-weight: 700; font-size: 1.1rem; color: var(--tsinghua-purple); }
+        .speaker-title { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+
+        /* --- 右侧侧边栏 (Sticky) --- */
+        .sidebar { position: sticky; top: 100px; height: fit-content; }
+        .info-card {
+            background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .info-item { display: flex; gap: 15px; margin-bottom: 1.5rem; }
+        .info-icon {
+            width: 40px; height: 40px; background: rgba(102, 0, 153, 0.1); color: var(--tsinghua-purple);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .info-text h4 { font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+        .info-text p { font-weight: 600; color: #333; line-height: 1.4; }
+
+        .btn-action {
+            display: block; width: 100%; padding: 12px; text-align: center;
+            background: var(--tsinghua-purple); color: #fff; font-weight: 600; border-radius: 6px;
+            margin-top: 2rem; transition: 0.3s;
+        }
+        .btn-action:hover { background: #4b0070; }
+        
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; color: #666; font-weight: 600; margin-bottom: 2rem; }
+        .btn-back:hover { color: var(--tsinghua-purple); }
+
+        /* --- 数据仓库 (隐藏) --- */
+        #db-events { display: none; }
+
+        @media (max-width: 768px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 40px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <div style="display: flex;">
+            <a href="events.html" class="nav-link active">Back to Events</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="events.html" class="btn-back"><i class="fas fa-arrow-left"></i> All Events</a>
+
+        <div class="detail-grid">
+            
+            <main id="main-content">
+                <div class="event-header">
+                    <span class="badge-type">Loading...</span>
+                    <h1 class="event-title">Loading Event Details...</h1>
+                </div>
+            </main>
+
+            <aside class="sidebar">
+                <div class="info-card">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="far fa-calendar-alt"></i></div>
+                        <div class="info-text">
+                            <h4>Date</h4>
+                            <p id="info-date">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="far fa-clock"></i></div>
+                        <div class="info-text">
+                            <h4>Time</h4>
+                            <p id="info-time">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-text">
+                            <h4>Location</h4>
+                            <p id="info-location">Loading...</p>
+                        </div>
+                    </div>
+
+                    <a href="#" class="btn-action" id="info-btn">Register Now</a>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <div id="db-events">
+
+        <div id="upcoming-1" 
+             data-type="Academic Seminar" 
+             data-date="April 15, 2026" 
+             data-time="14:00 - 16:00" 
+             data-location="FIT Building, Room 1-312"
+             data-btn="Register Now">
+            
+            <h1 class="event-title">The Future of Agentic AI: From Theory to Practice</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>Recent advances in Large Language Models (LLMs) have paved the way for autonomous agents capable of complex reasoning and tool use. However, significant challenges remain in reliability, safety, and multi-agent collaboration.</p>
+                <p>In this seminar, we will discuss the scaling laws of agent capabilities and demonstrate our latest framework, AgentBeats, which achieves state-of-the-art performance on coding benchmarks.</p>
+                
+                <h3>Speaker Bio</h3>
+                <div class="speaker-card">
+                    <div class="speaker-name">Prof. Jie Tang</div>
+                    <div class="speaker-title">Professor, Tsinghua University</div>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        Jie Tang is a Professor at the Department of Computer Science and Technology, Tsinghua University. His research interests include artificial general intelligence, data mining, and social networks.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="upcoming-2" 
+             data-type="Conference" 
+             data-date="May 22, 2026" 
+             data-time="09:00 - 18:00" 
+             data-location="Main Auditorium, Tsinghua University"
+             data-btn="View Agenda">
+            
+            <h1 class="event-title">Tsinghua AI & Knowledge Graph Summit 2026</h1>
+            
+            <div class="content-block">
+                <h3>Overview</h3>
+                <p>The annual summit brings together leading researchers and industry experts to discuss the convergence of Knowledge Graphs (KGs) and Large Language Models (LLMs).</p>
+                
+                <h3>Key Tracks</h3>
+                <ul>
+                    <li>- Neuro-Symbolic Integration</li>
+                    <li>- KG-Augmented Generation (RAG)</li>
+                    <li>- Reasoning in Large Models</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="past-1" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+        <div id="past-2" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+        <div id="past-3" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+        <div id="past-4" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+        <div id="past-5" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 获取 URL 中的 ID (例如 ?id=upcoming-1)
+            const params = new URLSearchParams(window.location.search);
+            const eventId = params.get('id');
+
+            // 2. 找到仓库里对应的数据
+            const source = document.getElementById(eventId);
+
+            if (source) {
+                // 3. 填充左侧内容
+                const mainContent = document.getElementById('main-content');
+                // 从仓库的 innerHTML 直接拿内容
+                const type = source.getAttribute('data-type');
+                const title = source.querySelector('.event-title').innerText;
+                const content = source.querySelector('.content-block').outerHTML; // 拿 content-block 的全部 HTML
+
+                mainContent.innerHTML = `
+                    <div class="event-header">
+                        <span class="badge-type">${type}</span>
+                        <h1 class="event-title">${title}</h1>
+                    </div>
+                    ${content}
+                `;
+
+                // 4. 填充右侧侧边栏 (从 data 属性拿)
+                document.getElementById('info-date').innerText = source.getAttribute('data-date');
+                document.getElementById('info-time').innerText = source.getAttribute('data-time');
+                document.getElementById('info-location').innerText = source.getAttribute('data-location');
+                
+                const btn = document.getElementById('info-btn');
+                btn.innerText = source.getAttribute('data-btn');
+
+                // 如果是 Past Event，按钮可能变成 "Watch Replay"
+                if (eventId.includes('past')) {
+                    btn.style.backgroundColor = '#fff';
+                    btn.style.color = 'var(--tsinghua-purple)';
+                    btn.style.border = '1px solid var(--tsinghua-purple)';
+                }
+
+            } else {
+                // 找不到 ID 的情况
+                document.querySelector('.container').innerHTML = '<h2 style="text-align:center; color:#999;">Event not found.</h2><p style="text-align:center"><a href="events.html">Return to Events</a></p>';
+            }
+        });
+    </script>
+
+</body>
+</html>

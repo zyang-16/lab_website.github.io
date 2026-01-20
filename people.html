@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 (全站统一) --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --founders-rock: #4b0070;
+            --california-gold: #FFD200; 
+            --white: #FFFFFF;
+            --academic-blue: #1a2b5e; 
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: #1d1d1f;
+            line-height: 1.6;
+            background-color: #FFFFFF;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem; font-weight: 800; color: #000; text-transform: none; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; text-transform: none; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 (About/People) --- */
+        .people-hero {
+            /* --- 1. 背景 --- */
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            
+            /* --- 2. 固定高度 --- */
+            height: 600px; /* 👇 保持一致 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* --- 3. 其他 --- */
+            color: var(--white);
+            padding: 0 2rem;
+            text-align: center;
+        }
+        .people-hero-container { max-width: 900px; margin: 0 auto; }
+        .people-title {
+            font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .people-subtitle {
+            font-size: 1.2rem; opacity: 0.95; line-height: 1.8; font-weight: 300;
+        }
+
+        /* --- 团队展示区域 --- */
+        .team-section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+        /* 分类标题条 (深蓝色横条 - 还原参考图) */
+        /* .category-bar {
+            background-color: var(--academic-blue);
+            color: #fff;
+            padding: 12px 0;
+            text-align: center;
+            border-radius: 6px; 
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .category-title {
+            font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; margin: 0;
+        } */
+
+        .category-title {
+            color: var(--academic-blue); /* 使用深邃学院蓝 */
+            font-size: 1.8rem;           /* 加大字号 */
+            font-weight: 800;            /* 加粗 */
+            text-align: center;          /* 居中 */
+            margin-bottom: 2.5rem;       /* 下方留白 */
+            margin-top: 3rem;            /* 上方留白 */
+            letter-spacing: -0.5px;
+        }
+
+
+        /* 人员网格 */
+        .people-grid {
+            display: grid;
+            /* 自动适应列宽，每列最小 200px */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 40px 20px; /* 上下间距大一点，左右小一点 */
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        /* 单个人员卡片 */
+        .profile-card {
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .profile-img-wrapper {
+            width: 160px; height: 160px; margin-bottom: 1.2rem;
+            border-radius: 50%; overflow: hidden;
+            border: 4px solid #fff; /* 白边 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .profile-card:hover .profile-img-wrapper {
+            transform: scale(1.05); border-color: var(--tsinghua-purple);
+        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .profile-name {
+            font-size: 1.1rem; font-weight: 700; color: #000; margin-bottom: 0.3rem;
+        }
+        .profile-title {
+            font-size: 0.9rem; color: #666; font-weight: 500; line-height: 1.4;
+            max-width: 180px; /* 防止头衔太长 */
+        }
+
+        /* --- Join Our Community 板块 --- */
+        .community-section {
+            background-color: #660099; 
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+        } 
+
+        .community-container {
+            max-width: 900px; /* 内容不宜太宽，聚焦视线 */
+            margin: 0 auto;
+        }
+
+        .community-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .community-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9; /* 稍微透明一点，增加质感 */
+            margin-bottom: 3rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .community-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; /* 手机端自动换行 */
+        }
+
+        /* 这里的按钮可以直接复用之前的 .btn 样式 */
+        /* 但为了保险起见，我微调了一个针对深色背景的样式类 */
+        .btn-community {
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            
+            background: #FFD200; /* 活力金 */
+            color: #1a2b5e;      /* 深蓝色文字，与背景呼应 */
+            border: 1px solid #FFD200;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-community:hover {
+            background: #FFC107;
+            border-color: #FFC107;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4); /* 悬停时投影更重 */
+        }
+        /* --- 页脚 --- */
+        footer {
+            background-color: #1a2b5e;
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; }
+            .navbar-menu { flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="people-hero">
+        <div class="people-hero-container">
+            <h1 class="people-title">People @ Tsinghua KEG</h1>
+            <p class="people-subtitle">
+                <b>
+                Pioneering minds drive the breakthroughs at Tsinghua KEG. From world-class faculty and researchers to our talented students, we unite around a shared mission: advancing the frontiers of Knowledge Engineering and Artificial General Intelligence (AGI).
+                </b>
+            </p>
+        </div>
+    </header>
+
+    <div class="team-section">
+
+        <h3 class="category-title">Faculty</h3>
+
+        <div class="people-grid">
+            
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/juanzi.png" alt="Juanzi Li" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/persons/ljz/" target="_blank">Juanzi Li</a>
+                </div>
+                <div class="profile-title">Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/jie.png" alt="Jie Tang" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/jietang/" target="_blank">Jie Tang</a>
+                </div>
+                <div class="profile-title">Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/bin.png" alt="Bin Xu" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/persons/xubin/" target="_blank">Bin Xu</a>
+                </div>
+                <div class="profile-title">Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/yuxiao.png" alt="Yuxiao Dong" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/yuxiao/" target="_blank">Yuxiao Dong</a>
+                </div>
+                <div class="profile-title">Associate Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/lei.png" alt="Lei Hou" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="#" target="_blank">Lei Hou</a>
+                </div>
+                <div class="profile-title">Assistant Professor</div>
+            </div>
+
+        </div>
+
+        <div class="category-bar">
+            <h3 class="category-title">Postdoc</h3>
+        </div>
+        <div class="people-grid">
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+        </div>
+
+        <div class="category-bar">
+            <h3 class="category-title">PhD</h3>
+        </div>
+        <div class="people-grid">
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+        </div>
+
+
+        <div class="category-bar">
+            <h3 class="category-title">Master</h3>
+        </div>
+        <div class="people-grid">
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+        </div>
+
+
+        <div class="category-bar">
+            <h3 class="category-title">Undergraduates</h3>
+        </div>
+        <div class="people-grid">
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+        </div>
+
+        <div class="category-bar">
+            <h3 class="category-title">Visiting Student Researcher</h3>
+        </div>
+        <div class="people-grid">
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+        </div>
+
+        <div class="category-bar">
+            <h3 class="category-title">Alumni</h3>
+        </div>
+        <div class="people-grid">
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-title">Postdoctoral Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="https://via.placeholder.com/200" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Researcher Name</div>
+                <div class="profile-title">Researcher</div>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area <br> 
+                of Artificial General Intelligence. 
+            </p>
+            <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="#" class="btn-community">Join Agentic AI Discord</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

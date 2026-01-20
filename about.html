@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About KEG | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 (与全站统一) --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --white: #FFFFFF;
+            --light-bg: #F9FAFB;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: #1d1d1f;
+            line-height: 1.7;
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+        h2 { font-weight: 800; letter-spacing: -0.03em; color: var(--academic-blue); margin-bottom: 1rem; }
+        p { color: #555; font-size: 1.05rem; }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem; font-weight: 800; color: #000; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 (统一风格) --- */
+        .about-hero {
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover; background-position: center bottom; background-repeat: no-repeat;
+            height: 600px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--white); padding: 0 2rem; text-align: center;
+        }
+        .about-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .about-subtitle { 
+            color: #ffffff; /* 强制白色 */
+            font-size: 1.3rem; opacity: 0.95; font-weight: 300; max-width: 800px; line-height: 1.6; 
+        }
+
+        /* --- 通用 Section 容器 --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+        .section-py { padding: 6rem 0; }
+        .bg-light { background-color: var(--light-bg); }
+
+        /* --- About 页独有板块样式 --- */
+        /* --- 通用大标题样式 (复刻 Research 页面的风格) --- */
+        .section-title {
+            color: var(--academic-blue); /* 深邃学院蓝 */
+            font-size: 2.5rem;           /* 大字号 */
+            font-weight: 800;            /* 特粗 */
+            text-align: center;          /* 居中 */
+            margin-bottom: 1.5rem;       /* 下方留白 */
+            letter-spacing: -0.02em;     /* 紧凑字间距 */
+        }
+        .mission-box { text-align: center; max-width: 900px; margin: 0 auto; }
+        .mission-statement { font-size: 1.8rem; font-weight: 700; color: var(--tsinghua-purple); line-height: 1.4; margin-bottom: 2rem; }
+        
+        .scope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-top: 3rem; }
+        .scope-item { text-align: left; border-left: 4px solid var(--california-gold); padding-left: 1.5rem; }
+        .scope-icon { font-size: 2rem; color: var(--academic-blue); margin-bottom: 1rem; display: block; }
+        .scope-title { font-size: 1.4rem; font-weight: 700; color: #000; margin-bottom: 0.5rem; }
+        
+        .history-layout { display: flex; align-items: center; gap: 4rem; flex-wrap: wrap; }
+        .history-content { flex: 1; }
+        .history-logo { flex: 0 0 300px; text-align: center; }
+        .history-logo img { width: 100%; max-width: 280px; opacity: 0.9; }
+        .timeline-highlight { color: var(--tsinghua-purple); font-weight: 700; }
+
+        .culture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .culture-card {
+            background: #fff; padding: 2.5rem; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s;
+            border-top: 5px solid var(--academic-blue);
+        }
+        .culture-card:hover { transform: translateY(-5px); }
+        .culture-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--academic-blue); }
+        .culture-card.gold-top { border-top-color: var(--california-gold); }
+        .culture-card.purple-top { border-top-color: var(--tsinghua-purple); }
+
+        .impact-stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; text-align: center; margin-top: 3rem; }
+        .stat-item { flex: 1; min-width: 200px; }
+        .stat-num { font-size: 3rem; font-weight: 800; color: var(--tsinghua-purple); line-height: 1; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 1rem; font-weight: 600; text-transform: uppercase; color: #666; letter-spacing: 1px; }
+
+        /* --- Join Our Community (从 Research 页完全同步) --- */
+        .community-section {
+            background-color: #660099; /* 清华紫 */
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+        } 
+        .community-container { max-width: 900px; margin: 0 auto; }
+        /* --- Join Our Community 样式修正 --- */
+
+        .community-title {
+            /* 👇 关键修改：强制设置为白色，防止被全局 h2 颜色覆盖 */
+            color: #ffffff !important; 
+            
+            font-size: 2.5rem; 
+            font-weight: 800; 
+            margin-bottom: 1.5rem; 
+            letter-spacing: -0.02em;
+        }
+
+        .community-desc {
+            /* 👇 关键修改：强制设置为白色 */
+            color: #ffffff !important;
+            
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            opacity: 0.9; 
+            margin-bottom: 3rem;
+            max-width: 750px; 
+            margin-left: auto; 
+            margin-right: auto;
+        }
+        .community-buttons {
+            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
+        }
+        .btn-community {
+            padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            background: var(--california-gold); color: var(--academic-blue);
+            border: 1px solid var(--california-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-community:hover {
+            background: #FFC107; border-color: #FFC107;
+            transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        /* --- Footer (从 Research 页完全同步) --- */
+        footer {
+            background-color: #1a2b5e; /* 深邃学院蓝 */
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: none; /* 保持原样，不全大写 */
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .history-layout { flex-direction: column; }
+            .navbar { flex-direction: column; height: auto; padding: 1rem; }
+            .navbar-menu { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li> 
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="about-hero">
+        <h1 class="about-title">About @ Tsinghua KEG</h1>
+        <p class="about-subtitle">
+            Bridging Knowledge and Intelligence for a Better Future.
+        </p>
+    </header>
+
+    <section class="section-py">
+        <div class="container">
+            <div class="mission-box">
+                <h2 style="text-align: center; margin-bottom: 3rem;">Our Vision</h2>
+                <div class="mission-statement">
+                    "To compute knowledge for artificial general intelligence and empower global academic discovery."
+                </div>
+                <p class="mission-desc">
+                    At Tsinghua KEG (Knowledge Engineering Group), we believe that the next generation of AI must bridge the gap between <strong>data-driven learning</strong> and <strong>symbolic knowledge</strong>. Our vision is to build intelligent systems that can understand, reason, and generate knowledge at a human level.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py bg-light">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Research Scope</h2>
+            <div class="scope-grid">
+                <div class="scope-item">
+                    <i class="fas fa-brain scope-icon"></i>
+                    <div class="scope-title">Large Language Models</div>
+                    <p>Foundation models (GLM series), efficient training, and reasoning capabilities.</p>
+                </div>
+                <div class="scope-item">
+                    <i class="fas fa-project-diagram scope-icon"></i>
+                    <div class="scope-title">Knowledge Graphs</div>
+                    <p>Knowledge acquisition, reasoning, and neuro-symbolic integration.</p>
+                </div>
+                <div class="scope-item">
+                    <i class="fas fa-network-wired scope-icon"></i>
+                    <div class="scope-title">Social Networks</div>
+                    <p>Academic social network analysis, user modeling, and influence propagation.</p>
+                </div>
+                <div class="scope-item">
+                    <i class="fas fa-search scope-icon"></i>
+                    <div class="scope-title">Data Mining</div>
+                    <p>Algorithms for massive datasets, pattern recognition, and predictive analytics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py">
+        <div class="container">
+            <div class="history-layout">
+                <div class="history-content">
+                    <h2>History & Affiliation</h2>
+                    <p style="margin-bottom: 1.5rem;">
+                        Founded in <strong>1996</strong>, the Knowledge Engineering Group is a premier research lab within the <span class="timeline-highlight">Department of Computer Science and Technology at Tsinghua University</span>, consistently ranked among the top CS departments globally.
+                    </p>
+                    <p>
+                        We are also the birthplace of <strong>AMiner</strong> (2006), an AI-driven academic search engine that has revolutionized how researchers connect and discover knowledge. Over nearly three decades, KEG has evolved from a small research unit into a global hub for AI innovation.
+                    </p>
+                </div>
+                <div class="history-logo">
+                    <img src="./keg.png" alt="Tsinghua University Logo" style="max-width: 200px;">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py bg-light">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Our Research Culture</h2>
+            <div class="culture-grid">
+                <div class="culture-card purple-top">
+                    <i class="fas fa-hourglass-half" style="font-size:2rem; color:var(--tsinghua-purple); margin-bottom:1rem;"></i>
+                    <h3>Long-termism</h3>
+                    <p>We focus on fundamental, hard problems rather than low-hanging fruit. We believe in persistent effort over decades to achieve breakthroughs in AGI.</p>
+                </div>
+                <div class="culture-card gold-top">
+                    <i class="fas fa-globe-asia" style="font-size:2rem; color:var(--california-gold); margin-bottom:1rem;"></i>
+                    <h3>Openness</h3>
+                    <p>We are committed to Open Source. From ChatGLM to AMiner data, we share our models and datasets to democratize AI and foster global collaboration.</p>
+                </div>
+                <div class="culture-card" style="border-top-color: #000;">
+                    <i class="fas fa-cogs" style="font-size:2rem; color:#000; margin-bottom:1rem;"></i>
+                    <h3>Theory + Systems</h3>
+                    <p>We pursue "Ding Tian Li Di" (顶天立地): aiming for world-class theoretical contributions while building robust, large-scale systems that work in the real world.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area of artificial general intelligence. 
+            </p>
+            
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="#" class="btn-community">Join Agentic AI Discord</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

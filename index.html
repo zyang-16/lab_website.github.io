@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tsinghua KEG | Knowledge Engineering Group</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --founders-rock: #4b0070;
+            --medalist: #C4820E;
+            --california-gold: #FDB515;
+            --white: #FFFFFF;
+            --light-gray: #F4F4F4;
+            --dark-gray: #46535E;
+            --text-main: #1d1d1f;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-main);
+            line-height: 1.6;
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        h1, h2, h3, .btn {
+            letter-spacing: -0.025em;
+        }
+
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #000000; 
+            
+            /* 👇👇👇 修改这里：改为 none，这样 TSINGHUA 就不会强制全大写了 */
+            text-transform: none; 
+            
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .navbar-menu { display: flex; gap: 32px; }
+        
+        .nav-link {
+            color: #1d1d1f; 
+            font-weight: 500;
+            font-size: 0.95rem;
+            text-transform: none; /* 导航菜单也保持大小写混合 */
+            padding: 5px 0;
+            position: relative;
+        }
+        
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--tsinghua-purple);
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 --- */
+        .hero {
+            /* --- 1. 背景与遮罩 (保持清华紫渐变) --- */
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover;
+            background-position: center bottom; /* 建议改为 bottom，确保能看到二校门的门洞 */
+            background-repeat: no-repeat;
+            
+            /* --- 2. 关键修改：固定高度 + 居中 --- */
+            height: 600px; /* 👇 强制固定高度 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 垂直居中 */
+            align-items: center;     /* 水平居中 */
+            
+            /* --- 3. 其他样式 --- */
+            color: var(--white);
+            padding: 0 2rem; /* 只保留左右边距，防止文字贴边 */
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-container {
+            max-width: 1400px; /* 👇 修改 1：加宽容器，给单行文字更多空间 */
+            width: 95%;        /* 防止在小屏幕贴边 */
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            /* 👇 修改 2：删除固定的 font-size，改用智能缩放 */
+            /* 解释：最小 2rem，首选 3.5vw (视口宽度的3.5%)，最大 3.8rem */
+            font-size: clamp(2rem, 3.5vw, 4rem); 
+            
+            white-space: nowrap; /* 👇 关键：强制文字不换行 */
+            
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            line-height: 1.6;      /* 增加行高，让介绍文字读起来更舒服 */
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            font-weight: 400;
+            max-width: 800px;      /* 限制介绍文字的宽度，防止它太长难读 */
+            margin-left: auto;
+            margin-right: auto;    /* 居中显示 */
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* 移动端适配：手机屏幕太窄，一行实在放不下时，允许换行 */
+        @media (max-width: 1024px) {
+            .hero-title {
+                white-space: normal; /* 允许换行 */
+            }
+        }
+
+        /* --- 按钮样式：活力金 + 微圆角 --- */
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 30px; 
+            
+            /* 👇 关键修改：从 50px 改为 6px (微圆角)，看起来更规整 */
+            border-radius: 6px; 
+            
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            
+            /* 活力金配色 */
+            background: #FFD200;  
+            color: #5E008E;       
+            border: 1px solid #FFD200; 
+            
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+        }
+
+        .btn:hover {
+            background: #FFC107; 
+            border-color: #FFC107;
+            color: #4b0070;      
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 210, 0, 0.5); 
+        }
+
+        /* 次按钮保持一致 */
+        .btn-outline {
+            /* 样式完全同上 */
+            background: #FFD200; 
+            color: #5E008E;
+            border: 1px solid #FFD200;
+        }
+
+        .btn-outline:hover {
+            background: #FFC107;
+            border-color: #FFC107;
+            color: #4b0070;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 210, 0, 0.5);
+        }
+
+
+        /* --- 次按钮：保持一致 --- */
+        .btn-outline {
+            background: #FFD200; 
+            color: #5E008E;
+            border: 1px solid #FFD200;
+        }
+
+        .btn-outline:hover {
+            background: #FFC107;
+            border-color: #FFC107;
+            color: #4b0070;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 210, 0, 0.5);
+        }
+
+        /* --- 通用区块 --- */
+        .section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        .section-title {
+            color: var(--tsinghua-purple);
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -0.04em;
+        }
+
+        /* --- 三大支柱 --- */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
+        }
+        .pillar-card {
+            background: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 6px solid var(--tsinghua-purple);
+        }
+        .pillar-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .pillar-icon {
+            font-size: 2.5rem;
+            color: var(--founders-rock);
+            margin-bottom: 1.5rem;
+            background: rgba(102, 0, 153, 0.05);
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .pillar-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--tsinghua-purple);
+        }
+
+        /* --- 新版：Our Global Impact (垂直居中 + 纯白背景) --- */
+        .impact-section {
+            background-color: #FFFFFF; /* 改为纯白背景 */
+            padding: 3rem 2rem;
+            position: relative;
+        }
+
+        .impact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            /* 去掉了 grid，改为默认的垂直堆叠 */
+            text-align: center; /* 让所有内容居中 */
+        }
+
+        /* 文字区域 */
+        .impact-text-content {
+            max-width: 1000px; /* 限制宽度，防止文字太长难读 */
+            margin: 0 auto 4rem; /* 居中，并与下方卡片保持距离 */
+        }
+
+        .impact-title {
+            color: #660099; /* 深邃学院蓝 */
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .impact-desc {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        /* 卡片网格：改为 3 列 */
+        .impact-grid {
+            display: grid;
+            /* 自动适应：电脑上通常显示 3 列，平板 2 列，手机 1 列 */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; /* 卡片间距 */
+        }
+
+        .impact-card {
+            background: #FFFFFF;
+            padding: 2.5rem 1.5rem; /* 稍微增加一点内边距 */
+            border-radius: 12px;
+            /* 给一个淡一点的阴影，让它在白底上也能显出来 */
+            box-shadow: 0 10px 40px rgba(0,0,0,0.06); 
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #f0f0f0; /* 加一个极淡的边框 */
+        }
+
+        .impact-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+            border-color: transparent;
+        }
+
+        .impact-number {
+            font-size: 2.8rem; /* 数字加大一点，更有冲击力 */
+            font-weight: 800;
+            color: #1a2b5e; 
+            margin-bottom: 0.5rem;
+            font-family: "Inter", sans-serif;
+        }
+
+        .impact-label {
+            font-size: 0.95rem;
+            
+            /* 👇 原来是 #666，改成 #444 或 #333，看起来更清晰有力 */
+            color: #444; 
+            
+            /* 👇 或者保留颜色，把字重加粗一点点 */
+            font-weight: 600; 
+            
+            line-height: 1.5;
+        }
+
+
+        /* --- 数据统计 --- */
+        .stats-section {
+            background-color: var(--tsinghua-purple);
+            color: var(--white);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--california-gold);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.05em;
+        }
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 1px;
+        }
+
+        /* --- Join Our Community 板块 --- */
+        .community-section {
+            background-color: #660099; 
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+        } 
+
+        .community-container {
+            max-width: 900px; /* 内容不宜太宽，聚焦视线 */
+            margin: 0 auto;
+        }
+
+        .community-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .community-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9; /* 稍微透明一点，增加质感 */
+            margin-bottom: 3rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .community-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; /* 手机端自动换行 */
+        }
+
+        /* 这里的按钮可以直接复用之前的 .btn 样式 */
+        /* 但为了保险起见，我微调了一个针对深色背景的样式类 */
+        .btn-community {
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            
+            background: #FFD200; /* 活力金 */
+            color: #1a2b5e;      /* 深蓝色文字，与背景呼应 */
+            border: 1px solid #FFD200;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-community:hover {
+            background: #FFC107;
+            border-color: #FFC107;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4); /* 悬停时投影更重 */
+        }
+
+        /* --- 新闻 --- */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+        .news-card {
+            border: 1px solid #eaeaea;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: box-shadow 0.3s;
+        }
+        .news-card:hover {
+            box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+        }
+        .news-image-placeholder {
+            height: 220px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-weight: 600;
+        }
+        .news-content {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .news-meta {
+            color: var(--founders-rock);
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+            text-transform: none;
+            letter-spacing: 0.5px;
+        }
+        .news-title {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .news-desc {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        .read-more {
+            color: var(--tsinghua-purple);
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .read-more:hover { text-decoration: underline; }
+
+        /* --- 页脚 --- */
+        footer {
+            background-color: #1a2b5e;
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 1.5rem; }
+            .navbar-menu { margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; gap: 20px; }
+            .hero-title { font-size: 2.5rem; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="navbar-brand" style="display: flex; align-items: center; gap: 0; text-decoration: none;">
+            <img src="./keg.png" alt="Tsinghua Logo" style="height: 50px; margin-right: 12px;">
+
+            <span style="color: #660099; font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; line-height: 1;">
+                Tsinghua
+            </span>
+            
+            <span style="color: #8c52b3; font-weight: 400; font-size: 1.1rem; margin-left: 8px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 1; padding-top: 4px;">
+                Knowledge Engineering Group
+            </span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-container">
+            <h1 class="hero-title">Teaching Machines to Think Like Humans</h1>
+            
+            <p class="hero-subtitle">
+                The Tsinghua Knowledge Engineering Group (KEG) is dedicated to advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="research.html" class="btn btn-primary">Explore Our Research</a>
+                <a href="news.html" class="btn btn-primary">Explore Our News</a>
+                <a href="events.html" class="btn btn-primary">Explore Our Events</a>
+                <a href="#community" class="btn btn-primary">Join Our Community</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Our Three Pillars</h2>
+            <p>Empowering the future through comprehensive initiatives.</p>
+        </div>
+        <div class="pillars-grid">
+            <div class="pillar-card">
+                <span class="pillar-icon"><i class="fas fa-lightbulb"></i></span>
+                <h3 class="pillar-title">Research</h3>
+                <p>Pushing the boundaries of AI research while ensuring these powerful technologies remain safe, robust, and beneficial.</p>
+            </div>
+            <div class="pillar-card">
+                <span class="pillar-icon"><i class="fas fa-graduation-cap"></i></span>
+                <h3 class="pillar-title">Education</h3>
+                <p>Pioneering initiatives and courses, empowering students worldwide with cutting-edge skills.</p>
+            </div>
+            <div class="pillar-card">
+                <span class="pillar-icon"><i class="fas fa-users"></i></span>
+                <h3 class="pillar-title">Community</h3>
+                <p>Building a global innovation hub. Connecting breakthrough research with real-world impact through summits and forums.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="impact-section">
+        <div class="impact-container">
+            
+            <div class="impact-text-content">
+                <h2 class="impact-title">Our Global Impact</h2>
+                <p class="impact-desc">
+                    We have developed a series of state-of-the-art models including 
+                    <strong>GLM-130B, ChatGLM, CogView & CogVideo, and CodeGeex</strong>. 
+                    Proudly, our pretrained base models have been adopted by over 1,000 organizations across 70+ countries. We also invented <strong>AMiner.org</strong>, connecting the global academic community.
+                </p>
+            </div>
+
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-number">10,000,000+</div>
+                    <div class="impact-label">ChatGLM-6b Downloads<br>Worldwide</div>
+                </div>
+                
+                <div class="impact-card">
+                    <div class="impact-number">30,000,000+</div>
+                    <div class="impact-label">AMiner Users<br>Globally</div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="impact-number">220</div>
+                    <div class="impact-label">Countries & Regions<br>Connected</div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="impact-number">1,000+</div>
+                    <div class="impact-label">Organizations Using<br>Our Base Models</div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="impact-number">500+</div>
+                    <div class="impact-label">Top-tier Conference<br>Papers Published</div>
+                </div>
+
+                <div class="impact-card">
+                    <div class="impact-number">10k+</div>
+                    <div class="impact-label">Global Academic<br>Citations</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Latest News & Events</h2>
+        </div>
+        <div class="news-grid">
+            <div class="news-card">
+                <div class="news-image-placeholder">News Image</div>
+                <div class="news-content">
+                    <div class="news-meta">Recent</div>
+                    <h3 class="news-title">Latest Research Publication</h3>
+                    <p class="news-desc">KEG researchers have published new findings in top-tier conferences like KDD and ACL.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image-placeholder">Event Image</div>
+                <div class="news-content">
+                    <div class="news-meta">Upcoming</div>
+                    <h3 class="news-title">Academic Seminar</h3>
+                    <p class="news-desc">Join us for a seminar on Large Language Models and Knowledge Graphs.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+            <div class="news-card">
+                <div class="news-image-placeholder">Award Image</div>
+                <div class="news-content">
+                    <div class="news-meta">Award</div>
+                    <h3 class="news-title">Best Paper Award</h3>
+                    <p class="news-desc">Congratulations to our team for winning the Best Paper Award at the recent international conference.</p>
+                    <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="community" class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area of artificial general intelligence. 
+            </p>
+            
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="#" class="btn-community">Join Agentic AI Discord</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.
+                </p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
