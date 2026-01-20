@@ -1,411 +1,424 @@
-<!-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Agentic AI Weekly | Tsinghua KEG</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
 
     <style>
         /* --- 核心变量 --- */
         :root {
-            --sub-purple: #743AD5;
-            --sub-purple-hover: #622eb8;
+            --brand-color: #660099; /* 清华紫 */
+            --brand-hover: #4b0070;
             --text-main: #222222;
-            --text-meta: #727272;
-            --border: #E5E5E5;
-            --bg-gray: #F5F5F5;
+            --text-gray: #737373;
+            --bg-body: #FFFFFF;
+            --bg-accent: #F9F9F9;
+            --border-color: #E6E6E6;
             
-            --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-            --font-reading: "Merriweather", serif;
+            --font-ui: "Inter", sans-serif;
+            --font-serif: "Merriweather", serif;
         }
 
-        /* --- 全局重置 --- */
+        /* --- 全局设置 --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: var(--font-ui);
             color: var(--text-main);
-            background-color: #fff;
-            line-height: 1.5;
+            background-color: var(--bg-body);
+            line-height: 1.6;
         }
-        a { text-decoration: none; color: inherit; transition: color 0.2s; }
+        a { text-decoration: none; color: inherit; transition: 0.2s; }
         ul { list-style: none; }
-        button { font-family: inherit; }
+        button { border: none; background: none; cursor: pointer; font-family: inherit; }
 
-        /* --- 1. 顶部导航 --- */
-        .nav-header {
-            position: sticky; top: 0; z-index: 1000;
-            background: #fff; border-bottom: 1px solid var(--border);
+        /* --- 1. 导航栏 --- */
+        .pub-nav {
+            position: sticky; top: 0; z-index: 999;
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border-color);
+            height: 60px; display: flex; align-items: center; justify-content: center;
             padding: 0 20px;
         }
-        .nav-container {
-            max-width: 1100px; margin: 0 auto;
-            height: 64px;
-            display: flex; align-items: center; justify-content: space-between;
+        .nav-content {
+            width: 100%; max-width: 1100px;
+            display: flex; justify-content: space-between; align-items: center;
         }
         
-        /* 中间 Logo */
-        .nav-logo {
+        .pub-logo {
             font-family: var(--font-ui);
-            font-weight: 700; font-size: 1.2rem;
-            color: var(--sub-purple);
-            position: absolute; left: 50%; transform: translateX(-50%);
-            display: flex; align-items: center; gap: 8px;
+            font-weight: 700; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 10px;
+            color: var(--brand-color);
         }
+        .pub-logo img { height: 32px; width: auto; }
 
-        /* 右侧操作区 (Search, Subscribe, Sign in) */
-        .nav-right { display: flex; align-items: center; gap: 16px; }
-        .nav-icon { color: var(--text-meta); font-size: 1rem; cursor: pointer; }
-        .nav-icon:hover { color: var(--sub-purple); }
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-link { font-size: 0.9rem; color: var(--text-gray); font-weight: 500; }
+        .nav-link:hover { color: var(--brand-color); }
         
-        .btn-header-sub {
-            background: var(--sub-purple); color: #fff; border: none;
-            padding: 6px 14px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;
-            cursor: pointer;
+        .btn-subscribe-sm {
+            background: var(--brand-color); color: #fff;
+            padding: 6px 16px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;
+            transition: 0.2s;
         }
-        .btn-header-sub:hover { background: var(--sub-purple-hover); }
-        
-        .btn-signin {
-            font-size: 0.85rem; font-weight: 500; color: var(--text-meta);
+        .btn-subscribe-sm:hover { background: var(--brand-hover); }
+
+        /* --- 2. 刊头 Hero --- */
+        .pub-hero {
+            text-align: center; padding: 60px 20px 40px;
+            max-width: 800px; margin: 0 auto;
+            border-bottom: 1px solid var(--border-color);
         }
-        .btn-signin:hover { color: var(--text-main); }
-
-
-        /* 次级导航 */
-        .nav-sub {
-            display: flex; justify-content: center; gap: 24px;
-            padding: 12px 0; font-size: 0.85rem; font-weight: 500; color: var(--text-meta);
-            border-bottom: 1px solid transparent; /* 占位 */
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 3rem; font-weight: 900; 
+            color: var(--brand-color);
+            margin-bottom: 15px; line-height: 1.1;
         }
-        .nav-sub a:hover { color: var(--text-main); }
-        .nav-sub a.active { color: var(--text-main); border-bottom: 1px solid var(--text-main); padding-bottom: 12px; margin-bottom: -13px; }
+        .hero-desc {
+            font-size: 1.15rem; color: var(--text-gray); line-height: 1.6;
+        }
 
-
-        /* --- 2. 主体布局 --- */
-        .main-wrapper {
+        /* --- 3. 布局 --- */
+        .container {
             max-width: 1100px; margin: 0 auto;
-            display: grid; 
-            grid-template-columns: 680px 1fr;
-            gap: 60px;
-            padding: 40px 20px 80px;
+            display: grid; grid-template-columns: 1fr 320px;
+            gap: 60px; padding: 40px 20px;
         }
 
-        /* --- 左侧内容区 --- */
-        .content-col { display: flex; flex-direction: column; }
-
-        /* Featured Banner */
-        .banner-card {
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 30px; padding-bottom: 30px;
+        /* --- 👇 搜索 + 分享 组合栏样式 --- */
+        .toolbar-wrapper {
+            margin-bottom: 40px;
+            display: flex;
+            gap: 12px; /* 搜索框和按钮之间的间距 */
         }
-        .banner-flex { display: flex; gap: 40px; align-items: flex-start; }
-        .banner-img-wrap { flex: 1.2; }
-        .banner-img { width: 100%; height: auto; border-radius: 4px; border: 1px solid #eee; }
+
+        .search-box {
+            position: relative;
+            flex: 1; /* 搜索框占据剩余空间 */
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 42px; /* 左边留空给图标 */
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 50px; /* 圆角胶囊 */
+            font-family: var(--font-ui);
+            background-color: var(--bg-accent);
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--brand-color);
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(102, 0, 153, 0.08);
+        }
+        .search-icon {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: #aaa; pointer-events: none;
+        }
+
+        .btn-toolbar-share {
+            padding: 0 24px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 50px; /* 圆角胶囊 */
+            font-weight: 600;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s;
+            white-space: nowrap; /* 防止文字换行 */
+        }
+        .btn-toolbar-share:hover {
+            border-color: var(--brand-color);
+            color: var(--brand-color);
+            background: rgba(102, 0, 153, 0.05);
+        }
+
+        /* --- 文章列表 --- */
+        .post-list { display: flex; flex-direction: column; gap: 40px; }
+
+        .post-card {
+            display: flex; flex-direction: column;
+            padding-bottom: 40px; border-bottom: 1px solid var(--border-color);
+            transition: opacity 0.3s;
+        }
+        .post-card:last-child { border-bottom: none; }
         
-        .banner-info { flex: 1; text-align: center; padding-top: 10px; }
-        .banner-title {
-            font-family: var(--font-reading); font-size: 1.5rem; font-weight: 700;
-            margin-bottom: 10px; line-height: 1.3; color: #222;
+        .post-meta-top {
+            font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; 
+            letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600;
         }
-        .banner-desc { font-size: 0.95rem; color: var(--text-meta); margin-bottom: 15px; line-height: 1.5; }
-        .banner-date { font-size: 0.75rem; font-weight: 700; color: var(--text-meta); text-transform: uppercase; }
-
-
-        /* Filter Tabs */
-        .feed-filter {
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 25px;
-        }
-        .filter-left { display: flex; gap: 10px; }
-        .filter-btn { 
-            font-size: 0.85rem; font-weight: 600; color: var(--text-meta); 
-            padding: 4px 8px; border-radius: 4px; cursor: pointer; 
-        }
-        .filter-btn.active { background: #EEE; color: #000; }
-
-
-        /* Post Items */
-        .post-item {
-            display: flex; justify-content: space-between; gap: 24px;
-            padding-bottom: 24px; margin-bottom: 24px;
-            border-bottom: 1px solid var(--border);
-        }
-        .post-text { flex: 1; }
         
         .post-title {
-            font-family: var(--font-reading); font-size: 1.25rem; font-weight: 700;
-            margin-bottom: 6px; line-height: 1.3; color: #222;
+            font-family: var(--font-serif);
+            font-size: 1.6rem; font-weight: 700; color: #111;
+            margin-bottom: 10px; line-height: 1.3;
+            cursor: pointer;
         }
-        .post-title:hover { text-decoration: underline; cursor: pointer; }
+        .post-title:hover { text-decoration: underline; color: var(--brand-color); }
 
-        .post-snippet {
-            font-size: 0.95rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 8px;
-            display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
-        }
-        .post-meta { font-size: 0.75rem; color: var(--text-meta); text-transform: uppercase; font-weight: 500; }
-
-        .post-thumb-box { width: 140px; height: 100px; flex-shrink: 0; }
-        .post-thumb { width: 100%; height: 100%; object-fit: cover; border-radius: 4px; border: 1px solid #eee; }
-
-        /* See All Button */
-        .btn-see-all {
-            padding: 8px 16px; background: #EEE; border: none; border-radius: 4px;
-            font-weight: 600; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
-        }
-        .btn-see-all:hover { background: #E0E0E0; }
-
-        /* Internal Footer (Main Column) */
-        .internal-footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid var(--border); }
-        .internal-footer h3 { font-size: 0.9rem; font-weight: 700; margin-bottom: 15px; }
-        
-        .form-row { display: flex; gap: 0; max-width: 400px; margin-bottom: 20px; }
-        .input-sub {
-            flex: 1; padding: 10px; border: 1px solid #ddd; border-right: none;
-            border-radius: 4px 0 0 4px; font-size: 0.9rem; background: #F9F9F9;
-        }
-        .btn-sub-purple {
-            background: var(--sub-purple); color: #fff; border: none;
-            padding: 0 15px; border-radius: 0 4px 4px 0; font-weight: 600; font-size: 0.9rem; cursor: pointer;
+        .post-excerpt {
+            font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;
+            font-family: var(--font-serif);
         }
         
-        .internal-links { display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: var(--text-meta); }
-        .internal-links a:hover { text-decoration: underline; }
-
-
-        /* --- 右侧侧边栏 --- */
-        .sidebar-col { padding-top: 0; }
-
-        /* About Widget */
-        .about-box { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid var(--border); }
-        .about-icon {
-            width: 40px; height: 40px; background: #eee; border-radius: 4px; margin-bottom: 10px;
-        }
-        .about-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
-        .about-desc { font-size: 0.85rem; color: var(--text-meta); line-height: 1.5; margin-bottom: 15px; }
-        
-        /* Sidebar Form */
-        .sidebar-form { display: flex; gap: 0; }
-        .sidebar-input {
-            width: 100%; padding: 8px; border: 1px solid #ddd; border-right: none;
-            border-radius: 4px 0 0 4px; font-size: 0.85rem; background: #F9F9F9;
-        }
-        .sidebar-btn {
-            background: var(--sub-purple); color: #fff; border: none;
-            padding: 0 12px; border-radius: 0 4px 4px 0; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+        .post-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 0.9rem; color: var(--text-gray);
         }
 
-        /* Recommendations */
-        .rec-box h4 {
-            font-size: 0.85rem; font-weight: 700; color: #222; 
-            margin-bottom: 15px;
+        .post-byline {
+            font-size: 0.85rem; color: var(--text-gray); font-weight: 500; 
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
-        .rec-list { display: flex; flex-direction: column; gap: 15px; }
-        .rec-item { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
-        .rec-img { width: 32px; height: 32px; border-radius: 4px; background: #ccc; }
-        .rec-info { flex: 1; }
-        .rec-name { font-size: 0.9rem; font-weight: 600; line-height: 1.2; margin-bottom: 2px; }
-        .rec-author { font-size: 0.8rem; color: var(--text-meta); }
 
-
-        /* --- Footer (Global) --- */
-        .footer-global {
-            background: var(--bg-gray); color: var(--text-meta); text-align: center;
-            padding: 40px 20px; font-size: 0.8rem; border-top: 1px solid var(--border);
+        .post-actions { display: flex; align-items: center; gap: 18px; }
+        .action-btn {
+            font-size: 0.85rem; color: var(--text-gray); cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: color 0.2s;
         }
-        .footer-links-global a { margin: 0 5px; text-decoration: underline; color: var(--text-meta); }
-        
-        .footer-btns { margin-top: 20px; display: flex; justify-content: center; gap: 10px; }
-        .btn-footer {
-            background: #fff; border: 1px solid #ddd; padding: 6px 12px; border-radius: 4px; 
-            font-weight: 600; font-size: 0.8rem; cursor: pointer; color: #222;
-        }
-        .btn-orange-icon { color: #FF6719; margin-right: 4px; }
-        
-        .footer-tagline { margin-top: 15px; font-size: 0.75rem; color: #aaa; }
+        .action-btn:hover { color: var(--brand-color); }
+        .action-btn.liked { color: #e91e63; }
+        .action-btn.liked i { font-weight: 900; }
 
-        @media (max-width: 900px) {
-            .main-wrapper { grid-template-columns: 1fr; padding: 20px; }
-            .banner-flex { flex-direction: column; gap: 20px; }
-            .post-item { flex-direction: column-reverse; }
-            .post-thumb-box { width: 100%; height: 180px; }
-            .sidebar-col { order: -1; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .featured-post .post-title { font-size: 2rem; }
+        .featured-img { 
+            width: 100%; height: 350px; object-fit: cover; border-radius: 8px; 
+            margin-bottom: 20px; border: 1px solid #eee;
+        }
+
+        /* --- 侧边栏 --- */
+        .sidebar { padding-top: 10px; }
+        .widget { margin-bottom: 40px; }
+        .widget-title {
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; 
+            letter-spacing: 1px; color: var(--text-gray); margin-bottom: 15px;
+            border-bottom: 2px solid var(--brand-color); display: inline-block; padding-bottom: 4px;
+        }
+
+        .sidebar-sub-box {
+            background: var(--bg-accent); padding: 20px; border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .sub-input {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;
+            margin-bottom: 10px; font-family: var(--font-ui);
+        }
+        .sub-btn-full {
+            width: 100%; padding: 10px; background: var(--brand-color); color: #fff;
+            border: none; border-radius: 4px; font-weight: 600; cursor: pointer;
+        }
+        .sub-btn-full:hover { background: var(--brand-hover); }
+
+        .link-list li { margin-bottom: 12px; }
+        .link-item { display: flex; align-items: center; gap: 10px; }
+        .link-icon {
+            width: 32px; height: 32px; background: #eee; border-radius: 4px; flex-shrink: 0;
+        }
+        .link-text { font-weight: 500; font-size: 0.95rem; }
+        .link-desc { font-size: 0.8rem; color: var(--text-gray); }
+
+        /* --- 底部 --- */
+        .simple-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px; text-align: center; color: var(--text-gray); font-size: 0.85rem;
+        }
+        .footer-nav { margin-bottom: 15px; }
+        .footer-nav a { margin: 0 8px; text-decoration: underline; }
+
+        @media (max-width: 850px) {
+            .container { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body>
 
-    <header class="nav-header">
-        <div class="nav-container">
-            <div style="width: 100px;"></div>
-
-            <div class="nav-logo">
-                <div class="nav-logo-icon" style="background:url('./keg.png') center/cover;"></div>
-                The Agentic AI Weekly
-            </div>
-
-            <div class="nav-right">
-                <i class="fas fa-search nav-icon"></i>
-                <i class="fas fa-arrow-up-from-bracket nav-icon"></i> <button class="btn-header-sub">Subscribe</button>
-                <a href="#" class="btn-signin">Sign in</a>
+    <nav class="pub-nav">
+        <div class="nav-content">
+            <a href="index.html" class="pub-logo">
+                <i class="fas fa-chevron-left" style="font-size: 0.8rem; margin-right: 5px;"></i> Lab Home
+            </a>
+            
+            <div class="nav-actions">
+                <a href="archive.html" class="nav-link">Archive</a>
+                <a href="archive_about.html" class="nav-link">About</a>
+                <button class="btn-subscribe-sm" onclick="document.querySelector('.sidebar-input').focus()">Subscribe</button>
             </div>
         </div>
+    </nav>
+
+    <header class="pub-hero">
+        <h1 class="hero-title">The Agentic AI Weekly</h1>
+        <p class="hero-desc">
+            Deep dives into Autonomous Agents, LLMs, and Responsible AI. <br>
+            Curated by the Tsinghua KEG Research Team.
+        </p>
     </header>
 
-    <div class="nav-sub">
-        <a href="#" class="active">Home</a>
-        <a href="#">Notes</a>
-        <a href="#">Archive</a>
-        <a href="#">About</a>
-    </div>
-
-    <div class="main-wrapper">
+    <div class="container">
         
-        <main class="content-col">
+        <main class="post-list">
             
-            <div class="banner-card">
-                <div class="banner-flex">
-                    <div class="banner-img-wrap">
-                        <img src="https://via.placeholder.com/800x450?text=AgentX+Competition" class="banner-img" alt="Banner">
-                    </div>
-                    <div class="banner-info">
-                        <h2 class="banner-title">Agentic AI Weekly | Tsinghua KEG | January 14, 2026</h2>
-                        <p class="banner-desc">AgentBeats Phase 1 Submission Deadline, Agents in the Wild Workshop at ICLR 2026; Agentic AI Summit 2026: Trends This Week</p>
-                        <div class="banner-date">JAN 15 · TSINGHUA KEG</div>
-                    </div>
+            <div class="toolbar-wrapper">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="weeklySearch" class="search-input" placeholder="Search articles..." onkeyup="filterPosts()">
                 </div>
-            </div>
-
-            <div class="feed-filter">
-                <div class="filter-left">
-                    <div class="filter-btn active">Latest</div>
-                    <div class="filter-btn">Top</div>
-                    <div class="filter-btn">Discussions</div>
-                </div>
-                <div class="nav-icon"><i class="fas fa-search"></i></div>
-            </div>
-
-            <article class="post-item">
-                <div class="post-text">
-                    <h3 class="post-title">Agentic AI Weekly | Tsinghua KEG | January 7, 2026</h3>
-                    <p class="post-snippet">
-                        AgentBeats Phase 1 Submissions, OpenDev Custom Track, and Prize / Sponsor Updates; Agentic AI Summit 2026...
-                    </p>
-                    <div class="post-meta">JAN 8 · TSINGHUA KEG</div>
-                </div>
-                <div class="post-thumb-box">
-                    <img src="https://via.placeholder.com/140x100" class="post-thumb">
-                </div>
-            </article>
-
-            <article class="post-item">
-                <div class="post-text">
-                    <h3 class="post-title">A Year of Innovation: Tsinghua KEG Wraps Up 2025 — Cheers to 2026!</h3>
-                    <p class="post-snippet">
-                        Recap: MOOCs, AgentX & AgentBeats, Agentic AI Summit, Workshop on Frontier AI in Cybersecurity, Research...
-                    </p>
-                    <div class="post-meta">DEC 30, 2025 · TSINGHUA KEG</div>
-                </div>
-                <div class="post-thumb-box">
-                    <img src="https://via.placeholder.com/140x100" class="post-thumb">
-                </div>
-            </article>
-
-            <article class="post-item">
-                <div class="post-text">
-                    <h3 class="post-title">Agentic AI Weekly | Tsinghua KEG | December 10, 2025</h3>
-                    <p class="post-snippet">
-                        AgentBeats Phase 1 Submission Form & Developer Platform (agentbeats.dev), MOOC Lecture on Agentic AI Safety...
-                    </p>
-                    <div class="post-meta">DEC 11, 2025 · TSINGHUA KEG</div>
-                </div>
-                <div class="post-thumb-box">
-                    <img src="https://via.placeholder.com/140x100" class="post-thumb">
-                </div>
-            </article>
-
-            <div style="margin-top:10px;">
-                <button class="btn-see-all">
-                    See all <i class="fas fa-chevron-right" style="font-size:0.75rem;"></i>
+                
+                <button class="btn-toolbar-share" onclick="sharePage('The Agentic AI Weekly')" title="Share this page">
+                    <i class="fas fa-share-nodes"></i> Share
                 </button>
             </div>
-
-            <div class="internal-footer">
-                <h3>Agentic AI Weekly</h3>
-                <form class="form-row">
-                    <input type="email" class="input-sub" placeholder="Type your email..." />
-                    <button class="btn-sub-purple">Subscribe</button>
-                </form>
-                <div class="internal-links">
-                    <a href="#">About</a>
-                    <a href="#">Archive</a>
-                    <a href="#">Recommendations</a>
-                    <a href="#">Sitemap</a>
+            
+            <article class="post-card featured-post">
+                <div class="post-meta-top">LATEST ISSUE · JAN 14, 2026</div>
+                <img src="https://via.placeholder.com/800x400?text=AgentBeats+Competition" class="featured-img" alt="Cover">
+                <h2 class="post-title">AgentBeats Phase 1 Deadline & New Benchmarks</h2>
+                <p class="post-excerpt">
+                    This week, we wrap up the first phase of the AgentBeats coding competition. We also introduce a new set of benchmarks for evaluating multi-agent collaboration in dynamic environments...
+                </p>
+                <div class="post-footer">
+                    <div class="post-byline">JAN 14, 2026 | Tsinghua KEG</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">42</span></button>
+                        <button class="action-btn" onclick="handleComment()"><i class="far fa-comment"></i> 8</button>
+                        <button class="action-btn" onclick="sharePage('AgentBeats Phase 1')"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
                 </div>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta-top">ISSUE #41</div>
+                <h2 class="post-title">Prize Updates & Custom Tracks for OpenDev</h2>
+                <p class="post-excerpt">
+                    Detailed breakdown of the prize pool for the new Custom Track. Also, we discuss the implications of multi-agent collaboration in cybersecurity environments and what it means for safety...
+                </p>
+                <div class="post-footer">
+                    <div class="post-byline">JAN 7, 2026 | Tsinghua KEG</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">15</span></button>
+                        <button class="action-btn" onclick="handleComment()"><i class="far fa-comment"></i> 2</button>
+                        <button class="action-btn" onclick="sharePage('Prize Updates')"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta-top">YEAR IN REVIEW</div>
+                <h2 class="post-title">2025: A Year of Agentic Innovation</h2>
+                <p class="post-excerpt">
+                    Looking back at our major milestones: The launch of ChatGLM-4, the first Agentic AI MOOC, and over 50 top-tier conference papers accepted. What's next for 2026?
+                </p>
+                <div class="post-footer">
+                    <div class="post-byline">DEC 30, 2025 | Tsinghua KEG</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">128</span></button>
+                        <button class="action-btn" onclick="handleComment()"><i class="far fa-comment"></i> 34</button>
+                        <button class="action-btn" onclick="sharePage('2025 Year in Review')"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
+                </div>
+            </article>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="archive.html" style="font-weight: 600; color: var(--brand-color);">View Full Archive &rarr;</a>
             </div>
 
         </main>
 
-        <aside class="sidebar-col">
-            
-            <div class="about-box">
-                <div class="about-icon" style="background:url('./keg.png') center/cover;"></div>
-                <h3 class="about-title">Agentic AI Weekly</h3>
-                <p class="about-desc">
-                    Agentic AI Weekly spotlights AI insights from the Tsinghua KEG Center for Responsible, Decentralized Intelligence (RDI) – delivering clear-cut, weekly insights.
-                </p>
-                
-                <form class="sidebar-form">
-                    <input type="email" class="sidebar-input" placeholder="Type your email..." />
-                    <button class="sidebar-btn">Subscribe</button>
-                </form>
-            </div>
-
-            <div class="rec-box">
-                <h4>Recommendations</h4>
-                <div class="rec-list">
-                    <div class="rec-item">
-                        <div class="rec-img" style="background:#222; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:0.8rem;">E1</div>
-                        <div class="rec-info">
-                            <div class="rec-name">E1 Ventures</div>
-                            <div class="rec-author">Ana Levine</div>
-                        </div>
-                    </div>
-                    <div class="rec-item">
-                        <div class="rec-img" style="background:#C47535; display:flex; align-items:center; justify-content:center; color:#fff;"><i class="fas fa-fingerprint"></i></div>
-                        <div class="rec-info">
-                            <div class="rec-name">The Interweave</div>
-                            <div class="rec-author">Murilo Menezes</div>
-                        </div>
-                    </div>
+        <aside class="sidebar">
+            <div class="widget">
+                <div class="sidebar-sub-box">
+                    <h3 style="font-size:1.1rem; margin-bottom:10px; font-weight:700;">Subscribe to the newsletter</h3>
+                    <p style="font-size:0.9rem; color:#555; margin-bottom:15px; line-height:1.4;">
+                        Join 5,000+ researchers getting our weekly updates directly in their inbox.
+                    </p>
+                    <form action="https://YOUR_LAB_MAILCHIMP_URL" method="POST" target="_blank">
+                        <input type="email" name="EMAIL" class="sub-input sidebar-input" placeholder="Type your email..." required>
+                        <button type="submit" class="sub-btn-full">Subscribe</button>
+                    </form>
                 </div>
             </div>
 
+            <div class="widget">
+                <div class="widget-title">About</div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <img src="./keg.png" style="width:40px; height:auto;">
+                    <div style="font-weight:700; font-size:0.95rem;">Tsinghua KEG</div>
+                </div>
+                <p style="font-size:0.9rem; color:#555; line-height:1.5;">
+                    The Knowledge Engineering Group (KEG) at Tsinghua University. We research Knowledge Graphs, LLMs, and Social Networks.
+                </p>
+            </div>
         </aside>
 
     </div>
 
-    <footer class="footer-global">
-        <p class="footer-links-global">
-            © 2026 Tsinghua KEG · 
-            <a href="#">Privacy</a> · 
-            <a href="#">Terms</a> · 
-            <a href="#">Collection notice</a>
-        </p>
-        
-        <div class="footer-btns">
-            <button class="btn-footer">
-                <i class="fas fa-bookmark btn-orange-icon"></i> Start your Substack
-            </button>
-            <button class="btn-footer">
-                Get the app
-            </button>
+    <footer class="simple-footer">
+        <div class="footer-nav">
+            <a href="#">Subscribe</a>
         </div>
-        
-        <p class="footer-tagline">Substack is the home for great culture</p>
+        <p>© 2026 Tsinghua KEG. All rights reserved.</p>
+        <p style="margin-top:10px; font-size:0.75rem; opacity:0.6;">Published with standalone pride.</p>
     </footer>
 
+    <script>
+        function filterPosts() {
+            const input = document.getElementById('weeklySearch');
+            const filter = input.value.toLowerCase();
+            const cards = document.querySelectorAll('.post-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.post-title').innerText.toLowerCase();
+                const excerpt = card.querySelector('.post-excerpt').innerText.toLowerCase();
+                if (title.includes(filter) || excerpt.includes(filter)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        function handleLike(btn) {
+            const icon = btn.querySelector('i');
+            const countSpan = btn.querySelector('.count');
+            let count = parseInt(countSpan.innerText);
+
+            if (btn.classList.contains('liked')) {
+                count--;
+                btn.classList.remove('liked');
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            } else {
+                count++;
+                btn.classList.add('liked');
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            }
+            countSpan.innerText = count;
+        }
+
+        function handleComment() {
+            const userResponse = confirm("Join the discussion on our Discord channel?");
+            if (userResponse) {
+                window.open("https://discord.gg/your-invite-code", "_blank");
+            }
+        }
+
+        function sharePage(title) {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert(`🔗 Link copied!\nReady to share: "${title}"`);
+            });
+        }
+    </script>
+
 </body>
-</html> -->
-
-
+</html>
