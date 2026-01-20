@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 核心变量 (与全站统一) --- */
+        /* --- 核心变量 --- */
         :root {
             --tsinghua-purple: #660099; 
             --california-gold: #FFD200; 
@@ -58,7 +58,7 @@
         }
         .nav-link:hover::after { width: 100%; }
 
-        /* --- Hero 区域 (统一风格) --- */
+        /* --- Hero 区域 --- */
         .about-hero {
             background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
             background-size: cover; background-position: center bottom; background-repeat: no-repeat;
@@ -68,25 +68,15 @@
         }
         .about-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .about-subtitle { 
-            color: #ffffff; /* 强制白色 */
-            font-size: 1.3rem; opacity: 0.95; font-weight: 300; max-width: 800px; line-height: 1.6; 
+            color: #ffffff; font-size: 1.3rem; opacity: 0.95; font-weight: 300; max-width: 800px; line-height: 1.6; 
         }
 
-        /* --- 通用 Section 容器 --- */
+        /* --- 通用 Section --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
         .section-py { padding: 6rem 0; }
         .bg-light { background-color: var(--light-bg); }
 
-        /* --- About 页独有板块样式 --- */
-        /* --- 通用大标题样式 (复刻 Research 页面的风格) --- */
-        .section-title {
-            color: var(--academic-blue); /* 深邃学院蓝 */
-            font-size: 2.5rem;           /* 大字号 */
-            font-weight: 800;            /* 特粗 */
-            text-align: center;          /* 居中 */
-            margin-bottom: 1.5rem;       /* 下方留白 */
-            letter-spacing: -0.02em;     /* 紧凑字间距 */
-        }
+        /* --- Vision & Mission --- */
         .mission-box { text-align: center; max-width: 900px; margin: 0 auto; }
         .mission-statement { font-size: 1.8rem; font-weight: 700; color: var(--tsinghua-purple); line-height: 1.4; margin-bottom: 2rem; }
         
@@ -94,13 +84,28 @@
         .scope-item { text-align: left; border-left: 4px solid var(--california-gold); padding-left: 1.5rem; }
         .scope-icon { font-size: 2rem; color: var(--academic-blue); margin-bottom: 1rem; display: block; }
         .scope-title { font-size: 1.4rem; font-weight: 700; color: #000; margin-bottom: 0.5rem; }
-        
-        .history-layout { display: flex; align-items: center; gap: 4rem; flex-wrap: wrap; }
-        .history-content { flex: 1; }
-        .history-logo { flex: 0 0 300px; text-align: center; }
-        .history-logo img { width: 100%; max-width: 280px; opacity: 0.9; }
-        .timeline-highlight { color: var(--tsinghua-purple); font-weight: 700; }
 
+        /* --- History Timeline --- */
+        .history-intro { text-align: center; max-width: 800px; margin: 0 auto 4rem; }
+        .timeline-box { position: relative; max-width: 800px; margin: 0 auto; padding-left: 40px; }
+        .timeline-box::before {
+            content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: #E5E5E5;
+        }
+        .timeline-item { position: relative; margin-bottom: 3.5rem; animation: fadeIn 0.5s ease-in-out; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-dot {
+            position: absolute; left: -32px; top: 5px; width: 18px; height: 18px;
+            background: #fff; border: 4px solid var(--tsinghua-purple); border-radius: 50%; z-index: 2; transition: all 0.3s ease;
+        }
+        .timeline-item:hover .timeline-dot { background: var(--california-gold); border-color: var(--california-gold); transform: scale(1.2); }
+        .timeline-year {
+            display: inline-block; background: var(--tsinghua-purple); color: #fff; padding: 4px 12px;
+            border-radius: 20px; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.8rem;
+        }
+        .timeline-content h3 { font-size: 1.3rem; font-weight: 700; color: var(--academic-blue); margin-bottom: 0.5rem; }
+        .timeline-content p { font-size: 1rem; color: #666; margin: 0; }
+
+        /* --- Research Culture --- */
         .culture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .culture-card {
             background: #fff; padding: 2.5rem; border-radius: 12px;
@@ -112,106 +117,37 @@
         .culture-card.gold-top { border-top-color: var(--california-gold); }
         .culture-card.purple-top { border-top-color: var(--tsinghua-purple); }
 
-        .impact-stats { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; text-align: center; margin-top: 3rem; }
-        .stat-item { flex: 1; min-width: 200px; }
-        .stat-num { font-size: 3rem; font-weight: 800; color: var(--tsinghua-purple); line-height: 1; margin-bottom: 0.5rem; }
-        .stat-label { font-size: 1rem; font-weight: 600; text-transform: uppercase; color: #666; letter-spacing: 1px; }
-
-        /* --- Join Our Community (从 Research 页完全同步) --- */
-        .community-section {
-            background-color: #660099; /* 清华紫 */
-            color: #ffffff;
-            padding: 3rem 2rem;
-            text-align: center;
-        } 
+        /* --- Community Section --- */
+        .community-section { background-color: #660099; color: #ffffff; padding: 3rem 2rem; text-align: center; } 
         .community-container { max-width: 900px; margin: 0 auto; }
-        /* --- Join Our Community 样式修正 --- */
-
-        .community-title {
-            /* 👇 关键修改：强制设置为白色，防止被全局 h2 颜色覆盖 */
-            color: #ffffff !important; 
-            
-            font-size: 2.5rem; 
-            font-weight: 800; 
-            margin-bottom: 1.5rem; 
-            letter-spacing: -0.02em;
-        }
-
-        .community-desc {
-            /* 👇 关键修改：强制设置为白色 */
-            color: #ffffff !important;
-            
-            font-size: 1.1rem; 
-            line-height: 1.6; 
-            opacity: 0.9; 
-            margin-bottom: 3rem;
-            max-width: 750px; 
-            margin-left: auto; 
-            margin-right: auto;
-        }
-        .community-buttons {
-            display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;
-        }
+        .community-title { color: #ffffff !important; font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+        .community-desc { color: #ffffff !important; font-size: 1.1rem; line-height: 1.6; opacity: 0.9; margin-bottom: 3rem; max-width: 750px; margin-left: auto; margin-right: auto; }
+        .community-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .btn-community {
             padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 1rem;
             cursor: pointer; transition: all 0.3s ease; text-decoration: none;
             background: var(--california-gold); color: var(--academic-blue);
             border: 1px solid var(--california-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .btn-community:hover {
-            background: #FFC107; border-color: #FFC107;
-            transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-        }
+        .btn-community:hover { background: #FFC107; transform: translateY(-3px); }
 
-        /* --- Footer (从 Research 页完全同步) --- */
-        footer {
-            background-color: #1a2b5e; /* 深邃学院蓝 */
-            color: rgba(255,255,255,0.7);
-            padding: 5rem 2rem 2rem;
-            font-size: 0.95rem;
-        }
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1fr 1fr;
-            gap: 3rem;
-            margin-bottom: 4rem;
-        }
-        .footer-brand h2 {
-            color: var(--white);
-            font-size: 1.8rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            letter-spacing: -0.02em;
-        }
-        .footer-col h3 {
-            color: var(--white);
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-            font-weight: 700;
-            text-transform: none; /* 保持原样，不全大写 */
-            letter-spacing: 1px;
-            opacity: 0.9;
-        }
+        /* --- Footer --- */
+        footer { background-color: #1a2b5e; color: rgba(255,255,255,0.7); padding: 5rem 2rem 2rem; font-size: 0.95rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+        .footer-brand h2 { color: var(--white); font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+        .footer-col h3 { color: var(--white); margin-bottom: 1.5rem; font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
         .footer-col ul li { margin-bottom: 1rem; }
-        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a { color: rgba(255,255,255,0.6); }
         .footer-col a:hover { color: var(--california-gold); opacity: 1; }
-        
-        .footer-bottom {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-            font-size: 0.85rem;
-        }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.85rem; }
 
         @media (max-width: 768px) {
-            .history-layout { flex-direction: column; }
             .navbar { flex-direction: column; height: auto; padding: 1rem; }
             .navbar-menu { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
             .footer-content { grid-template-columns: 1fr; }
+            .timeline-box { padding-left: 30px; }
+            .timeline-dot { left: -24px; width: 14px; height: 14px; top: 6px; }
+            .timeline-box::before { left: 8px; }
         }
     </style>
 </head>
@@ -258,6 +194,71 @@
 
     <section class="section-py bg-light">
         <div class="container">
+            <h2 style="text-align: center; margin-bottom: 2rem;">History & Milestones</h2>
+            <p class="history-intro">
+                Founded in <strong>1996</strong>, KEG has evolved from a small research unit into a global hub for AI innovation. Here are some key moments in our journey.
+            </p>
+
+            <div class="timeline-box">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">1996</span>
+                    <div class="timeline-content">
+                        <h3>KEG Established</h3>
+                        <p>The Knowledge Engineering Group was founded within the Department of Computer Science and Technology at Tsinghua University.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2006</span>
+                    <div class="timeline-content">
+                        <h3>Launch of AMiner</h3>
+                        <p>Released AMiner.org, an AI-driven academic search and mining platform, now connecting millions of researchers worldwide.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2014</span>
+                    <div class="timeline-content">
+                        <h3>Joint Research Center with [Partner Name]</h3>
+                        <p>Established the Tsinghua-[Partner] Joint Research Center for Big Data Mining, marking a new era of industrial collaboration.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2019</span>
+                    <div class="timeline-content">
+                        <h3>Cognitive Intelligence Key Lab</h3>
+                        <p>Became a core unit of the Tsinghua University Institute for Artificial Intelligence, focusing on Cognitive AI.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2023</span>
+                    <div class="timeline-content">
+                        <h3>ChatGLM & Commercialization</h3>
+                        <p>Successfully transferred ChatGLM technology to Zhipu AI (spin-off), accelerating the industrial application of Large Language Models.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2024</span>
+                    <div class="timeline-content">
+                        <h3>New Frontiers</h3>
+                        <p>Expanded research into Multi-modal Agents and embodied AI, establishing new benchmarks in the field.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py">
+        <div class="container">
             <h2 style="text-align: center; margin-bottom: 3rem;">Research Scope</h2>
             <div class="scope-grid">
                 <div class="scope-item">
@@ -279,25 +280,6 @@
                     <i class="fas fa-search scope-icon"></i>
                     <div class="scope-title">Data Mining</div>
                     <p>Algorithms for massive datasets, pattern recognition, and predictive analytics.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="section-py">
-        <div class="container">
-            <div class="history-layout">
-                <div class="history-content">
-                    <h2>History & Affiliation</h2>
-                    <p style="margin-bottom: 1.5rem;">
-                        Founded in <strong>1996</strong>, the Knowledge Engineering Group is a premier research lab within the <span class="timeline-highlight">Department of Computer Science and Technology at Tsinghua University</span>, consistently ranked among the top CS departments globally.
-                    </p>
-                    <p>
-                        We are also the birthplace of <strong>AMiner</strong> (2006), an AI-driven academic search engine that has revolutionized how researchers connect and discover knowledge. Over nearly three decades, KEG has evolved from a small research unit into a global hub for AI innovation.
-                    </p>
-                </div>
-                <div class="history-logo">
-                    <img src="./keg.png" alt="Tsinghua University Logo" style="max-width: 200px;">
                 </div>
             </div>
         </div>
@@ -336,7 +318,7 @@
             <div class="community-buttons">
                 <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
                 <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
-                <a href="#" class="btn-community">Join Agentic AI Discord</a>
+                <a href="join_us.html" class="btn-community">Join Our Lab</a>
             </div>
         </div>
     </section>

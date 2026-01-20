@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Us - Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 (保持一致) --- */
+        :root {
+            --brand-color: #660099; /* 清华紫 */
+            --brand-light: #F3E5F5;
+            --text-main: #222222;
+            --text-gray: #555555;
+            --bg-body: #FFFFFF;
+            --border-color: #E6E6E6;
+            
+            --font-ui: "Inter", sans-serif;
+            --font-serif: "Merriweather", serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-ui); color: var(--text-main); line-height: 1.6; background: #fff; }
+        a { text-decoration: none; color: inherit; transition: 0.2s; }
+
+        /* --- 导航栏 (复用) --- */
+        .pub-nav {
+            position: sticky; top: 0; z-index: 999;
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border-color);
+            height: 60px; display: flex; align-items: center; justify-content: center;
+            padding: 0 20px;
+        }
+        .nav-content { width: 100%; max-width: 1100px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-back { font-size: 0.9rem; font-weight: 500; color: var(--text-gray); display: flex; align-items: center; gap: 6px; }
+        .nav-back:hover { color: var(--brand-color); }
+
+        /* --- 页面主体 --- */
+        .join-container { max-width: 900px; margin: 0 auto; padding: 80px 20px 100px; }
+
+        /* 头部 */
+        .join-header { text-align: center; margin-bottom: 80px; }
+        .join-title {
+            font-family: var(--font-serif); font-size: 2.8rem; font-weight: 900; 
+            color: var(--brand-color); margin-bottom: 20px;
+        }
+        .join-intro {
+            font-size: 1.15rem; color: var(--text-gray); max-width: 650px; margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* --- 👇 新增：招聘要求板块 CSS --- */
+        .req-section { margin-bottom: 80px; }
+        .req-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 双栏 */
+            gap: 30px;
+        }
+        .req-card {
+            background: #F9FAFB; /* 极淡的灰色背景 */
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 35px;
+            transition: transform 0.2s;
+        }
+        .req-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(102, 0, 153, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .req-title {
+            font-family: var(--font-serif);
+            font-size: 1.5rem; font-weight: 700; color: #111;
+            margin-bottom: 20px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .req-icon { color: var(--brand-color); font-size: 1.3rem; }
+        .req-list { margin-left: 20px; }
+        .req-list li {
+            margin-bottom: 12px;
+            position: relative;
+            padding-left: 5px;
+            color: #444;
+            font-size: 0.95rem;
+        }
+        .req-list li::marker { color: var(--brand-color); font-weight: bold; } /* 紫色圆点 */
+        .req-tag {
+            display: inline-block;
+            background: #fff; border: 1px solid #e0e0e0;
+            padding: 4px 10px; border-radius: 4px;
+            font-size: 0.8rem; color: #666; font-weight: 600;
+            margin-right: 6px; margin-top: 5px;
+        }
+
+        /* --- 垂直时间轴样式 --- */
+        .process-section { margin-top: 60px; }
+        .section-label {
+            font-family: var(--font-serif); font-size: 1.8rem; font-weight: 700; 
+            text-align: center; margin-bottom: 50px; position: relative;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            padding-left: 30px;
+        }
+        .timeline::before {
+            content: ''; position: absolute; left: 0; top: 10px; bottom: 0;
+            width: 2px; background: #E0E0E0;
+        }
+        .step-item { position: relative; padding-left: 40px; padding-bottom: 50px; }
+        .step-marker {
+            position: absolute; left: -39px; top: 0;
+            width: 20px; height: 20px; background: #fff;
+            border: 4px solid var(--brand-color); border-radius: 50%; z-index: 1;
+        }
+        .step-title {
+            font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: #111; margin-bottom: 10px;
+        }
+        .step-desc { font-size: 1rem; color: var(--text-gray); line-height: 1.6; }
+        .step-desc strong { color: #333; font-weight: 600; }
+        .step-item:last-child { padding-bottom: 0; }
+        .step-item:last-child::before {
+            content: ''; position: absolute; left: -31px; top: 20px; bottom: 0; width: 4px; background: #fff;
+        }
+
+        /* --- 申请按钮 --- */
+        .cta-box { text-align: center; margin-top: 60px; }
+        .btn-apply {
+            display: inline-block;
+            background: var(--brand-color); color: #fff;
+            padding: 16px 40px; border-radius: 50px;
+            font-size: 1.1rem; font-weight: 600;
+            box-shadow: 0 4px 15px rgba(102, 0, 153, 0.2);
+            transition: all 0.2s;
+        }
+        .btn-apply:hover {
+            background: #4b0070;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 0, 153, 0.3);
+        }
+
+        /* Footer */
+        .simple-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px; text-align: center; color: var(--text-gray); font-size: 0.85rem;
+            margin-top: 80px;
+        }
+        .footer-nav a { margin: 0 8px; text-decoration: underline; color: var(--text-gray); }
+
+        /* 移动端适配 */
+        @media (max-width: 768px) {
+            .req-grid { grid-template-columns: 1fr; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="pub-nav">
+        <div class="nav-content">
+            <a href="index.html" class="nav-back">
+                <i class="fas fa-arrow-left"></i> Back to Home
+            </a>
+            <div style="font-weight:700; color:var(--brand-color);">Tsinghua KEG</div>
+        </div>
+    </nav>
+
+    <main class="join-container">
+        
+        <header class="join-header">
+            <h1 class="join-title">Join Our Research Team</h1>
+            <p class="join-intro">
+                We are looking for highly-motivated students and researchers to work on the frontiers of <strong>AGI, Large Language Models, and Agentic Systems</strong>.
+            </p>
+        </header>
+
+        <section class="req-section">
+            <h2 class="section-label">Who We Are Looking For</h2>
+            
+            <div class="req-grid">
+                
+                <div class="req-card">
+                    <h3 class="req-title">
+                        <i class="fas fa-graduation-cap req-icon"></i> Students
+                    </h3>
+                    <p style="margin-bottom:20px; color:#666; font-size:0.95rem;">
+                        For Undergrads, Master students, or visiting scholars.
+                    </p>
+                    <ul class="req-list">
+                        <li><strong>Solid Math & Coding:</strong> Proficiency in Python and PyTorch is a must. Familiarity with Linux.</li>
+                        <li><strong>Self-Motivated:</strong> Passionate about AGI, especially in <strong>Code Agents</strong> & <strong>VLM</strong>.</li>
+                        <li><strong>Commitment:</strong> At least 6 months of internship time is preferred.</li>
+                        <li><strong>Bonus:</strong> Experience in NLP/CV competitions or open-source projects.</li>
+                    </ul>
+                    <div style="margin-top:20px;">
+                        <span class="req-tag">Python</span>
+                        <span class="req-tag">PyTorch</span>
+                        <span class="req-tag">VLM</span>
+                    </div>
+                </div>
+
+                <div class="req-card">
+                    <h3 class="req-title">
+                        <i class="fas fa-flask req-icon"></i> Postdocs
+                    </h3>
+                    <p style="margin-bottom:20px; color:#666; font-size:0.95rem;">
+                        For PhD graduates focusing on AGI theory & algorithms.
+                    </p>
+                    <ul class="req-list">
+                        <li><strong>PhD Degree:</strong> In Computer Science, AI, or related fields.</li>
+                        <li><strong>Publication Record:</strong> At least 2 first-author papers in top-tier conferences (<strong>ACL, EACL</strong>, ICLR, NeurIPS, etc.).</li>
+                        <li><strong>Leadership:</strong> Ability to mentor junior students and lead research groups.</li>
+                        <li><strong>Research Vision:</strong> A clear research plan related to LLMs or Agents.</li>
+                    </ul>
+                    <div style="margin-top:20px;">
+                        <span class="req-tag">Top-tier Pubs</span>
+                        <span class="req-tag">Leadership</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="process-section">
+            <h2 class="section-label">How to Apply</h2>
+            
+            <div class="timeline">
+                
+                <div class="step-item">
+                    <div class="step-marker"></div>
+                    <h3 class="step-title">1. Prepare Your Materials</h3>
+                    <p class="step-desc">
+                        We need your <strong>CV/Resume</strong> and a <strong>Transcript</strong> (for students). If you have publications or a GitHub portfolio, please include them.
+                    </p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-marker"></div>
+                    <h3 class="step-title">2. Choose Your Track</h3>
+                    <p class="step-desc">
+                        Specify if you are applying for a <strong>Student Internship</strong>, <strong>PhD Position</strong>, or <strong>Postdoctoral Fellow</strong>. Mention your specific research interests (e.g., Tool-use, Alignment, Multi-agent).
+                    </p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-marker"></div>
+                    <h3 class="step-title">3. Send Email</h3>
+                    <p class="step-desc">
+                        Email your materials to <strong>keg.cs.tsinghua@gmail.com</strong>. <br>
+                        Please use the subject line: <br>
+                        <code>[Application] Your Name - Position - University</code>
+                    </p>
+                </div>
+
+                <div class="step-item">
+                    <div class="step-marker"></div>
+                    <h3 class="step-title">4. Interview</h3>
+                    <p class="step-desc">
+                        If your profile matches our needs, we will contact you within 2 weeks to schedule an interview with our faculty or senior researchers.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="cta-box">
+            <a href="mailto:keg.cs.tsinghua@gmail.com" class="btn-apply">
+                Apply Now <i class="fas fa-paper-plane" style="margin-left:8px;"></i>
+            </a>
+        </div>
+
+    </main>
+
+    <footer class="simple-footer">
+        <div class="footer-nav">
+            <a href="#">Subscribe</a>
+        </div>
+        <p style="margin-top:15px;">© 2026 Tsinghua KEG. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
