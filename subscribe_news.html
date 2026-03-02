@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Agentic AI Weekly | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --brand-color: #660099; /* 清华紫 */
+            --brand-hover: #4b0070;
+            --text-main: #222222;
+            --text-gray: #737373;
+            --bg-body: #FFFFFF;
+            --bg-accent: #F9F9F9;
+            --border-color: #E6E6E6;
+            
+            --font-ui: "Inter", sans-serif;
+            --font-serif: "Merriweather", serif;
+        }
+
+        /* --- 全局设置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-ui);
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            line-height: 1.6;
+        }
+        a { text-decoration: none; color: inherit; transition: 0.2s; }
+        ul { list-style: none; }
+        button { border: none; background: none; cursor: pointer; font-family: inherit; }
+
+        /* --- 1. 导航栏 --- */
+        .pub-nav {
+            position: sticky; top: 0; z-index: 999;
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border-color);
+            height: 60px; display: flex; align-items: center; justify-content: center;
+            padding: 0 20px;
+        }
+        .nav-content {
+            width: 100%; max-width: 1100px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .pub-logo {
+            font-family: var(--font-ui);
+            font-weight: 700; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 10px;
+            color: var(--brand-color);
+        }
+        .pub-logo img { height: 32px; width: auto; }
+
+        .nav-actions { display: flex; align-items: center; gap: 15px; }
+        .nav-link { font-size: 0.9rem; color: var(--text-gray); font-weight: 500; }
+        .nav-link:hover { color: var(--brand-color); }
+        
+        .btn-subscribe-sm {
+            background: var(--brand-color); color: #fff;
+            padding: 6px 16px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .btn-subscribe-sm:hover { background: var(--brand-hover); }
+
+        /* --- 2. 刊头 Hero --- */
+        .pub-hero {
+            text-align: center; padding: 60px 20px 40px;
+            max-width: 800px; margin: 0 auto;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .hero-title {
+            font-family: var(--font-serif);
+            font-size: 3rem; font-weight: 900; 
+            color: var(--brand-color);
+            margin-bottom: 15px; line-height: 1.1;
+        }
+        .hero-desc {
+            font-size: 1.15rem; color: var(--text-gray); line-height: 1.6;
+        }
+
+        /* --- 3. 布局 --- */
+        .container {
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 320px;
+            gap: 60px; padding: 40px 20px;
+        }
+
+        /* --- 👇 搜索 + 分享 组合栏样式 --- */
+        .toolbar-wrapper {
+            margin-bottom: 40px;
+            display: flex;
+            gap: 12px; /* 搜索框和按钮之间的间距 */
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1; /* 搜索框占据剩余空间 */
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 15px 12px 42px; /* 左边留空给图标 */
+            font-size: 0.95rem;
+            border: 1px solid var(--border-color);
+            border-radius: 50px; /* 圆角胶囊 */
+            font-family: var(--font-ui);
+            background-color: var(--bg-accent);
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--brand-color);
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(102, 0, 153, 0.08);
+        }
+        .search-icon {
+            position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+            color: #aaa; pointer-events: none;
+        }
+
+        .btn-toolbar-share {
+            padding: 0 24px;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 50px; /* 圆角胶囊 */
+            font-weight: 600;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px;
+            transition: all 0.2s;
+            white-space: nowrap; /* 防止文字换行 */
+        }
+        .btn-toolbar-share:hover {
+            border-color: var(--brand-color);
+            color: var(--brand-color);
+            background: rgba(102, 0, 153, 0.05);
+        }
+
+        /* --- 文章列表 --- */
+        .post-list { display: flex; flex-direction: column; gap: 40px; }
+
+        .post-card {
+            display: flex; flex-direction: column;
+            padding-bottom: 40px; border-bottom: 1px solid var(--border-color);
+            transition: opacity 0.3s;
+        }
+        .post-card:last-child { border-bottom: none; }
+        
+        .post-meta-top {
+            font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; 
+            letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600;
+        }
+        
+        .post-title {
+            font-family: var(--font-serif);
+            font-size: 1.6rem; font-weight: 700; color: #111;
+            margin-bottom: 10px; line-height: 1.3;
+            cursor: pointer;
+        }
+        .post-title:hover { text-decoration: underline; color: var(--brand-color); }
+
+        .post-excerpt {
+            font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;
+            font-family: var(--font-serif);
+        }
+        
+        .post-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: 0.9rem; color: var(--text-gray);
+        }
+
+        .post-byline {
+            font-size: 0.85rem; color: var(--text-gray); font-weight: 500; 
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .post-actions { display: flex; align-items: center; gap: 18px; }
+        .action-btn {
+            font-size: 0.85rem; color: var(--text-gray); cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: color 0.2s;
+        }
+        .action-btn:hover { color: var(--brand-color); }
+        .action-btn.liked { color: #e91e63; }
+        .action-btn.liked i { font-weight: 900; }
+
+        .featured-post .post-title { font-size: 2rem; }
+        .featured-img { 
+            width: 100%; height: 350px; object-fit: cover; border-radius: 8px; 
+            margin-bottom: 20px; border: 1px solid #eee;
+        }
+
+        /* --- 侧边栏 --- */
+        .sidebar { padding-top: 10px; }
+        .widget { margin-bottom: 40px; }
+        .widget-title {
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; 
+            letter-spacing: 1px; color: var(--text-gray); margin-bottom: 15px;
+            border-bottom: 2px solid var(--brand-color); display: inline-block; padding-bottom: 4px;
+        }
+
+        .sidebar-sub-box {
+            background: var(--bg-accent); padding: 20px; border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+        .sub-input {
+            width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;
+            margin-bottom: 10px; font-family: var(--font-ui);
+        }
+        .sub-btn-full {
+            width: 100%; padding: 10px; background: var(--brand-color); color: #fff;
+            border: none; border-radius: 4px; font-weight: 600; cursor: pointer;
+        }
+        .sub-btn-full:hover { background: var(--brand-hover); }
+
+        .link-list li { margin-bottom: 12px; }
+        .link-item { display: flex; align-items: center; gap: 10px; }
+        .link-icon {
+            width: 32px; height: 32px; background: #eee; border-radius: 4px; flex-shrink: 0;
+        }
+        .link-text { font-weight: 500; font-size: 0.95rem; }
+        .link-desc { font-size: 0.8rem; color: var(--text-gray); }
+
+        /* --- 底部 --- */
+        .simple-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px; text-align: center; color: var(--text-gray); font-size: 0.85rem;
+        }
+        .footer-nav { margin-bottom: 15px; }
+        .footer-nav a { margin: 0 8px; text-decoration: underline; }
+
+        @media (max-width: 850px) {
+            .container { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="pub-nav">
+        <div class="nav-content">
+            <a href="index.html" class="pub-logo">
+                <i class="fas fa-chevron-left" style="font-size: 0.8rem; margin-right: 5px;"></i> Lab Home
+            </a>
+            
+            <div class="nav-actions">
+                <a href="archive.html" class="nav-link">Archive</a>
+                <a href="archive_about.html" class="nav-link">About</a>
+                <button class="btn-subscribe-sm" onclick="document.querySelector('.sidebar-input').focus()">Subscribe</button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="pub-hero">
+        <h1 class="hero-title">The Agentic AI Weekly</h1>
+        <p class="hero-desc">
+            Deep dives into Autonomous Agents, LLMs, and Responsible AI. <br>
+            Curated by the Tsinghua KEG Research Team.
+        </p>
+    </header>
+
+    <div class="container">
+        
+        <main class="post-list">
+            
+            <div class="toolbar-wrapper">
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="weeklySearch" class="search-input" placeholder="Search articles..." onkeyup="filterPosts()">
+                </div>
+                
+                <button class="btn-toolbar-share" onclick="sharePage('The Agentic AI Weekly')" title="Share this page">
+                    <i class="fas fa-share-nodes"></i> Share
+                </button>
+            </div>
+            
+            <article class="post-card featured-post">
+                <div class="post-meta-top">LATEST ISSUE · JAN 14, 2026</div>
+                <img src="https://via.placeholder.com/800x400?text=AgentBeats+Competition" class="featured-img" alt="Cover">
+                <h2 class="post-title">AgentBeats Phase 1 Deadline & New Benchmarks</h2>
+                <p class="post-excerpt">
+                    This week, we wrap up the first phase of the AgentBeats coding competition. We also introduce a new set of benchmarks for evaluating multi-agent collaboration in dynamic environments...
+                </p>
+                <div class="post-footer">
+                    <div class="post-byline">JAN 14, 2026 | Tsinghua KEG</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">42</span></button>
+                        <button class="action-btn" onclick="handleComment()"><i class="far fa-comment"></i> 8</button>
+                        <button class="action-btn" onclick="sharePage('AgentBeats Phase 1')"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta-top">ISSUE #41</div>
+                <h2 class="post-title">Prize Updates & Custom Tracks for OpenDev</h2>
+                <p class="post-excerpt">
+                    Detailed breakdown of the prize pool for the new Custom Track. Also, we discuss the implications of multi-agent collaboration in cybersecurity environments and what it means for safety...
+                </p>
+                <div class="post-footer">
+                    <div class="post-byline">JAN 7, 2026 | Tsinghua KEG</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">15</span></button>
+                        <button class="action-btn" onclick="handleComment()"><i class="far fa-comment"></i> 2</button>
+                        <button class="action-btn" onclick="sharePage('Prize Updates')"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card">
+                <div class="post-meta-top">YEAR IN REVIEW</div>
+                <h2 class="post-title">2025: A Year of Agentic Innovation</h2>
+                <p class="post-excerpt">
+                    Looking back at our major milestones: The launch of ChatGLM-4, the first Agentic AI MOOC, and over 50 top-tier conference papers accepted. What's next for 2026?
+                </p>
+                <div class="post-footer">
+                    <div class="post-byline">DEC 30, 2025 | Tsinghua KEG</div>
+                    <div class="post-actions">
+                        <button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">128</span></button>
+                        <button class="action-btn" onclick="handleComment()"><i class="far fa-comment"></i> 34</button>
+                        <button class="action-btn" onclick="sharePage('2025 Year in Review')"><i class="fas fa-share-nodes"></i> Share</button>
+                    </div>
+                </div>
+            </article>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="archive.html" style="font-weight: 600; color: var(--brand-color);">View Full Archive &rarr;</a>
+            </div>
+
+        </main>
+
+        <aside class="sidebar">
+            <div class="widget">
+                <div class="sidebar-sub-box">
+                    <h3 style="font-size:1.1rem; margin-bottom:10px; font-weight:700;">Subscribe to the newsletter</h3>
+                    <p style="font-size:0.9rem; color:#555; margin-bottom:15px; line-height:1.4;">
+                        Join 5,000+ researchers getting our weekly updates directly in their inbox.
+                    </p>
+                    <form action="https://YOUR_LAB_MAILCHIMP_URL" method="POST" target="_blank">
+                        <input type="email" name="EMAIL" class="sub-input sidebar-input" placeholder="Type your email..." required>
+                        <button type="submit" class="sub-btn-full">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="widget">
+                <div class="widget-title">About</div>
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <img src="./keg.png" style="width:40px; height:auto;">
+                    <div style="font-weight:700; font-size:0.95rem;">Tsinghua KEG</div>
+                </div>
+                <p style="font-size:0.9rem; color:#555; line-height:1.5;">
+                    The Knowledge Engineering Group (KEG) at Tsinghua University. We research Knowledge Graphs, LLMs, and Social Networks.
+                </p>
+            </div>
+        </aside>
+
+    </div>
+
+    <footer class="simple-footer">
+        <div class="footer-nav">
+            <a href="#">Subscribe</a>
+        </div>
+        <p>© 2026 Tsinghua KEG. All rights reserved.</p>
+        <p style="margin-top:10px; font-size:0.75rem; opacity:0.6;">Published with standalone pride.</p>
+    </footer>
+
+    <script>
+        function filterPosts() {
+            const input = document.getElementById('weeklySearch');
+            const filter = input.value.toLowerCase();
+            const cards = document.querySelectorAll('.post-card');
+
+            cards.forEach(card => {
+                const title = card.querySelector('.post-title').innerText.toLowerCase();
+                const excerpt = card.querySelector('.post-excerpt').innerText.toLowerCase();
+                if (title.includes(filter) || excerpt.includes(filter)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+
+        function handleLike(btn) {
+            const icon = btn.querySelector('i');
+            const countSpan = btn.querySelector('.count');
+            let count = parseInt(countSpan.innerText);
+
+            if (btn.classList.contains('liked')) {
+                count--;
+                btn.classList.remove('liked');
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            } else {
+                count++;
+                btn.classList.add('liked');
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+            }
+            countSpan.innerText = count;
+        }
+
+        function handleComment() {
+            const userResponse = confirm("Join the discussion on our Discord channel?");
+            if (userResponse) {
+                window.open("https://discord.gg/your-invite-code", "_blank");
+            }
+        }
+
+        function sharePage(title) {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert(`🔗 Link copied!\nReady to share: "${title}"`);
+            });
+        }
+    </script>
+
+</body>
+</html>

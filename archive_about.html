@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - The Agentic AI Weekly</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Merriweather:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --brand-color: #660099; /* 清华紫 */
+            --brand-hover: #4b0070;
+            --text-main: #222222;
+            --text-gray: #737373;
+            --bg-body: #FFFFFF;
+            --bg-gray: #F9F9F9;
+            --border-color: #E6E6E6;
+            
+            --font-ui: "Inter", sans-serif;
+            --font-serif: "Merriweather", serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-ui); color: var(--text-main); line-height: 1.6; }
+        a { text-decoration: none; color: inherit; transition: 0.2s; }
+
+        /* --- 导航栏 (复用) --- */
+        .pub-nav {
+            position: sticky; top: 0; z-index: 999;
+            background: rgba(255,255,255,0.98);
+            border-bottom: 1px solid var(--border-color);
+            height: 60px; display: flex; align-items: center; justify-content: center;
+            padding: 0 20px;
+        }
+        .nav-content { width: 100%; max-width: 800px; display: flex; justify-content: space-between; align-items: center; }
+        .nav-back { font-size: 0.9rem; font-weight: 500; color: var(--text-gray); display: flex; align-items: center; gap: 6px; }
+        .nav-back:hover { color: var(--brand-color); }
+
+        /* --- 主容器 --- */
+        .about-container { max-width: 700px; margin: 0 auto; padding: 60px 20px 100px; }
+
+        /* --- 文本排版 --- */
+        h1 { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; line-height: 1.2; }
+        h3 { font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin-top: 40px; margin-bottom: 15px; }
+        p { font-size: 1.05rem; color: #333; margin-bottom: 20px; line-height: 1.7; }
+        .italic-text { font-style: italic; color: var(--text-gray); }
+        .link-u { text-decoration: underline; color: var(--text-main); }
+        .link-u:hover { color: var(--brand-color); }
+
+        /* --- 嵌入式订阅框 --- */
+        .inline-sub-form {
+            background: var(--bg-gray); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color);
+            margin: 30px 0; display: flex; gap: 10px;
+        }
+        .inline-input {
+            flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem;
+        }
+        .inline-btn {
+            background: var(--brand-color); color: #fff; border: none; padding: 0 24px;
+            border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s;
+        }
+        .inline-btn:hover { background: var(--brand-hover); }
+
+        /* --- People Card (复刻截图核心) --- */
+        .people-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 20px;
+            background: #fff;
+        }
+        
+        .pc-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        
+        .pc-name { font-size: 1.1rem; font-weight: 700; color: #000; }
+        .pc-handle { font-size: 0.9rem; color: var(--text-gray); margin-top: 2px; }
+        
+        .pc-avatar {
+            width: 56px; height: 56px; border-radius: 50%; 
+            background: var(--brand-color); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; font-weight: 700;
+        }
+
+        .pc-desc { font-size: 0.95rem; color: #444; margin-bottom: 20px; line-height: 1.5; }
+
+        .pc-actions { display: flex; gap: 10px; margin-bottom: 20px; }
+        
+        .btn-pc-sub {
+            flex: 1; background: var(--brand-color); color: #fff; border: none;
+            padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer;
+        }
+        .btn-pc-msg {
+            flex: 1; background: #fff; color: #333; border: 1px solid #ddd;
+            padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer;
+        }
+        .btn-pc-msg:hover { background: #f5f5f5; }
+
+        /* Publication Sub-card */
+        .pub-sub-card {
+            background: #F5F5F5; border-radius: 8px; padding: 12px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .psc-icon {
+            width: 36px; height: 36px; background: #fff; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid #eee;
+        }
+        .psc-info { display: flex; flex-direction: column; }
+        .psc-title { font-size: 0.9rem; font-weight: 600; color: #000; }
+        .psc-author { font-size: 0.8rem; color: var(--text-gray); }
+
+        /* --- Footer --- */
+        .simple-footer {
+            border-top: 1px solid var(--border-color);
+            padding: 40px 20px; text-align: center; color: var(--text-gray); font-size: 0.85rem;
+            margin-top: 60px;
+        }
+        .footer-nav a { margin: 0 8px; text-decoration: underline; color: var(--text-gray); }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .inline-sub-form { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="pub-nav">
+        <div class="nav-content">
+            <a href="subscribe_news.html" class="nav-back">
+                <i class="fas fa-arrow-left"></i> Back to Weekly Home
+            </a>
+            <div style="font-weight:700; color:var(--brand-color);">Tsinghua KEG</div>
+        </div>
+    </nav>
+
+    <main class="about-container">
+        
+        <h1>Why subscribe?</h1>
+        <p>
+            Subscribe to get full access to the newsletter and <a href="archive.html" class="link-u">publication archives</a>.
+        </p>
+
+        <form class="inline-sub-form" action="https://YOUR_LAB_MAILCHIMP_URL" method="POST" target="_blank">
+            <input type="email" name="EMAIL" class="inline-input" placeholder="Type your email..." required>
+            <button type="submit" class="inline-btn">Subscribe</button>
+        </form>
+
+        <h3>Stay up-to-date</h3>
+        <p>
+            Never miss an update—every new post is sent directly to your email inbox. For a spam-free, ad-free reading experience, plus audio and community features, get the <a href="#" class="link-u">Substack app</a>.
+        </p>
+
+        <h3>Join the crew</h3>
+        <p>
+            Be part of a community of people who share your interests. Participate in the comments section, or support this work with a subscription.
+        </p>
+        <p class="italic-text">
+            To learn more about the tech platform that powers this publication, visit <a href="#" class="link-u">Substack.com</a>.
+        </p>
+
+        <h3>People</h3>
+
+        <div class="people-card">
+            <div class="pc-header">
+                <div>
+                    <div class="pc-name">Tsinghua KEG</div>
+                    <div class="pc-handle">@tsinghuakeg</div>
+                </div>
+            </div>
+            
+            <div class="pc-desc">
+                The Knowledge Engineering Group (KEG) at Tsinghua University. We research Knowledge Graphs, LLMs, and Social Networks.
+            </div>
+
+            <div class="pc-actions">
+                <button class="btn-pc-sub" onclick="document.querySelector('.inline-input').focus()">Subscribe</button>
+                <button class="btn-pc-msg" onclick="location.href='mailto:keg.cs.tsinghua@gmail.com'">Message</button>
+            </div>
+
+            <div class="pub-sub-card">
+                <div class="psc-icon">
+                    <img src="./keg.png" style="width:24px; height:auto;">
+                </div>
+                <div class="psc-info">
+                    <span class="psc-title">The Agentic AI Weekly</span>
+                    <span class="psc-author">By Tsinghua KEG</span>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="simple-footer">
+        <div class="footer-nav">
+            <a href="#">Subscribe</a>
+        </div>
+        <p style="margin-top:15px;">© 2026 Tsinghua KEG. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Research | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 (与首页保持一致) --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --founders-rock: #4b0070;
+            --california-gold: #FFD200; /* 活力金 */
+            --white: #FFFFFF;
+            --academic-blue: #1a2b5e; /* 深邃学院蓝 */
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: #1d1d1f;
+            line-height: 1.6;
+            background-color: #F9FAFB; /* 页面背景微灰，突出白卡片 */
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 0 2rem;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #000000;
+            text-transform: none;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; text-transform: none; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; } /* 当前页面高亮 */
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Research Hero 区域 --- */
+        .research-hero {
+            /* --- 1. 背景 --- */
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            
+            /* --- 2. 固定高度 --- */
+            height: 600px; /* 👇 保持一致 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* --- 3. 其他 --- */
+            color: var(--white);
+            padding: 0 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .research-hero-container {
+            max-width: 1000px; margin: 0 auto;
+        }
+
+        .research-title {
+            font-size: 3.5rem; font-weight: 800; margin-bottom: 1rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            letter-spacing: -0.025em;
+        }
+        
+        .research-subtitle {
+            font-size: 1.25rem; opacity: 0.95; margin-bottom: 3rem; font-weight: 300; line-height: 1.6;
+        }
+
+        /* Hero 按钮 */
+        .btn-gold {
+            display: inline-block;
+            padding: 12px 36px;
+            border-radius: 6px;
+            background-color: var(--california-gold);
+            color: var(--academic-blue); /* 金底蓝字 */
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            background-color: #FFC107;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        /* --- Core Research Thrusts --- */
+        .thrusts-section {
+            padding: 6rem 2rem;
+            max-width: 1300px;
+            margin: 0 auto;
+        }
+        
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-title {
+            color: var(--academic-blue);
+            font-size: 2.4rem; font-weight: 800; margin-bottom: 1rem;
+            letter-spacing: -0.04em;
+        }
+        .section-desc { color: #666; font-size: 1.1rem; }
+
+        /* 卡片网格布局 */
+        .thrusts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px;
+        }
+
+        /* 单个研究卡片 */
+        .thrust-card {
+            background: #FFFFFF;
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border-top: 5px solid var(--california-gold); /* 顶部金线 */
+        }
+
+        .thrust-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+
+        .thrust-title {
+            color: var(--academic-blue);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        /* 列表样式 (带左侧竖线) */
+        .thrust-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-left: 3px solid #E0E0E0; /* 默认浅灰竖线 */
+            padding-left: 20px;
+        }
+
+        .thrust-card:hover .thrust-list {
+            border-left-color: var(--tsinghua-purple); /* 悬停时竖线变紫 */
+            transition: border-left-color 0.3s;
+        }
+
+        .thrust-item {
+            color: #444;
+            font-weight: 500;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        /* --- Join Our Community (从首页同步：清华紫背景) --- */
+        .community-section {
+            background-color: #660099; /* 清华紫 */
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+        } 
+
+        .community-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .community-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .community-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .community-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-community {
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            
+            background: #FFD200; /* 活力金 */
+            color: #1a2b5e;      /* 深蓝色文字 */
+            border: 1px solid #FFD200;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-community:hover {
+            background: #FFC107;
+            border-color: #FFC107;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+
+        /* --- Footer (从首页同步：深蓝色背景) --- */
+        footer {
+            background-color: #1a2b5e; /* 深邃学院蓝 */
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: none; /* 保持原样，不全大写 */
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 1.5rem; }
+            .navbar-menu { margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; gap: 20px; }
+            .research-title { font-size: 2.5rem; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand" style="display: flex; align-items: center; gap: 0; text-decoration: none;">
+            <img src="./keg.png" alt="Tsinghua Logo" style="height: 50px; margin-right: 12px;">
+
+            <span style="color: #660099; font-weight: 800; font-size: 1.6rem; letter-spacing: -0.5px; line-height: 1;">
+                Tsinghua KEG
+            </span>
+
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link active">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="research-hero">
+        <div class="research-hero-container">
+            <h1 class="research-title">Research @ Tsinghua KEG</h1>
+            <p class="research-subtitle">
+                Advancing the Frontier of Agentic AI and Decentralized Intelligence through rigorous academic inquiry and large-scale model development.
+            </p>
+            <a href="publications.html" class="btn-gold">View All Research Publications</a>
+        </div>
+    </header>
+
+    <section class="thrusts-section">
+        <div class="section-header">
+            <h2 class="section-title">Research Areas</h2>
+            <p class="section-desc">Pioneering the next generation of AI by bridging data-driven learning, knowledge modeling, and symbolic reasoning.</p>
+        </div>
+
+        <div class="thrusts-grid">
+            
+            <div class="thrust-card">
+                <h3 class="thrust-title">Foundation Models & AGI Architectures</h3>
+                <div class="thrust-list">
+                    <div class="thrust-item">Large Language Model (GLM)</div>
+                    <div class="thrust-item">Scaling Laws & Training Infrastructure</div>
+                    <div class="thrust-item">Long-Context & Efficient Inference</div>
+                    <div class="thrust-item">Multilingual & Knowledge-Enhanced Models</div>
+                    <div class="thrust-item-covers">
+                        <span class="cover-label">Covers:</span>
+                        <a href="https://github.com/THUDM/GLM" target="_blank" class="repo-link">GLM</a>, 
+                        <a href="https://github.com/THUDM/GLM-130B" target="_blank" class="repo-link">GLM-130B</a>, 
+                        <a href="https://github.com/THUDM/ChatGLM-6B" target="_blank" class="repo-link">ChatGLM</a>,
+                        <a href="https://github.com/zai-org/GLM-5" target="_blank" class="repo-link">GLM-4/5</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thrust-card">
+                <h3 class="thrust-title">Multimodal Intelligence & Generation</h3>
+                <div class="thrust-list">
+                    <div class="thrust-item">Vision-Language Models (CogVLM)</div>
+                    <div class="thrust-item">Text-to-Image Generation (CogView)</div>
+                    <div class="thrust-item">Text-to-Video Generation (CogVideo / CogVideoX)</div>
+                    <div class="thrust-item">Unified Multimodal Representation Learning</div>
+                    <div class="thrust-item-covers">
+                        <span class="cover-label">Covers:</span>
+                        <a href="https://github.com/THUDM/CogVLM" target="_blank" class="repo-link">CogVLM</a>, 
+                        <a href="https://github.com/zai-org/GLM-V" target="_blank" class="repo-link">GLM-V</a>,
+                        <a href="https://github.com/THUDM/CogView" target="_blank" class="repo-link">CogView</a>, 
+                        <a href="https://github.com/THUDM/CogVideo" target="_blank" class="repo-link">CogVideo</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thrust-card">
+                <h3 class="thrust-title">Agentic AI & Autonomous Systems</h3>
+                <div class="thrust-list">
+                    <div class="thrust-item">Agent Reasoning & Planning</div>
+                    <div class="thrust-item">Tool-Using and Web Agents</div>
+                    <div class="thrust-item">Long-Horizon Task Execution</div>
+                    <div class="thrust-item">Self-Reflection & Self-Improvement (AutoGLM)</div>
+                    <div class="thrust-item-covers">
+                        <span class="cover-label">Covers:</span>
+                        <a href="https://github.com/zai-org/Open-AutoGLM" target="_blank" class="repo-link">AutoGLM</a>, 
+                        <a href="https://github.com/THUDM/WebGLM" target="_blank" class="repo-link">WebGLM</a>,
+                        <a href="https://github.com/THUDM/WebRL" target="_blank" class="repo-link">WebRL</a>, 
+                        <a href="https://github.com/THUDM/AgentBench" target="_blank" class="repo-link">AgentBench</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thrust-card">
+                <h3 class="thrust-title">Knowledge-Centric AI & Data Mining</h3>
+                <div class="thrust-list">
+                    <div class="thrust-item">Knowledge Graph Construction & Reasoning</div>
+                    <div class="thrust-item">Social Network Mining</div>
+                    <div class="thrust-item">Scientific Knowledge Discovery</div>
+                    <div class="thrust-item">Academic Intelligence Platforms (AMiner)</div>
+                    <div class="thrust-item-covers">
+                        <span class="cover-label">Covers:</span>
+                        <a href="https://www.aminer.cn/" target="_blank" class="repo-link">AMiner</a>, 
+                        <a href="https://github.com/THUDM/CogDL" target="_blank" class="repo-link">CogDL</a>,
+                        <a href="https://github.com/THUDM/GraphMAE" target="_blank" class="repo-link">GraphMAE</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thrust-card">
+                <h3 class="thrust-title">AI for Programming & Software Engineering</h3>
+                <div class="thrust-list">
+                    <div class="thrust-item">Code Generation & Completion (CodeGeeX)</div>
+                    <div class="thrust-item">Automated Program Synthesis</div>
+                    <div class="thrust-item">Code Understanding, Review & Verification</div>
+                    <div class="thrust-item">Agentic Coding Systems</div>
+                    <div class="thrust-item-covers">
+                        <span class="cover-label">Covers:</span>
+                        <a href="https://github.com/THUDM/CodeGeeX" target="_blank" class="repo-link">CodeGeeX</a>,
+                        <a href="https://github.com/zai-org/GLM-4.5" target="_blank" class="repo-link">code agents</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="thrust-card">
+                <h3 class="thrust-title">Trustworthy, Secure & Responsible AI</h3>
+                <div class="thrust-list">
+                    <div class="thrust-item">Model Robustness & Alignment</div>
+                    <div class="thrust-item">Interpretability & Monitoring</div>
+                    <div class="thrust-item">Privacy-Preserving Learning</div>
+                    <div class="thrust-item">Safety Evaluation for Large Models</div>
+                    <div class="thrust-item">Covers: AI safety, alignment, interpretability, controllability</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area of artificial general intelligence. 
+            </p>
+            
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="join_us.html" class="btn-community">Join Our Lab</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

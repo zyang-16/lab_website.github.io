@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --text-main: #1d1d1f;
+            --bg-light: #F9FAFB;
+        }
+
+        /* --- 基础设置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Inter", sans-serif; color: var(--text-main); line-height: 1.7; background: #fff;
+        }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        
+        /* --- 导航栏 (保持统一) --- */
+        .navbar {
+            background: #fff; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px; display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand { font-size: 1.6rem; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+        .nav-link { color: #333; font-weight: 500; font-size: 0.95rem; margin-left: 32px; }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+
+        /* --- 布局容器 --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+        
+        /* --- Grid 布局 (左文右侧栏) --- */
+        .detail-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 60px;
+        }
+
+        /* --- 左侧主要内容 --- */
+        .event-header { margin-bottom: 2rem; border-bottom: 1px solid #eee; padding-bottom: 2rem; }
+        .badge-type {
+            display: inline-block; background: #E3F2FD; color: #1976D2; 
+            padding: 6px 12px; border-radius: 4px; font-weight: 700; font-size: 0.85rem; margin-bottom: 1rem; text-transform: uppercase;
+        }
+        .event-title { font-size: 2.5rem; font-weight: 800; color: var(--academic-blue); line-height: 1.2; margin-bottom: 1rem; }
+        
+        .content-block h3 { font-size: 1.4rem; color: #333; margin-top: 2.5rem; margin-bottom: 1rem; font-weight: 700; }
+        .content-block p { margin-bottom: 1rem; color: #555; font-size: 1.05rem; }
+        .speaker-card {
+            background: var(--bg-light); padding: 1.5rem; border-radius: 8px; border-left: 4px solid var(--tsinghua-purple); margin-top: 1rem;
+        }
+        .speaker-name { font-weight: 700; font-size: 1.1rem; color: var(--tsinghua-purple); }
+        .speaker-title { font-size: 0.9rem; color: #666; margin-bottom: 0.5rem; }
+
+        /* --- 右侧侧边栏 (Sticky) --- */
+        .sidebar { position: sticky; top: 100px; height: fit-content; }
+        .info-card {
+            background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .info-item { display: flex; gap: 15px; margin-bottom: 1.5rem; }
+        .info-icon {
+            width: 40px; height: 40px; background: rgba(102, 0, 153, 0.1); color: var(--tsinghua-purple);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .info-text h4 { font-size: 0.9rem; color: #888; text-transform: uppercase; margin-bottom: 4px; }
+        .info-text p { font-weight: 600; color: #333; line-height: 1.4; }
+
+        .btn-action {
+            display: block; width: 100%; padding: 12px; text-align: center;
+            background: var(--tsinghua-purple); color: #fff; font-weight: 600; border-radius: 6px;
+            margin-top: 2rem; transition: 0.3s;
+        }
+        .btn-action:hover { background: #4b0070; }
+        
+        .btn-back { display: inline-flex; align-items: center; gap: 8px; color: #666; font-weight: 600; margin-bottom: 2rem; }
+        .btn-back:hover { color: var(--tsinghua-purple); }
+
+        /* 定义一个新的按钮样式，不使用 event-btn 以免被 JS 拦截 */
+        .simple-details-link {
+            display: inline-block;
+            padding: 10px 24px;
+            background-color: transparent;
+            color: #660099; /* 保持清华紫 */
+            border: 1.5px solid #660099;
+            border-radius: 50px; /* 胶囊形状 */
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            margin-bottom: 20px;
+        }
+
+        /* 悬停时的视觉反馈 */
+        .simple-details-link:hover {
+            background-color: #660099;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(102, 0, 153, 0.2);
+        }
+        /* --- 数据仓库 (隐藏) --- */
+        #db-events { display: none; }
+
+        @media (max-width: 768px) {
+            .detail-grid { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 40px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <div style="display: flex;">
+            <a href="events.html" class="nav-link active">Back to Events</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <a href="events.html" class="btn-back"><i class="fas fa-arrow-left"></i> All Events</a>
+
+        <div class="detail-grid">
+            
+            <main id="main-content">
+                <div class="event-header">
+                    <span class="badge-type">Loading...</span>
+                    <h1 class="event-title">Loading Event Details...</h1>
+                </div>
+            </main>
+
+            <aside class="sidebar">
+                <div class="info-card">
+                    <div class="info-item">
+                        <div class="info-icon"><i class="far fa-calendar-alt"></i></div>
+                        <div class="info-text">
+                            <h4>Date</h4>
+                            <p id="info-date">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="far fa-clock"></i></div>
+                        <div class="info-text">
+                            <h4>Time</h4>
+                            <p id="info-time">Loading...</p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="info-text">
+                            <h4>Location</h4>
+                            <p id="info-location">Loading...</p>
+                        </div>
+                    </div>
+
+                    <a href="#" class="btn-action" id="info-btn">Register Now</a>
+                </div>
+            </aside>
+
+        </div>
+    </div>
+
+    <div id="db-events">
+
+        <div id="upcoming-1" 
+             data-type="Academic Seminar" 
+             data-date="April 15, 2026" 
+             data-time="14:00 - 16:00" 
+             data-location="FIT Building, Room 1-312"
+             data-btn="Register Now">
+            
+            <h1 class="event-title">The Future of Agentic AI: From Theory to Practice</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>Recent advances in Large Language Models (LLMs) have paved the way for autonomous agents capable of complex reasoning and tool use. However, significant challenges remain in reliability, safety, and multi-agent collaboration.</p>
+                <p>In this seminar, we will discuss the scaling laws of agent capabilities and demonstrate our latest framework, AgentBeats, which achieves state-of-the-art performance on coding benchmarks.</p>
+                
+                <h3>Speaker Bio</h3>
+                <div class="speaker-card">
+                    <div class="speaker-name">Prof. Jie Tang</div>
+                    <div class="speaker-title">Professor, Tsinghua University</div>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        Jie Tang is a Professor at the Department of Computer Science and Technology, Tsinghua University. His research interests include artificial general intelligence, data mining, and social networks.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="upcoming-2" 
+             data-type="Conference" 
+             data-date="May 22, 2026" 
+             data-time="09:00 - 18:00" 
+             data-location="Main Auditorium, Tsinghua University"
+             data-btn="View Agenda">
+            
+            <h1 class="event-title">Tsinghua AI & Knowledge Graph Summit 2026</h1>
+            
+            <div class="content-block">
+                <h3>Overview</h3>
+                <p>The annual summit brings together leading researchers and industry experts to discuss the convergence of Knowledge Graphs (KGs) and Large Language Models (LLMs).</p>
+                
+                <h3>Key Tracks</h3>
+                <ul>
+                    <li>- Neuro-Symbolic Integration</li>
+                    <li>- KG-Augmented Generation (RAG)</li>
+                    <li>- Reasoning in Large Models</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="past-1" 
+             data-type="Past Seminar" 
+             data-date="Feb 11, 2026" 
+             data-time="20:00 - 21:00" 
+             data-location="Online"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">T^2-Bench: Evaluating ConversationalAgents in a Dual-Control Environment</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>Existing benchmarks for conversational AI agents simulate single-control environments, where only the AI agent can use tools to interact with the world, while the user remains a passive information provider. This differs from real-world scenarios such as technical support, where users need to actively participate in modifying the state of the (shared) world. To address this gap, we introduce T²-Bench, with four key contributions:</p>
+                <p>1) A novel telecom-inspired dual-control domain modeled as a Dec-POMDP, where both the agent and the user make use of tools to act in a shared, dynamic environment that tests both agent coordination and communication.</p>
+                <p>2) A compositional task generator that programmatically creates diverse, verifiable tasks from atomic components, ensuring domain coverage and controlled complexity.</p>
+                <p>3) A reliable user simulator tightly coupled with the environment, whose behavior is constrained by tools and observable states, improving simulation fidelity.</p>
+                <p>4) Fine-grained analysis of agent performance through multiple ablations, including separating errors arising from reasoning versus communication and coordination.</p>
+                <p>In particular, our experiments show significant performance drops when agents shift from no-user to dual-control settings, highlighting the challenges of guiding users. Overall, T²-Bench provides a controlled testbed for agents that must both reason effectively and guide user actions.</p>
+                
+                <h3>Speaker Bio</h3>
+                <div class="speaker-card">
+                    <div class="speaker-name">Honghua Dong</div>
+                    <div class="speaker-title">Ph.D. candidate, University of Toronto</div>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        Honghua Dong is a Ph.D. candidate in Computer Science at the University of Toronto. Prior to UofT, he was an undergraduate student in the Yao Class at Tsinghua University. His research focuses on advancing the development of language model agents, evaluating and improving their capabilities, with additional interests spanning reasoning, graph neural networks, and reinforcement learning.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="past-2" 
+             data-type="Past Seminar" 
+             data-date="Jan 20, 2026" 
+             data-time="10:00 - 11:00" 
+             data-location="Online"
+             data-btn="View Details">
+            
+            <a href="events/yusun-talk.jpg"
+                target="_blank"
+                class="simple-details-link"
+                onclick="event.stopPropagation();">
+                View Details
+            </a>
+
+            
+            <h1 class="event-title">Test-Time Training</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We formulate long-context language modeling as a problem in continual learning, rather than architecture design. Under this formulation, we use only a standard Transformer architecture with sliding-window attention. However, the model continues learning at test time via next-token prediction on the given context, effectively compressing the context it reads into its weights.</p>
+                <p>In addition, we improve the model’s initialization for learning at test time through meta-learning during training. Overall, our method—Test-Time Training (TTT)—is end-to-end (E2E) at both test time (via next-token prediction) and training time (via meta-learning), in contrast to previous approaches.</p>
+                <p>We conduct extensive experiments with a focus on scaling properties. In particular, for 3B models trained with 164B tokens, TTT-E2E scales with context length in the same way as full-attention Transformers, while alternatives such as Mamba-2 and Gated DeltaNet do not. Meanwhile, similar to RNNs, TTT-E2E achieves constant inference latency regardless of context length, making it 2.7× faster than full attention for 128K context. Our code is publicly available.</p>
+                
+                <h3>Speaker Bio</h3>
+                <div class="speaker-card">
+                    <div class="speaker-name">Yu Sun</div>
+                    <div class="speaker-title">Postdoctoral Researcher, Standard University</div>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        Yu Sun is a postdoctoral researcher at Stanford University and a researcher at NVIDIA. His research focuses on continual learning, particularly a conceptual framework known as test-time training, where each test instance defines its own learning problem.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="past-3" 
+             data-type="Past Seminar" 
+             data-date="Jan 12, 2026" 
+             data-time="22:00 - 23:00" 
+             data-location="Online"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Titans + MIRAS: Helping AI Have Long-term Memory</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>Designing efficient and effective architectural backbones and optimization algorithms has long been central to improving the capabilities of foundation models. In this talk, we reconceptualize neural architectures and optimization algorithms as associative memory modules that learn key–value mappings using an internal objective, referred to as attentional bias.
+
+We observe that most existing sequence models rely on either dot-product similarity or L2 regression objectives as their attentional bias. Going beyond these objectives, we introduce a set of alternative attentional bias configurations and their effective approximations to stabilize training. We further reinterpret forgetting mechanisms in modern deep learning architectures as a form of retention regularization, and propose a novel set of forget gates for sequence models.
+
+Building on these insights, we present MIRAS, a general framework for designing deep learning architectures based on four design choices:
+(i) associative memory architecture,
+(ii) attentional bias objective,
+(iii) retention gate, and
+(iv) memory learning algorithm.
+
+We also introduce new sequence models, including Titans, which demonstrate exceptional performance on tasks such as language modeling, commonsense reasoning, and recall-intensive tasks—often outperforming Transformers and other modern linear recurrent models.</p>
+            
+                <h3>Speaker Bio</h3>
+                <div class="speaker-card">
+                    <div class="speaker-name">Ali Behrouz</div>
+                    <div class="speaker-title">Ph.D. student, Cornell University</div>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">
+                        Ali Behrouz is a Ph.D. student in the Computer Science Department at Cornell University and a research intern at Google Research. His research spans deep learning architectures and large language models, as well as their applications in healthcare and neuroscience. His work has been published at top venues including NeurIPS, ICML, ICLR, KDD, WWW, VLDB, and CHIL, and has received best paper awards and oral presentations.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="past-4" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+        <div id="past-5" 
+             data-type="Past Seminar" 
+             data-date="Mar 10, 2026" 
+             data-time="10:00 - 11:30" 
+             data-location="FIT 1-312"
+             data-btn="Watch Replay">
+            
+            <h1 class="event-title">Weekly Seminar: Multimodal Reasoning in ChatGLM</h1>
+            
+            <div class="content-block">
+                <h3>Abstract</h3>
+                <p>We present the architecture behind the latest ChatGLM multimodal capabilities, focusing on how visual encoders are aligned with the language model backbone.</p>
+                <p>The talk covers data collection strategies, alignment training, and evaluation results on standard VQA benchmarks.</p>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. 获取 URL 中的 ID (例如 ?id=upcoming-1)
+            const params = new URLSearchParams(window.location.search);
+            const eventId = params.get('id');
+
+            // 2. 找到仓库里对应的数据
+            const source = document.getElementById(eventId);
+
+            if (source) {
+                // 3. 填充左侧内容
+                const mainContent = document.getElementById('main-content');
+                // 从仓库的 innerHTML 直接拿内容
+                const type = source.getAttribute('data-type');
+                const title = source.querySelector('.event-title').innerText;
+                const content = source.querySelector('.content-block').outerHTML; // 拿 content-block 的全部 HTML
+
+                mainContent.innerHTML = `
+                    <div class="event-header">
+                        <span class="badge-type">${type}</span>
+                        <h1 class="event-title">${title}</h1>
+                    </div>
+                    ${content}
+                `;
+
+                // 4. 填充右侧侧边栏 (从 data 属性拿)
+                document.getElementById('info-date').innerText = source.getAttribute('data-date');
+                document.getElementById('info-time').innerText = source.getAttribute('data-time');
+                document.getElementById('info-location').innerText = source.getAttribute('data-location');
+                
+                const btn = document.getElementById('info-btn');
+                btn.innerText = source.getAttribute('data-btn');
+
+                // 如果是 Past Event，按钮可能变成 "Watch Replay"
+                if (eventId.includes('past')) {
+                    btn.style.backgroundColor = '#fff';
+                    btn.style.color = 'var(--tsinghua-purple)';
+                    btn.style.border = '1px solid var(--tsinghua-purple)';
+                }
+
+            } else {
+                // 找不到 ID 的情况
+                document.querySelector('.container').innerHTML = '<h2 style="text-align:center; color:#999;">Event not found.</h2><p style="text-align:center"><a href="events.html">Return to Events</a></p>';
+            }
+        });
+    </script>
+
+</body>
+</html>

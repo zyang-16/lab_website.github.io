@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About KEG | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --white: #FFFFFF;
+            --light-bg: #F9FAFB;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: #1d1d1f;
+            line-height: 1.7;
+            background-color: var(--white);
+            -webkit-font-smoothing: antialiased;
+        }
+        h2 { font-weight: 800; letter-spacing: -0.03em; color: var(--academic-blue); margin-bottom: 1rem; }
+        p { color: #555; font-size: 1.05rem; }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem; font-weight: 800; color: #000; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 --- */
+        .about-hero {
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover; background-position: center bottom; background-repeat: no-repeat;
+            height: 600px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--white); padding: 0 2rem; text-align: center;
+        }
+        .about-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .about-subtitle { 
+            color: #ffffff; font-size: 1.3rem; opacity: 0.95; font-weight: 300; max-width: 800px; line-height: 1.6; 
+        }
+
+        /* --- 通用 Section --- */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+        .section-py { padding: 2rem 0; }
+        .bg-light { background-color: var(--light-bg); }
+
+        /* --- Vision & Mission --- */
+        .mission-box { text-align: center; max-width: 900px; margin: 0 auto; }
+        .mission-statement { font-size: 1.8rem; font-weight: 700; color: var(--tsinghua-purple); line-height: 1.4; margin-bottom: 2rem; }
+        
+        .scope-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; margin-top: 3rem; }
+        .scope-item { text-align: left; border-left: 4px solid var(--california-gold); padding-left: 1.5rem; }
+        .scope-icon { font-size: 2rem; color: var(--academic-blue); margin-bottom: 1rem; display: block; }
+        .scope-title { font-size: 1.4rem; font-weight: 700; color: #000; margin-bottom: 0.5rem; }
+
+        /* --- History Timeline --- */
+        .history-intro { text-align: center; max-width: 800px; margin: 0 auto 4rem; }
+        .timeline-box { position: relative; max-width: 800px; margin: 0 auto; padding-left: 40px; }
+        .timeline-box::before {
+            content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 3px; background: #E5E5E5;
+        }
+        .timeline-item { position: relative; margin-bottom: 3.5rem; animation: fadeIn 0.5s ease-in-out; }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-dot {
+            position: absolute; left: -32px; top: 5px; width: 18px; height: 18px;
+            background: #fff; border: 4px solid var(--tsinghua-purple); border-radius: 50%; z-index: 2; transition: all 0.3s ease;
+        }
+        .timeline-item:hover .timeline-dot { background: var(--california-gold); border-color: var(--california-gold); transform: scale(1.2); }
+        .timeline-year {
+            display: inline-block; background: var(--tsinghua-purple); color: #fff; padding: 4px 12px;
+            border-radius: 20px; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.8rem;
+        }
+        .timeline-content h3 { font-size: 1.3rem; font-weight: 700; color: var(--academic-blue); margin-bottom: 0.5rem; }
+        .timeline-content p { font-size: 1rem; color: #666; margin: 0; }
+
+        /* --- Research Culture --- */
+        .culture-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .culture-card {
+            background: #fff; padding: 2.5rem; border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); transition: transform 0.3s;
+            border-top: 5px solid var(--academic-blue);
+        }
+        .culture-card:hover { transform: translateY(-5px); }
+        .culture-card h3 { font-size: 1.5rem; margin-bottom: 1rem; color: var(--academic-blue); }
+        .culture-card.gold-top { border-top-color: var(--california-gold); }
+        .culture-card.purple-top { border-top-color: var(--tsinghua-purple); }
+
+        .platform-list {
+        max-width: 1000px;
+        margin: 0 auto;
+        }
+
+        .platform-item {
+        display: grid;
+        grid-template-columns: 1fr 1.4fr; /* 图稍窄，文字稍宽 */
+        gap: 2.5rem;
+        align-items: center;
+        margin-bottom: 4rem;
+        }
+
+        .platform-image img {
+        width: 100%;
+        max-width: 360px;
+        border-radius: 10px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+        }
+
+        .platform-content h3 {
+        margin-bottom: 1rem;
+        font-size: 1.4rem;
+        }
+
+        .platform-content p {
+        line-height: 1.8;
+        color: #333;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+        .platform-item {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .platform-image img {
+            margin: 0 auto;
+        }
+        }
+        /* --- Community Section --- */
+        .community-section { background-color: #660099; color: #ffffff; padding: 3rem 2rem; text-align: center; } 
+        .community-container { max-width: 900px; margin: 0 auto; }
+        .community-title { color: #ffffff !important; font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+        .community-desc { color: #ffffff !important; font-size: 1.1rem; line-height: 1.6; opacity: 0.9; margin-bottom: 3rem; max-width: 750px; margin-left: auto; margin-right: auto; }
+        .community-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-community {
+            padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; transition: all 0.3s ease; text-decoration: none;
+            background: var(--california-gold); color: var(--academic-blue);
+            border: 1px solid var(--california-gold); box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-community:hover { background: #FFC107; transform: translateY(-3px); }
+
+        .about-content {
+            max-width: 900px;          /* 学术官网黄金宽度 */
+            margin: 0 auto;
+        }
+
+        .about-content p {
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 1.6rem;
+            color: #333;
+        }
+        .research-bullets {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 1rem;
+        }
+
+        .research-bullets li {
+            position: relative;
+            padding-left: 1.2rem;
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .research-bullets li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #6a1bc2; /* 紫色，和你网站一致 */
+            font-weight: bold;
+        }
+        /* --- Footer --- */
+        footer { background-color: #1a2b5e; color: rgba(255,255,255,0.7); padding: 5rem 2rem 2rem; font-size: 0.95rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+        .footer-brand h2 { color: var(--white); font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+        .footer-col h3 { color: var(--white); margin-bottom: 1.5rem; font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        .footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; font-size: 0.85rem; }
+
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 1rem; }
+            .navbar-menu { margin-top: 1rem; flex-wrap: wrap; justify-content: center; }
+            .footer-content { grid-template-columns: 1fr; }
+            .timeline-box { padding-left: 30px; }
+            .timeline-dot { left: -24px; width: 14px; height: 14px; top: 6px; }
+            .timeline-box::before { left: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li> 
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="about-hero">
+        <h1 class="about-title">About @ Tsinghua KEG</h1>
+        <p class="about-subtitle">
+            Bridging Knowledge and Intelligence for a Better Future.
+        </p>
+    </header>
+
+    <section class="section-py">
+        <div class="container">
+            <div class="mission-box">
+                <h2 style="text-align: center; margin-bottom: 1rem;">Vision</h2>
+                <div class="mission-statement">
+                    AGI: Teaching machines to think like humans
+                </div>
+                <!-- <p class="mission-desc">
+                    At Tsinghua KEG (Knowledge Engineering Group), we believe that the next generation of AI must bridge the gap between <strong>data-driven learning</strong> and <strong>symbolic knowledge</strong>. Our vision is to build intelligent systems that can understand, reason, and generate knowledge at a human level.
+                </p> -->
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py bg-light">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 1rem;">History & Milestones</h2>
+            <p class="history-intro">
+                Founded in <strong>1996</strong>, KEG has evolved from a research unit into a global hub for AI innovation. Here are some key moments in our journey.
+            </p>
+
+            <div class="timeline-box">
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">1996</span>
+                    <div class="timeline-content">
+                        <h3>KEG Established</h3>
+                        <p>The Knowledge Engineering Group was founded within the Department of Computer Science and Technology at Tsinghua University.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2006</span>
+                    <div class="timeline-content">
+                        <h3>Launch of AMiner</h3>
+                        <p>Released AMiner.org, an AI-driven academic search and mining platform, now connecting millions of researchers worldwide.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2019</span>
+                    <div class="timeline-content">
+                        <h3>Strategic Positioning in Foundation Model</h3>
+                        <p>Initiated a comprehensive strategic effort in large language models and foundation-model platforms, with innovations in pre-training methodologies as well as training and inference acceleration.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2023</span>
+                    <div class="timeline-content">
+                        <h3>ChatGLM & Commercialization</h3>
+                        <p>Successfully transferred ChatGLM technology to Zhipu AI (spin-off), accelerating the industrial application of Large Language Models.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <span class="timeline-year">2025</span>
+                    <div class="timeline-content">
+                        <h3>All-in on Coding & Agentic Systems</h3>
+                        <p>Consolidated its research efforts around code-centric foundation models and agentic systems, advancing the integration of large language models with program synthesis, tool use, and long-horizon reasoning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py bg-light">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">Research Culture</h2>
+            <div class="culture-grid">
+                <div class="culture-card purple-top">
+                    <i class="fas fa-hourglass-half" style="font-size:2rem; color:var(--tsinghua-purple); margin-bottom:1rem;"></i>
+                    <h3>Long-termism</h3>
+                    <p>We focus on fundamental, hard problems rather than low-hanging fruit. We believe in persistent effort over decades to achieve breakthroughs in AGI.</p>
+                </div>
+                <div class="culture-card gold-top">
+                    <i class="fas fa-globe-asia" style="font-size:2rem; color:var(--california-gold); margin-bottom:1rem;"></i>
+                    <h3>Openness</h3>
+                    <p>We are committed to Open Source. From AMiner to ChatGLM, we share our models and datasets to democratize AI and foster global collaboration.</p>
+                </div>
+                <div class="culture-card" style="border-top-color: #000;">
+                    <i class="fas fa-cogs" style="font-size:2rem; color:#000; margin-bottom:1rem;"></i>
+                    <h3>Theory + Systems</h3>
+                    <p>We pursue "Ding Tian Li Di" (顶天立地): aiming for world-class theoretical contributions while building robust, large-scale systems that work in the real world.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">About KEG</h2>
+            <div class="about-content">
+                <p>The <strong>Knowledge Engineering Group (KEG)</strong> at the Department of Computer Science and Technology, Tsinghua University, was founded in 1996 by Prof. <strong>Kehong Wang</strong>. The group is currently led by five faculty members: <strong>Juanzi Li, Bin Xu, Jie Tang, Yuxiao Dong, and Lei Hou</strong>. KEG focuses on foundational research in artificial intelligence driven by the dual engines of data and knowledge. Its research spans a broad range of areas including <strong>artificial intelligence, large-scale foundation models, knowledge graphs, data mining, and social network analysis</strong>.</p>
+
+                <p>Over the years, KEG has undertaken numerous national-level research projects, international collaborative programs, and industry partnerships. These include projects funded by <strong>the National Natural Science Foundation of China, the National Key R&D Program, the 863 Program, EU framework programs, and the China–UK Newton Advanced Fellowship</strong>, as well as collaborations with <strong>major organizations and enterprises</strong> such as Xinhua News Agency, Tencent, Huawei, Alibaba, Meituan, and OPPO. To date, KEG has trained over <strong>100 graduate students and more than 20 postdoctoral researchers</strong>. Many alumni have received honors such as Outstanding Doctoral and Master’s Theses Awards, Outstanding Graduates of Tsinghua University, and Beijing Outstanding Graduate Awards, reflecting the group’s strong record in talent cultivation.</p>
+
+                <p>Since 2019, KEG has actively aligned its research agenda with global trends in <strong>artificial intelligence</strong>, with a particular emphasis on large language models (LLMs) and foundation model platforms. The group has made key innovations in <strong>pre-training methodologies, training and inference acceleration, and system-level optimization</strong>, earning broad recognition from the international research community. Notably, KEG has established <strong>a fully independent, end-to-end foundation model technology stack with complete intellectual property rights</strong>. This effort has contributed to early deployments of large-model computing platforms at national supercomputing centers and domestic hardware vendors, helping to mitigate critical dependencies in large-scale AI infrastructure. <strong>The ChatGLM series of models</strong> developed by KEG has achieved state-of-the-art performance comparable to GPT-4, with techniques cited and positively evaluated by multiple Turing Award laureates. The open-source ChatGLM models have accumulated over <strong>140,000 stars on GitHub and more than 20 million downloads on Hugging Face</strong>, ranking as one of the top five most popular open-source organizations globally on Hugging Face, and the only research institution from China on the list.</p>
+
+                <p>KEG’s research has been recognized with numerous prestigious awards, including <strong>the Second Prize of the National Science and Technology Progress Award (2020), the First Prize of the Beijing Invention Patent Award (2020), the First Prize of the Chinese Institute of Electronics Science and Technology Progress Award (2023), and the Wang Xuan Outstanding Young Scholar Award (2020)</strong>. Internationally, KEG received <strong>the ACM SIGKDD Test-of-Time Award (2020)</strong>—the first such award granted to a team from mainland China—and <strong>the IEEE ICDM Research Contribution Award (2023)</strong>. Several of KEG’s research outcomes have been successfully transferred to industry, leading to the establishment of Zhipu AI (Beijing Zhipu Huazhang Technology Co., Ltd.), which has achieved a valuation exceeding 20 billion RMB, demonstrating KEG’s strong and sustained impact on both academia and industry.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-py">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem;">
+            Affiliated Platforms
+            </h2>
+
+            <div class="platform-list">
+
+            <!-- Platform Item -->
+            <div class="platform-item">
+                <div class="platform-image">
+                <img src="pingtai1.png" alt="AMiner Platform">
+                </div>
+                <div class="platform-content">
+                <h3>Beijing Key Laboratory of Foundation Models</h3>
+                <!-- <p>
+                    The Beijing Key Laboratory of Foundation Models is hosted by Tsinghua University and jointly established with Peking University, Beijing Zhipu Huazhang Technology Co., Ltd., and Beijing Zhipu Linghang Technology Co., Ltd. The laboratory was officially approved for construction in 2025. Academician Zhang Bo serves as the Chair of the Academic Committee, and Prof. Jie Tang serves as the Director.
+                    The laboratory focuses on fundamental challenges in superintelligent systems,
+conducting foundational theoretical research on large-scale foundation models.
+Its research explores novel model architectures and algorithmic innovations
+targeting superintelligence, with particular emphasis on extending the limits of
+self-learning, self-feedback, and self-reflection capabilities.
+
+In addition, the laboratory studies value alignment and safety ethics for large models,
+develops interpretability mechanisms, and aims to establish a secure, controllable,
+and trustworthy model ecosystem. It also promotes demonstrative applications of
+foundation models in domains such as finance, healthcare, and education.
+
+Leveraging strong university–industry collaboration, the laboratory jointly advances
+talent cultivation, research translation, and international exchange, accelerating
+both foundational innovation and real-world deployment in foundation model research.
+                </p> -->
+                <p>
+                    The Beijing Key Laboratory of Foundation Models was officially approved for construction in 2025. Academician Zhang Bo serves as the Chair of the Academic Committee, and Prof. Jie Tang serves as the Director. 
+                    <p>Research Areas:</p>
+                    <ul class="research-bullets">
+                        <li>Large-Scale Foundation Model Architectures</li>
+                        <li>Self-Learning, Feedback, and Reflection</li>
+                        <li>Value Alignment, Safety, and Interpretability</li>
+                        <li>Reliable Deployment in Real-World Domains</li>
+                    </ul>
+                </p>
+                </div>
+            </div>
+
+            <!-- Platform Item -->
+            <div class="platform-item">
+                <div class="platform-image">
+                <img src="pingtai-2.png" alt="GLM Platform">
+                </div>
+                <div class="platform-content">
+                <h3>Foundation Model Research Center, Institute for Artificial Intelligence, Tsinghua University</h3>
+                <p>
+                    The Foundation Model Research Center of the Institute for Artificial Intelligence,
+Tsinghua University, was established on June 30, 2023. The center aims to unite
+resources across government, academia, and industry, bringing together expertise
+from multiple departments and institutes at Tsinghua University.
+
+The center provides an open platform for researchers, industry experts, and students
+interested in foundation models to exchange ideas and explore frontier technologies.
+Through seminars, forums, and workshops, it continuously promotes innovation and
+practical applications of foundation models.
+
+Positioned as a coordinating hub and outward-facing platform, the center collaborates
+closely with the Department of Computer Science and Technology, the Department of
+Electronic Engineering, the Institute for Industry-Oriented AI, the School of Public
+Administration, and other related units to advance interdisciplinary research and
+large-model talent cultivation.
+                    </p>
+                    <p>
+The center actively serves national strategic needs, contributing to the advancement
+of foundation model research, the enhancement of research excellence, and the
+translation of scientific research outcomes into societal impact. It aims to become
+an internationally influential research institution with distinctive academic
+strengths, supporting technological self-reliance, high-level talent development,
+and the high-quality growth of artificial intelligence in China.
+                </p>
+                </div>
+            </div>
+
+            </div>
+        </div>
+        </section>
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area of artificial general intelligence. 
+            </p>
+            
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="join_us.html" class="btn-community">Join Our Lab</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

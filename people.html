@@ -1,0 +1,2618 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 (全站统一) --- */
+        :root {
+            --tsinghua-purple: #660099; 
+            --founders-rock: #4b0070;
+            --california-gold: #FFD200; 
+            --white: #FFFFFF;
+            --academic-blue: #1a2b5e; 
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* --- 全局重置 --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary);
+            color: #1d1d1f;
+            line-height: 1.6;
+            background-color: #FFFFFF;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* --- 导航栏 --- */
+        .navbar {
+            background-color: var(--white);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 1.6rem; font-weight: 800; color: #000; text-transform: none; letter-spacing: -0.5px;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link {
+            color: #1d1d1f; font-weight: 500; font-size: 0.95rem; text-transform: none; padding: 5px 0; position: relative;
+        }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after {
+            content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: var(--tsinghua-purple); transition: width 0.3s;
+        }
+        .nav-link:hover::after { width: 100%; }
+
+        /* --- Hero 区域 (About/People) --- */
+        .people-hero {
+            /* --- 1. 背景 --- */
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover;
+            background-position: center bottom;
+            background-repeat: no-repeat;
+            
+            /* --- 2. 固定高度 --- */
+            height: 600px; /* 👇 保持一致 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+            /* --- 3. 其他 --- */
+            color: var(--white);
+            padding: 0 2rem;
+            text-align: center;
+        }
+        .people-hero-container { max-width: 900px; margin: 0 auto; }
+        .people-title {
+            font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .people-subtitle {
+            font-size: 1.2rem; opacity: 0.95; line-height: 1.8; font-weight: 300;
+        }
+
+        /* --- 团队展示区域 --- */
+        .team-section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+        /* 分类标题条 (深蓝色横条 - 还原参考图) */
+        /* .category-bar {
+            background-color: var(--academic-blue);
+            color: #fff;
+            padding: 12px 0;
+            text-align: center;
+            border-radius: 6px; 
+            margin-bottom: 3rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .category-title {
+            font-size: 1.2rem; font-weight: 700; letter-spacing: 0.5px; margin: 0;
+        } */
+
+        .category-title {
+            color: var(--academic-blue); /* 使用深邃学院蓝 */
+            font-size: 1.8rem;           /* 加大字号 */
+            font-weight: 800;            /* 加粗 */
+            text-align: center;          /* 居中 */
+            margin-bottom: 2.5rem;       /* 下方留白 */
+            margin-top: 3rem;            /* 上方留白 */
+            letter-spacing: -0.5px;
+        }
+
+
+        /* 人员网格 */
+        .people-grid {
+            display: grid;
+            /* 自动适应列宽，每列最小 200px */
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 40px 20px; /* 上下间距大一点，左右小一点 */
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        /* 单个人员卡片 */
+        .profile-card {
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .profile-img-wrapper {
+            width: 160px; height: 160px; margin-bottom: 1.2rem;
+            border-radius: 50%; overflow: hidden;
+            border: 4px solid #fff; /* 白边 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .profile-card:hover .profile-img-wrapper {
+            transform: scale(1.05); border-color: var(--tsinghua-purple);
+        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .profile-name {
+            font-size: 1.1rem; font-weight: 700; color: #000; margin-bottom: 0.3rem;
+        }
+        .profile-title {
+            font-size: 0.9rem; color: #666; font-weight: 500; line-height: 1.4;
+            max-width: 180px; /* 防止头衔太长 */
+        }
+
+        /* 每一行的小字样式 */
+        .profile-subtitle {
+            font-size: 0.75rem; /* 字号稍微缩小，更精致 */
+            color: #666;       /* 柔和的灰色 */
+            font-weight: 400;
+            line-height: 1.4;
+            max-width: 200px;  /* 限制宽度，防止长文本打乱对齐 */
+            word-break: break-all;
+        }
+
+        /* --- Hero 区域 --- */
+        .people-hero {
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover; background-position: center bottom;
+            height: 600px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--white); padding: 0 2rem; text-align: center;
+        }
+        .people-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; }
+        .people-subtitle { font-size: 1.2rem; opacity: 0.95; line-height: 1.8; font-weight: 300; }
+
+        /* --- 团队展示区域 --- */
+        .team-section { padding: 4rem 2rem; max-width: 1200px; margin: 0 auto; }
+
+        .category-title {
+            color: var(--academic-blue); font-size: 1.8rem; font-weight: 800;
+            text-align: center; margin-bottom: 2.5rem; margin-top: 3rem; letter-spacing: -0.5px;
+        }
+
+        .people-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 40px 20px; text-align: center; margin-bottom: 4rem;
+        }
+
+        .profile-card { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
+        .profile-img-wrapper {
+            width: 160px; height: 160px; margin-bottom: 1.2rem;
+            border-radius: 50%; overflow: hidden;
+            border: 4px solid #fff; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .profile-card:hover .profile-img-wrapper {
+            transform: scale(1.05); border-color: var(--tsinghua-purple);
+        }
+        .profile-img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-name { font-size: 1.1rem; font-weight: 700; color: #000; margin-bottom: 0.3rem; }
+        .profile-title { font-size: 0.9rem; color: #666; font-weight: 500; }
+
+        /* --- 👇 新增：弹窗相关样式 (Modal) --- */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; backdrop-filter: blur(8px);
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-card {
+            background: #fff; width: 100%; max-width: 850px; border-radius: 16px;
+            padding: 40px; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .close-btn {
+            position: absolute; right: 20px; top: 15px; font-size: 32px;
+            color: #999; cursor: pointer; transition: color 0.2s;
+        }
+        .close-btn:hover { color: var(--tsinghua-purple); }
+        .detail-content { display: flex; gap: 40px; align-items: flex-start; text-align: left; }
+        .detail-info { flex: 1; }
+        .detail-name { font-family: var(--font-serif); font-size: 2.2rem; font-weight: 900; color: #111; margin-bottom: 8px; }
+        .detail-subtitle { font-weight: 600; color: var(--tsinghua-purple); margin-bottom: 20px; font-size: 1.1rem; }
+        .detail-bio { line-height: 1.8; color: #444; font-size: 1rem; margin-bottom: 25px; }
+        .detail-link { color: var(--tsinghua-purple); font-weight: 700; border-bottom: 2px solid rgba(102,0,153,0.2); }
+        .detail-link:hover { border-bottom-color: var(--tsinghua-purple); }
+        .detail-img { width: 280px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+        /* --- 其余部分样式保持原样 --- */
+        .community-section { background-color: #660099; color: #ffffff; padding: 3rem 2rem; text-align: center; } 
+        .btn-community { padding: 12px 32px; border-radius: 6px; font-weight: 700; background: #FFD200; color: #1a2b5e; display: inline-block; margin-top: 20px; }
+        footer { background-color: #1a2b5e; color: rgba(255,255,255,0.7); padding: 5rem 2rem 2rem; font-size: 0.95rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); text-align: center; padding-top: 2rem; margin-top: 2rem; }
+
+        @media (max-width: 768px) {
+            .detail-content { flex-direction: column-reverse; }
+            .detail-img { width: 100%; }
+            .modal-card { padding: 25px; }
+        }
+        
+        /* --- Join Our Community 板块 --- */
+        .community-section {
+            background-color: #660099; 
+            color: #ffffff;
+            padding: 3rem 2rem;
+            text-align: center;
+        } 
+
+        .community-container {
+            max-width: 900px; /* 内容不宜太宽，聚焦视线 */
+            margin: 0 auto;
+        }
+
+        .community-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .community-desc {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.9; /* 稍微透明一点，增加质感 */
+            margin-bottom: 3rem;
+            max-width: 750px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .community-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap; /* 手机端自动换行 */
+        }
+
+        /* 这里的按钮可以直接复用之前的 .btn 样式 */
+        /* 但为了保险起见，我微调了一个针对深色背景的样式类 */
+        .btn-community {
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            
+            background: #FFD200; /* 活力金 */
+            color: #1a2b5e;      /* 深蓝色文字，与背景呼应 */
+            border: 1px solid #FFD200;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-community:hover {
+            background: #FFC107;
+            border-color: #FFC107;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4); /* 悬停时投影更重 */
+        }
+        /* --- 页脚 --- */
+        footer {
+            background-color: #1a2b5e;
+            color: rgba(255,255,255,0.7);
+            padding: 5rem 2rem 2rem;
+            font-size: 0.95rem;
+        }
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+        .footer-brand h2 {
+            color: var(--white);
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+        .footer-col h3 {
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.85rem;
+        }
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; }
+            .navbar-menu { flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+            .footer-content { grid-template-columns: 1fr; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news.html" class="nav-link">News</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link active">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="people-hero">
+        <div class="people-hero-container">
+            <h1 class="people-title">People @ Tsinghua KEG</h1>
+            <p class="people-subtitle">
+                <b>
+                Pioneering minds drive the breakthroughs at Tsinghua KEG. From world-class faculty and researchers to our talented students, we unite around a shared mission: advancing the frontiers of Knowledge Engineering and Artificial General Intelligence (AGI).
+                </b>
+            </p>
+        </div>
+    </header>
+
+    <div class="team-section">
+
+        <h3 class="category-title">Faculty</h3>
+
+        <div class="people-grid">
+            
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/juanzi.png" alt="Juanzi Li" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/persons/ljz/" target="_blank">Juanzi Li</a>
+                </div>
+                <div class="profile-title">Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/jie.png" alt="Jie Tang" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/jietang/" target="_blank">Jie Tang</a>
+                </div>
+                <div class="profile-title">Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/bin.png" alt="Bin Xu" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/persons/xubin/" target="_blank">Bin Xu</a>
+                </div>
+                <div class="profile-title">Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/yuxiao.png" alt="Yuxiao Dong" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="https://keg.cs.tsinghua.edu.cn/yuxiao/" target="_blank">Yuxiao Dong</a>
+                </div>
+                <div class="profile-title">Associate Professor</div>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-img-wrapper">
+                    <img src="faculty/lei.png" alt="Lei Hou" class="profile-img">
+                </div>
+                <div class="profile-name">
+                    <a href="#" target="_blank">Lei Hou</a>
+                </div>
+                <div class="profile-title">Associate Professor</div>
+            </div>
+
+        </div>
+
+
+        <!-- PHD students -->
+        
+        <h3 class="category-title">PhD Students</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-mengyang')">
+                <div class="profile-img-wrapper">
+                    <img src="people/mengyang.png" alt="Mengyang Sun" class="profile-img">
+                </div>
+                <div class="profile-name">Mengyang Sun</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2019 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:sunmy19@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">sunmy19@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zhenyu')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhenyu.jpg" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhenyu Hou</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2021 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhenyu.hou08@gmail.com" class="email-link" onclick="event.stopPropagation();">zhenyu.hou08@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-liuxiao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/liuxiao.jpg" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xiao Liu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2021 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:shawliu9@gmail.com" class="email-link" onclick="event.stopPropagation();">shawliu9@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-jinhua')">
+                <div class="profile-img-wrapper">
+                    <img src="people/jinhua.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Jinhua Du</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:dujh22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">dujh22@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-wenyi')">
+                <div class="profile-img-wrapper">
+                    <img src="people/wenyi.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Wenyi Hong</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:wenyi.hong@outlook.com" class="email-link" onclick="event.stopPropagation();">wenyi.hong@outlook.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-jiazheng')">
+                <div class="profile-img-wrapper">
+                    <img src="people/jiazheng.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Jiazheng Xu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:xujz0703@gmail.com" class="email-link" onclick="event.stopPropagation();">xujz0703@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zhuoyi')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhuoyi.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhuoyi Yang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhuoyiyang2000@gmail.com" class="email-link" onclick="event.stopPropagation();">zhuoyiyang2000@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-aohan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/aohan.jpg" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Aohan Zeng</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:sengxian@live.com" class="email-link" onclick="event.stopPropagation();">sengxian@live.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xiaxiao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xiaxiao.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xiao Xia</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:xiax23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">xiax23@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xuyifan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xuyifan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Yifan Xu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:xuyifan2001@gmail.com" class="email-link" onclick="event.stopPropagation();">xuyifan2001@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="profile-card" onclick="openModal('modal-qinkai')">
+                <div class="profile-img-wrapper">
+                    <img src="people/qinkai.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Qinkai Zheng</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zqk23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zqk23@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="profile-card" onclick="openModal('modal-wendi')">
+                <div class="profile-img-wrapper">
+                    <img src="people/wendi.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Wendi Zheng</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhengwd23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zhengwd23@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="profile-card" onclick="openModal('modal-mingdao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/mingdao.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Mingdao Liu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:liumd24@mails.tsighua.edu.cn" class="email-link" onclick="event.stopPropagation();">liumd24@mails.tsighua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="profile-card" onclick="openModal('modal-jiayan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/jiayan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Jiayan Teng</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang & Xuelong Li (TeleAI)</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:tengjy24@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">tengjy24@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-hanyu')">
+                <div class="profile-img-wrapper">
+                    <img src="people/hanyu.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Hanyu Lai</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:laihy25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">laihy25@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-wenkai')">
+                <div class="profile-img-wrapper">
+                    <img src="people/wenkai.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Wenkai Li</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang & Xuelong Li (TeleAI)</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:lwk21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">lwk21@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-yujiang')">
+                <div class="profile-img-wrapper">
+                    <img src="people/yujiang.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Yujiang Li</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:liyujiang2020@gmail.com" class="email-link" onclick="event.stopPropagation();">liyujiang2020@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-lurui')">
+                <div class="profile-img-wrapper">
+                    <img src="people/lurui.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Rui Lu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:lu-r21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">lu-r21@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-bowen')">
+                <div class="profile-img-wrapper">
+                    <img src="people/bowen.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Bowen Lv</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:lvbw25@mail.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">lvbw25@mail.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="profile-card" onclick="openModal('modal-xixuan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xixuan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xixuan Song</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Ling Feng & Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:songxx21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">songxx21@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-shudan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/shudan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Daniel Zhang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhangsd25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zhangsd25@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div id="modal-mengyang" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-mengyang').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Mengyang Sun 孙梦阳</h2>
+                        <p class="detail-subtitle">PhD Student, 2019 - Present</p>
+                        <div class="detail-bio">
+                            Mengyang Sun is a Ph.D student at Tsinghua University, supervised by Prof. Jie Tang. His research interest lies in multilingual models, multi-task learning, and parameter-efficient fine-tuning of LLMs. He has published papers at conferences such as ICML, CIKM and WWW.  
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://openreview.net/profile?id=~Mengyang_Sun3" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/mengyang.png" alt="Mengyang Sun" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-zhenyu" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zhenyu').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zhenyu Hou 侯振宇</h2>
+                        <p class="detail-subtitle">PhD Student, 2021 - Present</p>
+                        <div class="detail-bio">
+                            Zhenyu Hou is a PhD student at Tsinghua University’s KEG Lab, focusing on language model reasoning and reinforcement learning. He has published more than ten papers as a first author or co–first author at international conferences such as ICML, ACL, and KDD. His researches have been applied to open-source large language models and a series of products.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://think2try.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhenyu.jpg" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-liuxiao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-liuxiao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xiao Liu 刘潇</h2>
+                        <p class="detail-subtitle">PhD Student, 2021 - Present</p>
+                        <div class="detail-bio">
+                            Xiao Liu is a fifth-year PhD student in the Department of Computer Science at Tsinghua University. His primary research focuses on the algorithms and applications of foundation models and foundation agents. His main work includes the P-Tuning series on prompt tuning for large language models; the open-sourced 100B-parameter bilingual language model GLM-130B and the ChatGLM model series; AgentBench, a benchmark for evaluating LLM-based agents; and AutoGLM, the first LLM-based agent for phone usage. He has received honors including a nomination for the Best Paper Award at WWW 2022, Tsinghua University’s Special Class Scholarship (Graduate), and the National Scholarship.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/xiao9905" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/liuxiao.jpg" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-jinhua" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-jinhua').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Jinhua Du 杜晋华</h2>
+                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Jinhua Du is a PhD student in the Department of Computer Science and Technology at Tsinghua University. He works on large language models, focusing on logical reasoning, reliability, and agentic systems for scalable evaluation and training.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://dujh22.github.io/Dujinhua_wiki/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/jinhua.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-wenyi" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-wenyi').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Wenyi Hong 洪文逸</h2>
+                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Wenyi Hong is a PhD student in the Department of Computer Science and Technology at Tsinghua University. Her research insterest mainly focuses on multimodal foundation models, including vision-language models, multimodal agents, and vision generation models.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://wenyihong.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/wenyi.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-jiazheng" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-jiazheng').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Jiazheng Xu 胥嘉政</h2>
+                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Jiazheng Xu is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on multimodal generative models, including reinforcement learning, evaluation and alignment.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/xujz18" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/jiazheng.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-zhuoyi" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zhuoyi').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zhuoyi Yang 杨卓毅</h2>
+                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Zhuoyi Yang is a PhD Candidate at Tsinghua University, with research interests both in multimodal generation and understanding. His work focuses on text-to-image/video generation, and visual understanding. He is very interested in understanding and simulating the world through pre-trained vision models. He has contributed to projects including the CogVideo, CogView, and CogVLM series. He is passionate about exploring generative AI and developing models that bridge vision and language for creative content generation.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://yzy-thu.github.io/zhuoyiyang.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhuoyi.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-aohan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-aohan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Aohan Zeng 曾奥涵</h2>
+                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Aohan Zeng is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on large language models, including pre-training, efficient architecture and coding agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/Sengxian" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/aohan.jpg" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xiaxiao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xiaxiao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xiao Xia 夏箫</h2>
+                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Xiao Xia is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on code generation and agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/Rishubi" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xiaxiao.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xuyifan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xuyifan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Yifan Xu 徐逸凡</h2>
+                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Yifan Xu is a PhD student in the Department of Computer Science at Tsinghua University. His research interest mainly focuses on mobile GUI agents, including reinforcement learning for agent training, multimodal models, and agent evaluation and benchmarking.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/xuyifan-0731" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xuyifan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-qinkai" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-qinkai').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Qinkai Zheng 郑勤锴</h2>
+                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Qinkai Zheng is a Ph.D. student in the Department of Computer Science at Tsinghua University. His research focuses on code generation model and coding agent. 
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/Stanislas0" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/qinkai.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-wendi" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-wendi').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Wendi Zheng 郑问迪</h2>
+                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Wendi Zheng is a Ph.D. student in the Department of Computer Science at Tsinghua University. His research interests mainly focus on visual generative models, for example text-to-image generation, etc.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com/citations?user=6v5wcQ8AAAAJ&hl=en" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/wendi.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-mingdao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-mingdao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Mingdao Liu 刘明道</h2>
+                        <p class="detail-subtitle">PhD Student, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Mingdao Liu is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on large language model pre-training and agentic coding.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/Btlmd" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/mingdao.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-jiayan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-jiayan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Jiayan Teng 滕嘉彦</h2>
+                        <p class="detail-subtitle">PhD Student, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Jiayan Teng is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on image generation, video generation and diffusion models.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://tengjiayan20.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/jiayan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-hanyu" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-hanyu').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Hanyu Lai 赖瀚宇</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Hanyu Lai is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on GUI Agent, Post-Training and Agentic RL.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com.hk/citations?user=cuFVHjwAAAAJ&hl=fr" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/hanyu.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-wenkai" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-wenkai').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Wenkai Li 李文凯</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Wenkai Li is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on GUI Agent.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/wenkai.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-yujiang" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-yujiang').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Yujiang Li 李雨江</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Yujiang Li is a PhD student in Colleage AI at Tsinghua University. Her research insterest mainly focuses on language model reasoning, machine learning agent and reinforcement learning. 
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com/citations?user=p9VZOkIAAAAJ" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/yujiang.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-lurui" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-lurui').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Rui Lu 鲁睿</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Rui Lu is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research focuses on LLM、Agentic RL and Deep Research Agent. 
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://learningrate1.com/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/lurui.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-bowen" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-bowen').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Bowen Lv 吕博文</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Bowen Lv is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on LLM、Agentic RL and GUI Agent.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href=" https://extreme1228.github.io/extreme1228/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/bowen.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-xixuan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xixuan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xixuan Song 宋曦轩</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Song Xixuan is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on MultiModal and Agentic RL.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/songxxzp/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xixuan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-shudan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-shudan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Daniel Zhang 张舒丹</h2>
+                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Shudan Zhang is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on GUI Agent, Agentic RL and Post-Training.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com/citations?user=Z-SskNIAAAAJ&hl=en&oi=ao" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/shudan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+        <!-- Master -->
+        <h3 class="category-title">Master Students</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-zeyi')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zeyi.png" alt="Zeyi Chen" class="profile-img">
+                </div>
+                <div class="profile-name">Zeyi Chen</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:chenzy23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">chenzy23@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xinghan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xinghan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xinghan Liu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: </div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:xh-liu23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">xh-liu23@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-jiahui')">
+                <div class="profile-img-wrapper">
+                    <img src="people/jiahui.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Matthew Taruno</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:matthew.taruno@gmail.com" class="email-link" onclick="event.stopPropagation();">matthew.taruno@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-yuzhe')">
+                <div class="profile-img-wrapper">
+                    <img src="people/yuzhe.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Yuzhe Zhang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:frankyuzhe@gmail.com" class="email-link" onclick="event.stopPropagation();">frankyuzhe@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-yilang')">
+                <div class="profile-img-wrapper">
+                    <img src="people/yilang.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Iat Long Iong</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:iong.iatlong@gmail.com" class="email-link" onclick="event.stopPropagation();">iong.iatlong@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zihan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zihan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zihan Wang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:w-zh24@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">w-zh24@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xingguan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xingguan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Alfonsus Rendy</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:jixg25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">jixg25@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xirui')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xirui.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xirui Pan</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="panxr25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">panxr25@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-wenhao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/wenhao.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Wenhao Yan</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:wh-yan25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">wh-yan25@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-shuntian')">
+                <div class="profile-img-wrapper">
+                    <img src="people/shuntian.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Shuntian Yao</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:yst25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">yst25@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-sining')">
+                <div class="profile-img-wrapper">
+                    <img src="people/sining.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Sining Zhoubian</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zbsn21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zbsn21@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div id="modal-zeyi" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zeyi').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zeyi Chen 陈泽毅</h2>
+                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Zeyi Chen is a Master student in the Global Innovation Exchange at Tsinghua University, supervised by Jie Tang. His research interests mainly focuses on LLM Post-Training, especially Sample Efficiency and Test-Time Training.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://www.linkedin.com/in/zeyi-chen-a429a2218/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zeyi.png" alt="Zeyi Chen" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xinghan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xinghan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xinghan Liu 刘星翰</h2>
+                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Xinghan Liu is a Master student at Tsinghua Universitry, supervised by Prof. Jie Tang. His research insterest mainly focuses on developing GUI Agents through Post-Training methods.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com/citations?hl=zh-CN&user=tu6FOA8AAAAJ" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xinghan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-jiahui" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-jiahui').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Matthew Taruno 吴嘉辉</h2>
+                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Matthew Taruno is a Master student in the Global Innovation Exchange at Tsinghua University, supervised by Jie Tang. His research interests mainly focuses on Post-Training, Reinforcement Learning, and Generalizable Agentic Systems.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="www.linkedin.com/in/mtaruno" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/jiahui.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-yuzhe" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-yuzhe').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Yuzhe Zhang 章裕哲</h2>
+                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <div class="detail-bio">
+                            Yuzhe Zhang is a Master student in the Global Innovation Exchange at Tsinghua University, supervised by Jie Tang. His research interests mainly focuses on Post-Training, Coding Agent, Benchmarking and Evaluation.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://zyzzzz-123.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/yuzhe.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-yilang" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-yilang').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Iat Long Iong 容逸朗</h2>
+                        <p class="detail-subtitle">Master Student, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Iat Long Iong is a Master student in the Department of Computer Science and Technology at Tsinghua University. His research insterests mainly focuses on GUI Agent, Agentic RL and Post-Training.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/boxworld18" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/yilang.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-zihan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zihan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zihan Wang 汪子涵</h2>
+                        <p class="detail-subtitle">Master Student, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Zihan Wang is a graduate student in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on large language models, including pre-training, algorithm design, and data attribution.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://pka.moe" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zihan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xingguan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xingguan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Alfonsus Rendy 纪惺冠</h2>
+                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Alfonsus Rendy is a Master’s student in the Advanced Computing Program at Tsinghua University and previously completed his undergraduate studies at CUHK-Shenzhen. His research interests lie in foundation models for decision-making, with a focus on agentic systems, reinforcement learning for agent training, and the development of self-improving and open-ended agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://rendyalfons.us/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xingguan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-xirui" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xirui').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xirui Pan 潘喜瑞</h2>
+                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Xirui Pan is a Master's student in the Department of Computer Science and Technology at Tsinghua University, supervised by Prof. Jie Tang. His research interests primarily focus on Large Language Models (LLMs) and Model Evaluation and Benchmarking.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xirui.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-wenhao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-wenhao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Wenhao Yan 严文昊</h2>
+                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Wenhao Yan is a Master's student in GIX program at Tsinghua University, supervised by Prof. Jie Tang. His research interests primarily focus on Diffusion Models and Video Generation with Multi-modal Conditions.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/wenhao.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-shuntian" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-shuntian').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Shuntian Yao 姚舜天</h2>
+                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Shuntian Yao is a Master's student in GIX program at Tsinghua University, supervised by Prof. Jie Tang. His research interests primarily focus on Reinforcement Learning Algorithms and LLM Agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/shuntian.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-sining" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-sining').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Sining Zhoubian 周卞思宁</h2>
+                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Sining Zhoubian is a Master student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on large language models, including advanced reasoning, reinforcement learning paradigms, self improvement algorithms and agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/zhoubiansining" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/sining.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Undergradutes Students -->
+        <h3 class="category-title">Undergraduate Students</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-zehai')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zehai.png" alt="Shicheng Tan" class="profile-img">
+                </div>
+                <div class="profile-name">Zehai He</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:he-zh22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">he-zh22@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zhiyuan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhiyuan.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhiyuan Liao</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:liao-zy22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">liao-zy22@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-keyun')">
+                <div class="profile-img-wrapper">
+                    <img src="people/keyun.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Keyun Luo</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:luoky22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">luoky22@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xueqiao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xueqiao.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xueqiao Sun</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang & Shuo Liu</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:snow10072740@gmail.com" class="email-link" onclick="event.stopPropagation();">snow10072740@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-haoran')">
+                <div class="profile-img-wrapper">
+                    <img src="people/haoran.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Haoran Wang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:ubecwang@gmail.com" class="email-link" onclick="event.stopPropagation();">ubecwang@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-haochen')">
+                <div class="profile-img-wrapper">
+                    <img src="people/haochen.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Hanchen Zhang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhanghanchen77@gmail.com" class="email-link" onclick="event.stopPropagation();">zhanghanchen77@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div id="modal-zehai" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zehai').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zehai He 何泽海</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Zehai He is a senior undergraduate student in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on multimodal large language models, multimodal agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://he-zh22.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zehai.png" alt="Shicheng Tan" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-zhiyuan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zhiyuan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zhiyuan Liao 廖致远</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Zhiyuan Liao is a senior undergraduate in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on LLM post-training and multimodal generative models.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/intkun" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhiyuan.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-keyun" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-keyun').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Keyun Luo 骆科运</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Keyun Luo is a senior undergraduate student in the Zhili College at Tsinghua University. His research interests mainly focus on large language models and AI agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/as-lky/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/keyun.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xueqiao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xueqiao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xueqiao Sun 孙雪桥</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Xueqiao Sun is an undergraduate student double majoring in Computer Science and Finance at Tsinghua University. Her research interest mainly focuses on AI Agents and Reinforcement Learning.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://huggingface.co/snow1007" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xueqiao.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-haoran" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-haoran').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Haoran Wang 王浩然</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Haoran Wang is a senior undergraduate in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on LLM post-training and coding agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/UbeCc" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/haoran.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-haochen" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-haochen').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Hanchen Zhang 张瀚宸</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Hanchen Zhang is a senior undergraduate in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on LLM post-training and agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/zhc7" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/haochen.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Postdoc -->
+        <h3 class="category-title">Postdoctoral Researcher</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-shicheng')">
+                <div class="profile-img-wrapper">
+                    <img src="people/shicheng.png" alt="Shicheng Tan" class="profile-img">
+                </div>
+                <div class="profile-name">Shicheng Tan</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <!-- <div class="profile-subtitle">Email: tsctan@foxmail.com</div> -->
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:tsctan@foxmail.com" class="email-link" onclick="event.stopPropagation();">tsctan@foxmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member2')">
+                <div class="profile-img-wrapper">
+                    <img src="people/huanjing.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Huanjing Zhao</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:huanjingzhj@foxmail.com" class="email-link" onclick="event.stopPropagation();">huanjingzhj@foxmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member4')">
+                <div class="profile-img-wrapper">
+                    <img src="people/cunxiang.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Cunxiang Wang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:wangcunxiang303@gmail.com" class="email-link" onclick="event.stopPropagation();">wangcunxiang303@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member5')">
+                <div class="profile-img-wrapper">
+                    <img src="people/tong.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Tong Yang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:yangtong@tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">yangtong@tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member3')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhen.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Zhen Yang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:yang-zhen@mail.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">yang-zhen@mail.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member6')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhaoyi.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Yi Zhao</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhaoyi.hb@gmail.com" class="email-link" onclick="event.stopPropagation();">zhaoyi.hb@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member7')">
+                <div class="profile-img-wrapper">
+                    <img src="people/jiqi.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Ji Qi</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present@Z.ai</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:qijithu@gmail.com" class="email-link" onclick="event.stopPropagation();">qijithu@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member8')">
+                <div class="profile-img-wrapper">
+                    <img src="people/liying.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Liying Tao</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:taoly@mail.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">taoly@mail.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-member9')">
+                <div class="profile-img-wrapper">
+                    <img src="people/miaoxin.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xin Miao</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:miaox1994@gmail.com" class="email-link" onclick="event.stopPropagation();">miaox1994@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div id="modal-shicheng" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-shicheng').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Shicheng Tan 谭世成</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Shicheng Tan is a postdoctoral researcher at the Department of Computer Science and Technology, Tsinghua University. He obtained his Ph.D. in Computer Science from Anhui University. His research focuses on AI for Education, particularly on building intelligent teaching assistant systems powered by large language models, and exploring memory mechanisms to support personalized learning.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/aitsc" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/shicheng.png" alt="Shicheng Tan" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-member2" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member2').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Huanjing Zhao 赵桓幜</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Huanjing Zhao is a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. He received his Ph.D. from the School of Computer Science and Technology, Anhui University. His current research interests focus on personalized test item generation leveraging Large Language Models (LLMs). Specifically, he explores how to utilize the advanced reasoning and generative capabilities of LLMs to automatically produce high-quality, adaptive assessment tasks tailored to individual learner profiles.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/hwangyeong" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/huanjing.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-member4" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member4').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Cunxiang Wang 王存翔</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</p>
+                        <div class="detail-bio">
+                            Cunxiang Wang is currently a postdoctoral researcher in the Department of Computer Science and Technology at Tsinghua University as well as a researcher at ZhipuAI, working with Prof. Jie Tang. He obtained his Ph.D. degree in Computer Science at Zhejiang University and Westlake University, supervised by Prof. Yue Zhang. He is now working on Agentic Coding, General Agents and LLM Evaluation.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href=" https://wangcunxiang.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/cunxiang.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-member5" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member5').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Tong Yang 杨桐</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</p>
+                        <div class="detail-bio">
+                            Tong Yang is currently a postdoctoral researcher in the Department of Computer Science and Technology at Tsinghua University. He received his B.Eng. degree in Control Science and Engineering in 2018 and his Ph.D. degrees in Robotics in 2024, both from Zhejiang University. He was a visiting researcher at the Centre for Autonomous Systems at University of Technology Sydney in 2019 and at the Personal Robotics Laboratory at Imperial College London in 2023. His research interests span across embodied intelligence and planning problems for complex robotic systems, as well as their mathematical underpinnings such as algebraic topology, graph theory, and differential geometry. 
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://zjutongyang.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/tong.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-member3" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member3').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zhen Yang 杨珍</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Zhen Yang is a postdoctoral researcher in the Department of Computer Science and Technology at Tsinghua University. She received her Ph.D. from the Knowledge Engineering Group (KEG), Department of Computer Science and Technology, Tsinghua University. Her research interests include vision-language models, large language models, and graph representation learning. Currently, her work focuses on multimodal coding agents and agentic reinforcement learning, with the goal of building agentic systems capable of reasoning, planning, and generating executable code across modalities.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://zyang-16.github.io/zhenyang.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhen.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-member6" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member6').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Yi Zhao 赵祎</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Yi Zhao is currently a Postdoctoral Researcher at Tsinghua University. He received his Ph.D. degree from Yanshan University. His current research interests focus on multimodal systems and data mining.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.co.jp/citations?user=7Asw0ZkAAAAJ&hl=zh-CN&oi=sra" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhaoyi.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-member7" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member3').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Ji Qi 齐济</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present@Z.ai</p>
+                        <div class="detail-bio">
+                            Ji Qi is a Postdoctoral Researcher jointly affiliated with Tsinghua University and Zhipu AI. He received his Ph.D. degree in June 2025 from the Knowledge Engineering Group, Department of Computer Science and Technology, Tsinghua University. His current research interests focus on the development of multimodal large language models.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com/citations?user=vv6bZjMAAAAJ&hl" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/jiqi.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <div id="modal-member8" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member8').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Liying Tao 陶丽颖</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present@Z.ai</p>
+                        <div class="detail-bio">
+                            Liying Tao is a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. She received her Ph.D. from Institute of Microelectronics of the Chinese Academy of Sciences (IMECAS). Her current research interests lie in the evaluation of Large Language Models (LLMs), with a particular focus on automated assessment frameworks and role-playing evaluation.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/liying.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-member9" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-member9').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xin Miao 苗心</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Xin Miao is a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. She received her PhD from Tsinghua University’s Department of Psychological and Cognitive Sciences. Her research lies at the intersection of psychology and human–IA interaction, examining how people perceive and evaluate intelligent agents, how agent errors influence users’ judgments, and how recovery strategies help repair evaluations after failures.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://scholar.google.com/citations?hl=zh-CN&user=IOFX_FgAAAAJ&view_op=list_works&authuser=1" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/miaoxin.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+       
+
+        <!-- Part-time Graduate Students -->
+        <h3 class="category-title">Part-time Graduate Students</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-chengxu')">
+                <div class="profile-img-wrapper">
+                    <img src="people/chengxu.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Xu Cheng</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Part-time Graduate Student, 2019 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:chengx19@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">chengx19@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xingyu')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xingyu.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xingyu Yan</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Part-time Graduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:yxypriv@gmail.com" class="email-link" onclick="event.stopPropagation();">yxypriv@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-liutao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/liutao.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Tao Liu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Part-time Graduate Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:liu-t24@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">liu-t24@mails.tsinghua.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-xunkai')">
+                <div class="profile-img-wrapper">
+                    <img src="people/xunkai.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Xunkai Zhang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Part-time Graduate Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:xunkai55@gmail.com" class="email-link" onclick="event.stopPropagation();">xunkai55@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div id="modal-chengxu" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-chengxu').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xu Cheng 程序</h2>
+                        <p class="detail-subtitle">Part-time Graduate Student, 2019 - Present</p>
+                        <div class="detail-bio">
+                            Xu Cheng is a PhD student in the Innovation Leadership Engineering Program at Tsinghua University and a technical committee member at Tencent. Leveraging his expertise in knowledge graphs, social networks, and user profiling, his current research explores the integration of multimodal and world models to revolutionize AI-driven game development.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/chengxu.png" alt="Shicheng Tan" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xingyu" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xingyu').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xingyu Yan 鄢兴雨</h2>
+                        <p class="detail-subtitle">Part-time Graduate Student, 2022 - Present</p>
+                        <div class="detail-bio">
+                            Xingyu Yan is a PhD student in the Innovation Leadership Engineering Program at Tsinghua University and the Chief Architect at Zhipu AI. He is interested in large model engineering and AI Chip Adaptation & Evaluation. Prior to his current roles, he served as a software engineer at Google and was an early contributor to the Arnetminer project from 2010 to 2014.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xingyu.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-liutao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-liutao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Tao Liu 刘涛</h2>
+                        <p class="detail-subtitle">Part-time Graduate Student, 2024 - Present</p>
+                        <div class="detail-bio">
+                            Liu Tao is a PhD student in the Department of Computer Science at Tsinghua University, with main research interests including large models, agents, and reinforcement learning.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/liutao.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-xunkai" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-xunkai').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Xunkai Zhang 张洵恺</h2>
+                        <p class="detail-subtitle">Part-time Graduate Student, 2025 - Present</p>
+                        <div class="detail-bio">
+                            Xunkai Zhang is a part-time PhD student in the Innovation Leadership Engineering Program at Tsinghua University, and the head of Edge AI Department at Z.ai. His research interests lies in enabling AI abilities on devices. Prior to his current roles, he was a software engineer in Google and a founding engineer in TensorFlow Lite project.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://github.com/xunkai55" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/xunkai.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Visiting Students -->
+        <h3 class="category-title">Visiting Students</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-yichen')">
+                <div class="profile-img-wrapper">
+                    <img src="people/yichen.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Yichen Xu</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2021-present @Peking University</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:xuyc@stu.pku.edu.cn" class="email-link" onclick="event.stopPropagation();">xuyc@stu.pku.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-jingyi')">
+                <div class="profile-img-wrapper">
+                    <img src="people/jingyi.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Yi Jing</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Undergraduate Student, 2022-present @UESTC</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:jingy200501@gmail.com" class="email-link" onclick="event.stopPropagation();">jingy200501@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-aming')">
+                <div class="profile-img-wrapper">
+                    <img src="people/.png" alt="Researcher" class="profile-img">
+                </div>
+                <div class="profile-name">Amine M'Charrak</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2021-present @University of Oxford</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:" class="email-link" onclick="event.stopPropagation();"></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div id="modal-yichen" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-yichen').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Yichen Xu 徐奕辰</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2021-present @Peking University</p>
+                        <div class="detail-bio">
+                            Yichen Xu is a senior undergraduate at Yuanpei College, Peking University and an incoming graduate student at Tsinghua University. His research interests lie in Agentic RL and Efficient Inference. He is particularly focused on developing robust agentic reinforcement learning frameworks, as well as optimizing LLM deployment through low-bit quantization.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="www.yichenxu.com" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/yichen.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-jingyi" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-jingyi').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Yi Jing 敬珆</h2>
+                        <p class="detail-subtitle">Undergraduate Student, 2022-present @UESTC</p>
+                        <div class="detail-bio">
+                            Yi Jing is a senior undergraduate student at the School of Computer Science and Engineering, University of Electronic Science and Technology of China, and an incoming graduate student at Tsinghua University. Her research interests focus mainly on LLM post-training and agents.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/jingyi.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-aming" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-aming').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Amine M'Charrak 麦卡拉克 阿敏</h2>
+                        <p class="detail-subtitle">PhD Student, 2021-present @University of Oxford</p>
+                        <div class="detail-bio">
+                            Amine M'Charrak
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="#" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/aming.png" alt="Researcher 2" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Alumni -->
+        <h3 class="category-title">Alumni</h3>
+        <div class="people-grid">
+            <div class="profile-card" onclick="openModal('modal-fengtao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/fengtao.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Tao Feng</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2024-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:fengtao.hi@gmail.com" class="email-link" onclick="event.stopPropagation();">fengtao.hi@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-fanjin')">
+                <div class="profile-img-wrapper">
+                    <img src="people/fanjin.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Fanjin Zhang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2017-2023 & Postdoctoral Researcher, 2024-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:fanjinz@ruc.edu.cn" class="email-link" onclick="event.stopPropagation();">fanjinz@ruc.edu.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zhengxiao')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhengxiao.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Zhengxiao Du</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2020-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <!-- <div class="profile-subtitle">
+                        Email: <a href="mailto:fengtao.hi@gmail.com" class="email-link" onclick="event.stopPropagation();">fengtao.hi@gmail.com</a>
+                    </div> -->
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zhouming')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhouming.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Ming Zhou</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2019-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zhou-m19@tsinghua.org.cn" class="email-link" onclick="event.stopPropagation();">zhou-m19@tsinghua.org.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-zhangdan')">
+                <div class="profile-img-wrapper">
+                    <img src="people/zhangdan.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Dan Zhang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2021-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:zd18@tsinghua.org.cn" class="email-link" onclick="event.stopPropagation();">zd18@tsinghua.org.cn</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-chenbo')">
+                <div class="profile-img-wrapper">
+                    <img src="people/chenbo.jpg" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Bo Chen</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">PhD Student, 2021-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:allanchen224@gmail.com" class="email-link" onclick="event.stopPropagation();">allanchen224@gmail.com</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-card" onclick="openModal('modal-wangwei')">
+                <div class="profile-img-wrapper">
+                    <img src="people/wangwei.png" alt="Xu Cheng" class="profile-img">
+                </div>
+                <div class="profile-name">Wei Wang</div>
+                <div class="profile-info-box">
+                    <div class="profile-subtitle">Postdoctoral Researcher, 2023-2025</div>
+                    <div class="profile-subtitle">Supervisor: Jie Tang</div>
+                    <div class="profile-subtitle">
+                        Email: <a href="mailto:weiwangorg@163.com" class="email-link" onclick="event.stopPropagation();">weiwangorg@163.com</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        
+
+        <div id="modal-fengtao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-fengtao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Tao Feng 冯涛, @THU</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2024-2025</p>
+                        <div class="detail-bio">
+                            Tao Feng was a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. His research interests include Video Generation, Vision-Language Model, GUI Agent and Continual Learning.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://hi-fengtao.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/fengtao.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-fanjin" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-fanjin').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Fanjin Zhang 张帆进, @Renmin University of China</h2>
+                        <p class="detail-subtitle">PhD Student, 2017-2023 & Postdoctoral Researcher, 2024-2025</p>
+                        <div class="detail-bio">
+                            Fanjin Zhang is an Assistant Professor in the School of Information, Renmin University of China. She received her Ph.D. degree from Tsinghua University, advised by Prof. Jie Tang, and her bachelor degree from Nanjing University. Her research interests generally include data mining, knowledge graph, and large language models, with an emphasis on developing scalable and lightweight data mining algorithms primarily on academic knowledge graph to accelerate academic research and scientific innovation. 
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://zfjsail.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/fanjin.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-zhengxiao" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zhengxiao').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Zhengxiao Du 杜政晓, @Z.ai</h2>
+                        <p class="detail-subtitle">PhD Student, 2020-2025</p>
+                        <div class="detail-bio">
+                            Zhengxiao Du is currently co-leading the base model group for GLM. He received a PhD in the Department of Computer Science and Technology at Tsinghua University in 2025, advised by Prof. Jie Tang. His research interest is large language models.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://zxdu.xyz" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhengxiao.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-zhouming" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zhouming').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Ming Zhou 周明, @Institute of Computing Technology, Chinese Academy of Sciences</h2>
+                        <p class="detail-subtitle">PhD Student, 2019-2025</p>
+                        <div class="detail-bio">
+                            Ming Zhou is currently an assistant researcher at the Institute of Computing Technology (ICT), Chinese Academy of Sciences. He obtained my Ph.D. supervised by Prof. Jie Tang at the Knowledge Engineering Group, Department of Computer Science and Technology in Tsinghua University, Beijing, China. Before joining Tsinghua, he was a researcher at Baidu and Tencent. His research focuses on large language models (LLMs), AI for science, multi-modal data mining, graph representation learning, and social & information networks. He has published in premier venues of LLMs, AI for science, graph neural networks (GNNs), and social networks, including a best student paper in ECML-PKDD 2023. 
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://asjqmasjqm.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhouming.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+        
+        <div id="modal-zhangdan" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-zhangdan').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Dan Zhang 张丹, @National University of Singapore</h2>
+                        <p class="detail-subtitle">PhD Student, 2021-2025</p>
+                        <div class="detail-bio">
+                            Dan Zhang is a postdoc research fellow at the National University of Singapore, working with Prof. Chua Tat-Seng. She finished her Ph.D. program and received the Doctoral degree in Engineering at Tsinghua, supervised by Prof. Jie Tang. Her interests include LLM, Agents, and RL.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://zhangdan0602.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/zhangdan.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-chenbo" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-chenbo').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Bo Chen 陈波, @ByteDance Seed</h2>
+                        <p class="detail-subtitle">PhD Student, 2021-2025</p>
+                        <div class="detail-bio">
+                            Chen Bo is a research scientist at ByteDance Seed, working on building intelligent AI agents. Before that, he received his Ph.D. from the Knowledge Engineering Group (KEG) at Tsinghua University, where he was advised by Prof. Jie Tang. His research focuses on building intelligent AI agents, with a particular interest in autonomous learning, reasoning, and self-evolution.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://allanchen95.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/chenbo.jpg" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-wangwei" class="modal-overlay" onclick="closeModal(event)">
+            <div class="modal-card">
+                <span class="close-btn" onclick="document.getElementById('modal-wangwei').style.display='none'">×</span>
+                <div class="detail-content">
+                    <div class="detail-info">
+                        <h2 class="detail-name">Wei Wang 王伟, @ Nankai University</h2>
+                        <p class="detail-subtitle">Postdoctoral Researcher, 2023-2025</p>
+                        <div class="detail-bio">
+                            Wei Wang is an associate professor at Nankai University. Before that, he was a postdoc research fellow with Department of Computer Science and Technology, Tsinghua University from 2023 to 2025. He received the PhD degree at Tsinghua University in 2022, and received the bachelor degree at Yanshan University, in 2016. His research interests include artificial intelligence, natural language processing, and LLM evaluation. Recent work focuses on the application of LLM in education, data analysis, and game intelligence.
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <a href="https://weiwangorg.github.io/" class="detail-link">Personal Website <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                    <img src="people/wangwei.png" alt="Yichen Xu" class="detail-img">
+                </div>
+            </div>
+        </div>
+
+        
+    </div>
+
+   
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">
+                We invite researchers, students, and innovators to collaborate with us on the exciting area <br> 
+                of Artificial General Intelligence. 
+            </p>
+            <div style="display:flex; justify-content:center; gap:20px; flex-wrap:wrap;">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="join_us.html" class="btn-community">Join Our Lab</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news.html">News</a></li>
+                    <li><a href="events.html">Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="#">WeChat</a></li>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>
+                        <a href="mailto:jas2015mine@163.com">Email Us</a>
+                    </li>
+                    
+                    <li>
+                        <a href="https://www.google.com/maps/search/Tsinghua+University+FIT+Building/@40.0005738,116.327666,17z" target="_blank">
+                            Location (FIT 1-308, Tsinghua)
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+            // 禁止背景滚动
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            // 如果点击的是背景遮罩层而非卡片内部，则关闭
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+
+</body>
+</html>
