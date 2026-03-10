@@ -136,9 +136,15 @@
         }
         .profile-card:hover .profile-img-wrapper {
             transform: scale(1.05); border-color: var(--tsinghua-purple);
+        }        
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 保证填满圆圈不变形 */
+            
+            /* 核心：把所有图片的默认视觉中心定在 水平居中、垂直偏上(比如 15% 或 20%) 的位置 */
+            object-position: 50% 15%; 
         }
-        .profile-img { width: 100%; height: 100%; object-fit: cover; }
-        
         .profile-name {
             font-size: 1.1rem; font-weight: 700; color: #000; margin-bottom: 0.3rem;
         }
@@ -356,14 +362,16 @@
         </a>
         <ul class="navbar-menu">
             <li><a href="index.html" class="nav-link">Home</a></li>
-            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="people.html" class="nav-link active">People</a></li>
             <li><a href="research.html" class="nav-link">Research</a></li>
             <li><a href="publications.html" class="nav-link">Publications</a></li>
-            <li><a href="news.html" class="nav-link">News</a></li>
-            <li><a href="events.html" class="nav-link">Events</a></li>
+            <!-- <li><a href="news.html" class="nav-link">News & Events</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li> -->
+            <li><a href="news_events.html" class="nav-link">News & Events</a></li>
             <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="course.html" class="nav-link">Courses</a></li>
             <li><a href="contact.html" class="nav-link">Contact</a></li>
-            <li><a href="about.html" class="nav-link active">About</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
     </nav>
 
@@ -386,7 +394,7 @@
             
             <div class="profile-card">
                 <div class="profile-img-wrapper">
-                    <img src="faculty/juanzi.png" alt="Juanzi Li" class="profile-img">
+                    <img src="faculty/juanzi.png" alt="Juanzi Li" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">
                     <a href="https://keg.cs.tsinghua.edu.cn/persons/ljz/" target="_blank">Juanzi Li</a>
@@ -396,7 +404,7 @@
 
             <div class="profile-card">
                 <div class="profile-img-wrapper">
-                    <img src="faculty/jie.png" alt="Jie Tang" class="profile-img">
+                    <img src="faculty/jie.png" alt="Jie Tang" class="profile-img", style="object-position: 50% 90%;">
                 </div>
                 <div class="profile-name">
                     <a href="https://keg.cs.tsinghua.edu.cn/jietang/" target="_blank">Jie Tang</a>
@@ -416,7 +424,7 @@
 
             <div class="profile-card">
                 <div class="profile-img-wrapper">
-                    <img src="faculty/yuxiao.png" alt="Yuxiao Dong" class="profile-img">
+                    <img src="faculty/yuxiao.png" alt="Yuxiao Dong" class="profile-img", style="object-position: 50% 60%;">
                 </div>
                 <div class="profile-name">
                     <a href="https://keg.cs.tsinghua.edu.cn/yuxiao/" target="_blank">Yuxiao Dong</a>
@@ -426,7 +434,7 @@
 
             <div class="profile-card">
                 <div class="profile-img-wrapper">
-                    <img src="faculty/lei.png" alt="Lei Hou" class="profile-img">
+                    <img src="faculty/lei.png" alt="Lei Hou" class="profile-img", style="object-position: 20% 20%;">
                 </div>
                 <div class="profile-name">
                     <a href="#" target="_blank">Lei Hou</a>
@@ -443,11 +451,11 @@
         <div class="people-grid">
             <div class="profile-card" onclick="openModal('modal-mengyang')">
                 <div class="profile-img-wrapper">
-                    <img src="people/mengyang.png" alt="Mengyang Sun" class="profile-img">
+                    <img src="people/mengyang.png" alt="Mengyang Sun" class="profile-img", style="object-position: 50% 30%;">
                 </div>
                 <div class="profile-name">Mengyang Sun</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2019 - Present</div>
+                    <div class="profile-subtitle">PhD, 2019 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:sunmy19@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">sunmy19@mails.tsinghua.edu.cn</a>
@@ -461,7 +469,7 @@
                 </div>
                 <div class="profile-name">Zhenyu Hou</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2021 - Present</div>
+                    <div class="profile-subtitle">PhD, 2021 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhenyu.hou08@gmail.com" class="email-link" onclick="event.stopPropagation();">zhenyu.hou08@gmail.com</a>
@@ -475,7 +483,7 @@
                 </div>
                 <div class="profile-name">Xiao Liu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2021 - Present</div>
+                    <div class="profile-subtitle">PhD, 2021 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:shawliu9@gmail.com" class="email-link" onclick="event.stopPropagation();">shawliu9@gmail.com</a>
@@ -485,11 +493,11 @@
 
             <div class="profile-card" onclick="openModal('modal-jinhua')">
                 <div class="profile-img-wrapper">
-                    <img src="people/jinhua.png" alt="Researcher" class="profile-img">
+                    <img src="people/jinhua.png" alt="Researcher" class="profile-img", style="object-position: 50% 10%;">
                 </div>
                 <div class="profile-name">Jinhua Du</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">PhD, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:dujh22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">dujh22@mails.tsinghua.edu.cn</a>
@@ -499,11 +507,11 @@
 
             <div class="profile-card" onclick="openModal('modal-wenyi')">
                 <div class="profile-img-wrapper">
-                    <img src="people/wenyi.png" alt="Researcher" class="profile-img">
+                    <img src="people/wenyi.png" alt="Researcher" class="profile-img", style="object-position: 50% 100%;">
                 </div>
                 <div class="profile-name">Wenyi Hong</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">PhD, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:wenyi.hong@outlook.com" class="email-link" onclick="event.stopPropagation();">wenyi.hong@outlook.com</a>
@@ -517,7 +525,7 @@
                 </div>
                 <div class="profile-name">Jiazheng Xu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">PhD, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:xujz0703@gmail.com" class="email-link" onclick="event.stopPropagation();">xujz0703@gmail.com</a>
@@ -527,11 +535,11 @@
 
             <div class="profile-card" onclick="openModal('modal-zhuoyi')">
                 <div class="profile-img-wrapper">
-                    <img src="people/zhuoyi.png" alt="Researcher" class="profile-img">
+                    <img src="people/zhuoyi.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Zhuoyi Yang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">PhD, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhuoyiyang2000@gmail.com" class="email-link" onclick="event.stopPropagation();">zhuoyiyang2000@gmail.com</a>
@@ -545,7 +553,7 @@
                 </div>
                 <div class="profile-name">Aohan Zeng</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2022 - Present</div>
+                    <div class="profile-subtitle">PhD, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:sengxian@live.com" class="email-link" onclick="event.stopPropagation();">sengxian@live.com</a>
@@ -559,7 +567,7 @@
                 </div>
                 <div class="profile-name">Xiao Xia</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">PhD, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:xiax23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">xiax23@mails.tsinghua.edu.cn</a>
@@ -573,7 +581,7 @@
                 </div>
                 <div class="profile-name">Yifan Xu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">PhD, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:xuyifan2001@gmail.com" class="email-link" onclick="event.stopPropagation();">xuyifan2001@gmail.com</a>
@@ -588,7 +596,7 @@
                 </div>
                 <div class="profile-name">Qinkai Zheng</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">PhD, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zqk23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zqk23@mails.tsinghua.edu.cn</a>
@@ -603,7 +611,7 @@
                 </div>
                 <div class="profile-name">Wendi Zheng</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2023 - Present</div>
+                    <div class="profile-subtitle">PhD, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhengwd23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zhengwd23@mails.tsinghua.edu.cn</a>
@@ -618,7 +626,7 @@
                 </div>
                 <div class="profile-name">Mingdao Liu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2024 - Present</div>
+                    <div class="profile-subtitle">PhD, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:liumd24@mails.tsighua.edu.cn" class="email-link" onclick="event.stopPropagation();">liumd24@mails.tsighua.edu.cn</a>
@@ -633,7 +641,7 @@
                 </div>
                 <div class="profile-name">Jiayan Teng</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2024 - Present</div>
+                    <div class="profile-subtitle">PhD, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang & Xuelong Li (TeleAI)</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:tengjy24@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">tengjy24@mails.tsinghua.edu.cn</a>
@@ -643,11 +651,11 @@
 
             <div class="profile-card" onclick="openModal('modal-hanyu')">
                 <div class="profile-img-wrapper">
-                    <img src="people/hanyu.png" alt="Researcher" class="profile-img">
+                    <img src="people/hanyu.png" alt="Researcher" class="profile-img", style="object-position: 50% 30%;">
                 </div>
                 <div class="profile-name">Hanyu Lai</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:laihy25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">laihy25@mails.tsinghua.edu.cn</a>
@@ -661,7 +669,7 @@
                 </div>
                 <div class="profile-name">Wenkai Li</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang & Xuelong Li (TeleAI)</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:lwk21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">lwk21@mails.tsinghua.edu.cn</a>
@@ -675,7 +683,7 @@
                 </div>
                 <div class="profile-name">Yujiang Li</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:liyujiang2020@gmail.com" class="email-link" onclick="event.stopPropagation();">liyujiang2020@gmail.com</a>
@@ -689,7 +697,7 @@
                 </div>
                 <div class="profile-name">Rui Lu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:lu-r21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">lu-r21@mails.tsinghua.edu.cn</a>
@@ -699,11 +707,11 @@
 
             <div class="profile-card" onclick="openModal('modal-bowen')">
                 <div class="profile-img-wrapper">
-                    <img src="people/bowen.png" alt="Researcher" class="profile-img">
+                    <img src="people/bowen.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Bowen Lv</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:lvbw25@mail.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">lvbw25@mail.tsinghua.edu.cn</a>
@@ -718,7 +726,7 @@
                 </div>
                 <div class="profile-name">Xixuan Song</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Ling Feng & Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:songxx21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">songxx21@mails.tsinghua.edu.cn</a>
@@ -728,11 +736,11 @@
 
             <div class="profile-card" onclick="openModal('modal-shudan')">
                 <div class="profile-img-wrapper">
-                    <img src="people/shudan.png" alt="Researcher" class="profile-img">
+                    <img src="people/shudan.png" alt="Researcher" class="profile-img", style="object-position: 50% 60%;">
                 </div>
                 <div class="profile-name">Daniel Zhang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2025 - Present</div>
+                    <div class="profile-subtitle">PhD, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhangsd25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zhangsd25@mails.tsinghua.edu.cn</a>
@@ -750,7 +758,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Mengyang Sun 孙梦阳</h2>
-                        <p class="detail-subtitle">PhD Student, 2019 - Present</p>
+                        <p class="detail-subtitle">PhD, 2019 - Present</p>
                         <div class="detail-bio">
                             Mengyang Sun is a Ph.D student at Tsinghua University, supervised by Prof. Jie Tang. His research interest lies in multilingual models, multi-task learning, and parameter-efficient fine-tuning of LLMs. He has published papers at conferences such as ICML, CIKM and WWW.  
                         </div>
@@ -769,7 +777,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zhenyu Hou 侯振宇</h2>
-                        <p class="detail-subtitle">PhD Student, 2021 - Present</p>
+                        <p class="detail-subtitle">PhD, 2021 - Present</p>
                         <div class="detail-bio">
                             Zhenyu Hou is a PhD student at Tsinghua University’s KEG Lab, focusing on language model reasoning and reinforcement learning. He has published more than ten papers as a first author or co–first author at international conferences such as ICML, ACL, and KDD. His researches have been applied to open-source large language models and a series of products.
                         </div>
@@ -788,7 +796,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xiao Liu 刘潇</h2>
-                        <p class="detail-subtitle">PhD Student, 2021 - Present</p>
+                        <p class="detail-subtitle">PhD, 2021 - Present</p>
                         <div class="detail-bio">
                             Xiao Liu is a fifth-year PhD student in the Department of Computer Science at Tsinghua University. His primary research focuses on the algorithms and applications of foundation models and foundation agents. His main work includes the P-Tuning series on prompt tuning for large language models; the open-sourced 100B-parameter bilingual language model GLM-130B and the ChatGLM model series; AgentBench, a benchmark for evaluating LLM-based agents; and AutoGLM, the first LLM-based agent for phone usage. He has received honors including a nomination for the Best Paper Award at WWW 2022, Tsinghua University’s Special Class Scholarship (Graduate), and the National Scholarship.
                         </div>
@@ -807,7 +815,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Jinhua Du 杜晋华</h2>
-                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <p class="detail-subtitle">PhD, 2022 - Present</p>
                         <div class="detail-bio">
                             Jinhua Du is a PhD student in the Department of Computer Science and Technology at Tsinghua University. He works on large language models, focusing on logical reasoning, reliability, and agentic systems for scalable evaluation and training.
                         </div>
@@ -827,7 +835,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Wenyi Hong 洪文逸</h2>
-                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <p class="detail-subtitle">PhD, 2022 - Present</p>
                         <div class="detail-bio">
                             Wenyi Hong is a PhD student in the Department of Computer Science and Technology at Tsinghua University. Her research insterest mainly focuses on multimodal foundation models, including vision-language models, multimodal agents, and vision generation models.
                         </div>
@@ -847,7 +855,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Jiazheng Xu 胥嘉政</h2>
-                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <p class="detail-subtitle">PhD, 2022 - Present</p>
                         <div class="detail-bio">
                             Jiazheng Xu is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on multimodal generative models, including reinforcement learning, evaluation and alignment.
                         </div>
@@ -866,7 +874,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zhuoyi Yang 杨卓毅</h2>
-                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <p class="detail-subtitle">PhD, 2022 - Present</p>
                         <div class="detail-bio">
                             Zhuoyi Yang is a PhD Candidate at Tsinghua University, with research interests both in multimodal generation and understanding. His work focuses on text-to-image/video generation, and visual understanding. He is very interested in understanding and simulating the world through pre-trained vision models. He has contributed to projects including the CogVideo, CogView, and CogVLM series. He is passionate about exploring generative AI and developing models that bridge vision and language for creative content generation.
                         </div>
@@ -886,7 +894,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Aohan Zeng 曾奥涵</h2>
-                        <p class="detail-subtitle">PhD Student, 2022 - Present</p>
+                        <p class="detail-subtitle">PhD, 2022 - Present</p>
                         <div class="detail-bio">
                             Aohan Zeng is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on large language models, including pre-training, efficient architecture and coding agents.
                         </div>
@@ -905,7 +913,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xiao Xia 夏箫</h2>
-                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <p class="detail-subtitle">PhD, 2023 - Present</p>
                         <div class="detail-bio">
                             Xiao Xia is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on code generation and agents.
                         </div>
@@ -924,7 +932,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Yifan Xu 徐逸凡</h2>
-                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <p class="detail-subtitle">PhD, 2023 - Present</p>
                         <div class="detail-bio">
                             Yifan Xu is a PhD student in the Department of Computer Science at Tsinghua University. His research interest mainly focuses on mobile GUI agents, including reinforcement learning for agent training, multimodal models, and agent evaluation and benchmarking.
                         </div>
@@ -944,7 +952,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Qinkai Zheng 郑勤锴</h2>
-                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <p class="detail-subtitle">PhD, 2023 - Present</p>
                         <div class="detail-bio">
                             Qinkai Zheng is a Ph.D. student in the Department of Computer Science at Tsinghua University. His research focuses on code generation model and coding agent. 
                         </div>
@@ -963,7 +971,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Wendi Zheng 郑问迪</h2>
-                        <p class="detail-subtitle">PhD Student, 2023 - Present</p>
+                        <p class="detail-subtitle">PhD, 2023 - Present</p>
                         <div class="detail-bio">
                             Wendi Zheng is a Ph.D. student in the Department of Computer Science at Tsinghua University. His research interests mainly focus on visual generative models, for example text-to-image generation, etc.
                         </div>
@@ -983,7 +991,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Mingdao Liu 刘明道</h2>
-                        <p class="detail-subtitle">PhD Student, 2024 - Present</p>
+                        <p class="detail-subtitle">PhD, 2024 - Present</p>
                         <div class="detail-bio">
                             Mingdao Liu is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on large language model pre-training and agentic coding.
                         </div>
@@ -1003,7 +1011,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Jiayan Teng 滕嘉彦</h2>
-                        <p class="detail-subtitle">PhD Student, 2024 - Present</p>
+                        <p class="detail-subtitle">PhD, 2024 - Present</p>
                         <div class="detail-bio">
                             Jiayan Teng is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on image generation, video generation and diffusion models.
                         </div>
@@ -1023,7 +1031,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Hanyu Lai 赖瀚宇</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Hanyu Lai is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on GUI Agent, Post-Training and Agentic RL.
                         </div>
@@ -1043,7 +1051,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Wenkai Li 李文凯</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Wenkai Li is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on GUI Agent.
                         </div>
@@ -1063,7 +1071,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Yujiang Li 李雨江</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Yujiang Li is a PhD student in Colleage AI at Tsinghua University. Her research insterest mainly focuses on language model reasoning, machine learning agent and reinforcement learning. 
                         </div>
@@ -1082,7 +1090,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Rui Lu 鲁睿</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Rui Lu is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research focuses on LLM、Agentic RL and Deep Research Agent. 
                         </div>
@@ -1102,7 +1110,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Bowen Lv 吕博文</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Bowen Lv is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on LLM、Agentic RL and GUI Agent.
                         </div>
@@ -1122,7 +1130,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xixuan Song 宋曦轩</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Song Xixuan is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on MultiModal and Agentic RL.
                         </div>
@@ -1142,7 +1150,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Daniel Zhang 张舒丹</h2>
-                        <p class="detail-subtitle">PhD Student, 2025 - Present</p>
+                        <p class="detail-subtitle">PhD, 2025 - Present</p>
                         <div class="detail-bio">
                             Shudan Zhang is a PhD student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on GUI Agent, Agentic RL and Post-Training.
                         </div>
@@ -1165,11 +1173,11 @@
         <div class="people-grid">
             <div class="profile-card" onclick="openModal('modal-zeyi')">
                 <div class="profile-img-wrapper">
-                    <img src="people/zeyi.png" alt="Zeyi Chen" class="profile-img">
+                    <img src="people/zeyi.png" alt="Zeyi Chen" class="profile-img", style="object-position: 50% 60%;">
                 </div>
                 <div class="profile-name">Zeyi Chen</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Master, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:chenzy23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">chenzy23@mails.tsinghua.edu.cn</a>
@@ -1183,7 +1191,7 @@
                 </div>
                 <div class="profile-name">Xinghan Liu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Master, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: </div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:xh-liu23@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">xh-liu23@mails.tsinghua.edu.cn</a>
@@ -1193,11 +1201,11 @@
 
             <div class="profile-card" onclick="openModal('modal-jiahui')">
                 <div class="profile-img-wrapper">
-                    <img src="people/jiahui.png" alt="Researcher" class="profile-img">
+                    <img src="people/jiahui.png" alt="Researcher" class="profile-img", style="object-position: 50% 90%;">
                 </div>
                 <div class="profile-name">Matthew Taruno</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Master, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:matthew.taruno@gmail.com" class="email-link" onclick="event.stopPropagation();">matthew.taruno@gmail.com</a>
@@ -1211,7 +1219,7 @@
                 </div>
                 <div class="profile-name">Yuzhe Zhang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2023 - Present</div>
+                    <div class="profile-subtitle">Master, 2023 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:frankyuzhe@gmail.com" class="email-link" onclick="event.stopPropagation();">frankyuzhe@gmail.com</a>
@@ -1225,7 +1233,7 @@
                 </div>
                 <div class="profile-name">Iat Long Iong</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Master, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:iong.iatlong@gmail.com" class="email-link" onclick="event.stopPropagation();">iong.iatlong@gmail.com</a>
@@ -1239,7 +1247,7 @@
                 </div>
                 <div class="profile-name">Zihan Wang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Master, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:w-zh24@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">w-zh24@mails.tsinghua.edu.cn</a>
@@ -1253,7 +1261,7 @@
                 </div>
                 <div class="profile-name">Alfonsus Rendy</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Master, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:jixg25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">jixg25@mails.tsinghua.edu.cn</a>
@@ -1263,11 +1271,11 @@
 
             <div class="profile-card" onclick="openModal('modal-xirui')">
                 <div class="profile-img-wrapper">
-                    <img src="people/xirui.png" alt="Researcher" class="profile-img">
+                    <img src="people/xirui.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Xirui Pan</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Master, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="panxr25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">panxr25@mails.tsinghua.edu.cn</a>
@@ -1277,11 +1285,11 @@
 
             <div class="profile-card" onclick="openModal('modal-wenhao')">
                 <div class="profile-img-wrapper">
-                    <img src="people/wenhao.png" alt="Researcher" class="profile-img">
+                    <img src="people/wenhao.png" alt="Researcher" class="profile-img", style="object-position: 50% 90%;">
                 </div>
                 <div class="profile-name">Wenhao Yan</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Master, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:wh-yan25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">wh-yan25@mails.tsinghua.edu.cn</a>
@@ -1295,7 +1303,7 @@
                 </div>
                 <div class="profile-name">Shuntian Yao</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Master, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:yst25@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">yst25@mails.tsinghua.edu.cn</a>
@@ -1309,7 +1317,7 @@
                 </div>
                 <div class="profile-name">Sining Zhoubian</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Master Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Master, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zbsn21@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">zbsn21@mails.tsinghua.edu.cn</a>
@@ -1326,7 +1334,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zeyi Chen 陈泽毅</h2>
-                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <p class="detail-subtitle">Master, 2023 - Present</p>
                         <div class="detail-bio">
                             Zeyi Chen is a Master student in the Global Innovation Exchange at Tsinghua University, supervised by Jie Tang. His research interests mainly focuses on LLM Post-Training, especially Sample Efficiency and Test-Time Training.
                         </div>
@@ -1345,7 +1353,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xinghan Liu 刘星翰</h2>
-                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <p class="detail-subtitle">Master, 2023 - Present</p>
                         <div class="detail-bio">
                             Xinghan Liu is a Master student at Tsinghua Universitry, supervised by Prof. Jie Tang. His research insterest mainly focuses on developing GUI Agents through Post-Training methods.
                         </div>
@@ -1364,7 +1372,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Matthew Taruno 吴嘉辉</h2>
-                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <p class="detail-subtitle">Master, 2023 - Present</p>
                         <div class="detail-bio">
                             Matthew Taruno is a Master student in the Global Innovation Exchange at Tsinghua University, supervised by Jie Tang. His research interests mainly focuses on Post-Training, Reinforcement Learning, and Generalizable Agentic Systems.
                         </div>
@@ -1383,7 +1391,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Yuzhe Zhang 章裕哲</h2>
-                        <p class="detail-subtitle">Master Student, 2023 - Present</p>
+                        <p class="detail-subtitle">Master, 2023 - Present</p>
                         <div class="detail-bio">
                             Yuzhe Zhang is a Master student in the Global Innovation Exchange at Tsinghua University, supervised by Jie Tang. His research interests mainly focuses on Post-Training, Coding Agent, Benchmarking and Evaluation.
                         </div>
@@ -1403,7 +1411,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Iat Long Iong 容逸朗</h2>
-                        <p class="detail-subtitle">Master Student, 2024 - Present</p>
+                        <p class="detail-subtitle">Master, 2024 - Present</p>
                         <div class="detail-bio">
                             Iat Long Iong is a Master student in the Department of Computer Science and Technology at Tsinghua University. His research insterests mainly focuses on GUI Agent, Agentic RL and Post-Training.
                         </div>
@@ -1423,7 +1431,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zihan Wang 汪子涵</h2>
-                        <p class="detail-subtitle">Master Student, 2024 - Present</p>
+                        <p class="detail-subtitle">Master, 2024 - Present</p>
                         <div class="detail-bio">
                             Zihan Wang is a graduate student in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on large language models, including pre-training, algorithm design, and data attribution.
                         </div>
@@ -1442,7 +1450,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Alfonsus Rendy 纪惺冠</h2>
-                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <p class="detail-subtitle">Master, 2025 - Present</p>
                         <div class="detail-bio">
                             Alfonsus Rendy is a Master’s student in the Advanced Computing Program at Tsinghua University and previously completed his undergraduate studies at CUHK-Shenzhen. His research interests lie in foundation models for decision-making, with a focus on agentic systems, reinforcement learning for agent training, and the development of self-improving and open-ended agents.
                         </div>
@@ -1462,7 +1470,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xirui Pan 潘喜瑞</h2>
-                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <p class="detail-subtitle">Master, 2025 - Present</p>
                         <div class="detail-bio">
                             Xirui Pan is a Master's student in the Department of Computer Science and Technology at Tsinghua University, supervised by Prof. Jie Tang. His research interests primarily focus on Large Language Models (LLMs) and Model Evaluation and Benchmarking.
                         </div>
@@ -1481,7 +1489,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Wenhao Yan 严文昊</h2>
-                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <p class="detail-subtitle">Master, 2025 - Present</p>
                         <div class="detail-bio">
                             Wenhao Yan is a Master's student in GIX program at Tsinghua University, supervised by Prof. Jie Tang. His research interests primarily focus on Diffusion Models and Video Generation with Multi-modal Conditions.
                         </div>
@@ -1500,7 +1508,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Shuntian Yao 姚舜天</h2>
-                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <p class="detail-subtitle">Master, 2025 - Present</p>
                         <div class="detail-bio">
                             Shuntian Yao is a Master's student in GIX program at Tsinghua University, supervised by Prof. Jie Tang. His research interests primarily focus on Reinforcement Learning Algorithms and LLM Agents.
                         </div>
@@ -1519,7 +1527,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Sining Zhoubian 周卞思宁</h2>
-                        <p class="detail-subtitle">Master Student, 2025 - Present</p>
+                        <p class="detail-subtitle">Master, 2025 - Present</p>
                         <div class="detail-bio">
                             Sining Zhoubian is a Master student in the Department of Computer Science and Technology at Tsinghua University. His research insterest mainly focuses on large language models, including advanced reasoning, reinforcement learning paradigms, self improvement algorithms and agents.
                         </div>
@@ -1542,7 +1550,7 @@
                 </div>
                 <div class="profile-name">Zehai He</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Undergraduate, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:he-zh22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">he-zh22@mails.tsinghua.edu.cn</a>
@@ -1556,7 +1564,7 @@
                 </div>
                 <div class="profile-name">Zhiyuan Liao</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Undergraduate, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:liao-zy22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">liao-zy22@mails.tsinghua.edu.cn</a>
@@ -1570,7 +1578,7 @@
                 </div>
                 <div class="profile-name">Keyun Luo</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Undergraduate, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:luoky22@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">luoky22@mails.tsinghua.edu.cn</a>
@@ -1580,11 +1588,11 @@
 
             <div class="profile-card" onclick="openModal('modal-xueqiao')">
                 <div class="profile-img-wrapper">
-                    <img src="people/xueqiao.png" alt="Researcher" class="profile-img">
+                    <img src="people/xueqiao.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Xueqiao Sun</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Undergraduate, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang & Shuo Liu</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:snow10072740@gmail.com" class="email-link" onclick="event.stopPropagation();">snow10072740@gmail.com</a>
@@ -1594,11 +1602,11 @@
 
             <div class="profile-card" onclick="openModal('modal-haoran')">
                 <div class="profile-img-wrapper">
-                    <img src="people/haoran.png" alt="Researcher" class="profile-img">
+                    <img src="people/haoran.png" alt="Researcher" class="profile-img", style="object-position: 50% 80%;">
                 </div>
                 <div class="profile-name">Haoran Wang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Undergraduate, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:ubecwang@gmail.com" class="email-link" onclick="event.stopPropagation();">ubecwang@gmail.com</a>
@@ -1608,11 +1616,11 @@
 
             <div class="profile-card" onclick="openModal('modal-haochen')">
                 <div class="profile-img-wrapper">
-                    <img src="people/haochen.png" alt="Researcher" class="profile-img">
+                    <img src="people/haochen.png" alt="Researcher" class="profile-img", style="object-position: 50% 80%;">
                 </div>
                 <div class="profile-name">Hanchen Zhang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Undergraduate, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Yuxiao Dong</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhanghanchen77@gmail.com" class="email-link" onclick="event.stopPropagation();">zhanghanchen77@gmail.com</a>
@@ -1630,7 +1638,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zehai He 何泽海</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Undergraduate, 2022 - Present</p>
                         <div class="detail-bio">
                             Zehai He is a senior undergraduate student in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on multimodal large language models, multimodal agents.
                         </div>
@@ -1649,7 +1657,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zhiyuan Liao 廖致远</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Undergraduate, 2022 - Present</p>
                         <div class="detail-bio">
                             Zhiyuan Liao is a senior undergraduate in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on LLM post-training and multimodal generative models.
                         </div>
@@ -1668,7 +1676,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Keyun Luo 骆科运</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Undergraduate, 2022 - Present</p>
                         <div class="detail-bio">
                             Keyun Luo is a senior undergraduate student in the Zhili College at Tsinghua University. His research interests mainly focus on large language models and AI agents.
                         </div>
@@ -1687,7 +1695,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xueqiao Sun 孙雪桥</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Undergraduate, 2022 - Present</p>
                         <div class="detail-bio">
                             Xueqiao Sun is an undergraduate student double majoring in Computer Science and Finance at Tsinghua University. Her research interest mainly focuses on AI Agents and Reinforcement Learning.
                         </div>
@@ -1707,7 +1715,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Haoran Wang 王浩然</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Undergraduate, 2022 - Present</p>
                         <div class="detail-bio">
                             Haoran Wang is a senior undergraduate in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on LLM post-training and coding agents.
                         </div>
@@ -1727,7 +1735,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Hanchen Zhang 张瀚宸</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Undergraduate, 2022 - Present</p>
                         <div class="detail-bio">
                             Hanchen Zhang is a senior undergraduate in the Department of Computer Science and Technology at Tsinghua University. His research interests mainly focus on LLM post-training and agents.
                         </div>
@@ -1746,11 +1754,11 @@
         <div class="people-grid">
             <div class="profile-card" onclick="openModal('modal-shicheng')">
                 <div class="profile-img-wrapper">
-                    <img src="people/shicheng.png" alt="Shicheng Tan" class="profile-img">
+                    <img src="people/shicheng.png" alt="Shicheng Tan" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Shicheng Tan</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present</div>
+                    <div class="profile-subtitle">Postdoc, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <!-- <div class="profile-subtitle">Email: tsctan@foxmail.com</div> -->
                     <div class="profile-subtitle">
@@ -1765,7 +1773,7 @@
                 </div>
                 <div class="profile-name">Huanjing Zhao</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present</div>
+                    <div class="profile-subtitle">Postdoc, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:huanjingzhj@foxmail.com" class="email-link" onclick="event.stopPropagation();">huanjingzhj@foxmail.com</a>
@@ -1775,11 +1783,11 @@
 
             <div class="profile-card" onclick="openModal('modal-member4')">
                 <div class="profile-img-wrapper">
-                    <img src="people/cunxiang.png" alt="Researcher" class="profile-img">
+                    <img src="people/cunxiang.png" alt="Researcher" class="profile-img", style="object-position: 50% -10%;">
                 </div>
                 <div class="profile-name">Cunxiang Wang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</div>
+                    <div class="profile-subtitle">Postdoc, 2024 - Present@Z.ai</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:wangcunxiang303@gmail.com" class="email-link" onclick="event.stopPropagation();">wangcunxiang303@gmail.com</a>
@@ -1789,11 +1797,11 @@
 
             <div class="profile-card" onclick="openModal('modal-member5')">
                 <div class="profile-img-wrapper">
-                    <img src="people/tong.png" alt="Researcher" class="profile-img">
+                    <img src="people/tong.png" alt="Researcher" class="profile-img", style="object-position: 50% 80%;">
                 </div>
                 <div class="profile-name">Tong Yang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</div>
+                    <div class="profile-subtitle">Postdoc, 2024 - Present@Z.ai</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:yangtong@tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">yangtong@tsinghua.edu.cn</a>
@@ -1803,11 +1811,11 @@
 
             <div class="profile-card" onclick="openModal('modal-member3')">
                 <div class="profile-img-wrapper">
-                    <img src="people/zhen.png" alt="Researcher" class="profile-img">
+                    <img src="people/zhen.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Zhen Yang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Postdoc, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:yang-zhen@mail.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">yang-zhen@mail.tsinghua.edu.cn</a>
@@ -1817,11 +1825,11 @@
 
             <div class="profile-card" onclick="openModal('modal-member6')">
                 <div class="profile-img-wrapper">
-                    <img src="people/zhaoyi.png" alt="Researcher" class="profile-img">
+                    <img src="people/zhaoyi.png" alt="Researcher" class="profile-img", style="object-position: 50% 90%;">
                 </div>
                 <div class="profile-name">Yi Zhao</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Postdoc, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhaoyi.hb@gmail.com" class="email-link" onclick="event.stopPropagation();">zhaoyi.hb@gmail.com</a>
@@ -1831,11 +1839,11 @@
 
             <div class="profile-card" onclick="openModal('modal-member7')">
                 <div class="profile-img-wrapper">
-                    <img src="people/jiqi.png" alt="Researcher" class="profile-img">
+                    <img src="people/jiqi.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Ji Qi</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present@Z.ai</div>
+                    <div class="profile-subtitle">Postdoc, 2025 - Present@Z.ai</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:qijithu@gmail.com" class="email-link" onclick="event.stopPropagation();">qijithu@gmail.com</a>
@@ -1849,7 +1857,7 @@
                 </div>
                 <div class="profile-name">Liying Tao</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Postdoc, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:taoly@mail.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">taoly@mail.tsinghua.edu.cn</a>
@@ -1859,11 +1867,11 @@
 
             <div class="profile-card" onclick="openModal('modal-member9')">
                 <div class="profile-img-wrapper">
-                    <img src="people/miaoxin.png" alt="Researcher" class="profile-img">
+                    <img src="people/miaoxin.png" alt="Researcher" class="profile-img", style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Xin Miao</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2025 - Present</div>
+                    <div class="profile-subtitle">Postdoc, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:miaox1994@gmail.com" class="email-link" onclick="event.stopPropagation();">miaox1994@gmail.com</a>
@@ -1881,7 +1889,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Shicheng Tan 谭世成</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present</p>
+                        <p class="detail-subtitle">Postdoc, 2024 - Present</p>
                         <div class="detail-bio">
                             Shicheng Tan is a postdoctoral researcher at the Department of Computer Science and Technology, Tsinghua University. He obtained his Ph.D. in Computer Science from Anhui University. His research focuses on AI for Education, particularly on building intelligent teaching assistant systems powered by large language models, and exploring memory mechanisms to support personalized learning.
                         </div>
@@ -1900,7 +1908,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Huanjing Zhao 赵桓幜</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present</p>
+                        <p class="detail-subtitle">Postdoc, 2024 - Present</p>
                         <div class="detail-bio">
                             Huanjing Zhao is a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. He received his Ph.D. from the School of Computer Science and Technology, Anhui University. His current research interests focus on personalized test item generation leveraging Large Language Models (LLMs). Specifically, he explores how to utilize the advanced reasoning and generative capabilities of LLMs to automatically produce high-quality, adaptive assessment tasks tailored to individual learner profiles.
                         </div>
@@ -1919,7 +1927,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Cunxiang Wang 王存翔</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</p>
+                        <p class="detail-subtitle">Postdoc, 2024 - Present@Z.ai</p>
                         <div class="detail-bio">
                             Cunxiang Wang is currently a postdoctoral researcher in the Department of Computer Science and Technology at Tsinghua University as well as a researcher at ZhipuAI, working with Prof. Jie Tang. He obtained his Ph.D. degree in Computer Science at Zhejiang University and Westlake University, supervised by Prof. Yue Zhang. He is now working on Agentic Coding, General Agents and LLM Evaluation.
                         </div>
@@ -1938,7 +1946,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Tong Yang 杨桐</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2024 - Present@Z.ai</p>
+                        <p class="detail-subtitle">Postdoc, 2024 - Present@Z.ai</p>
                         <div class="detail-bio">
                             Tong Yang is currently a postdoctoral researcher in the Department of Computer Science and Technology at Tsinghua University. He received his B.Eng. degree in Control Science and Engineering in 2018 and his Ph.D. degrees in Robotics in 2024, both from Zhejiang University. He was a visiting researcher at the Centre for Autonomous Systems at University of Technology Sydney in 2019 and at the Personal Robotics Laboratory at Imperial College London in 2023. His research interests span across embodied intelligence and planning problems for complex robotic systems, as well as their mathematical underpinnings such as algebraic topology, graph theory, and differential geometry. 
                         </div>
@@ -1958,7 +1966,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zhen Yang 杨珍</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present</p>
+                        <p class="detail-subtitle">Postdoc, 2025 - Present</p>
                         <div class="detail-bio">
                             Zhen Yang is a postdoctoral researcher in the Department of Computer Science and Technology at Tsinghua University. She received her Ph.D. from the Knowledge Engineering Group (KEG), Department of Computer Science and Technology, Tsinghua University. Her research interests include vision-language models, large language models, and graph representation learning. Currently, her work focuses on multimodal coding agents and agentic reinforcement learning, with the goal of building agentic systems capable of reasoning, planning, and generating executable code across modalities.
                         </div>
@@ -1978,7 +1986,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Yi Zhao 赵祎</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present</p>
+                        <p class="detail-subtitle">Postdoc, 2025 - Present</p>
                         <div class="detail-bio">
                             Yi Zhao is currently a Postdoctoral Researcher at Tsinghua University. He received his Ph.D. degree from Yanshan University. His current research interests focus on multimodal systems and data mining.
                         </div>
@@ -1997,7 +2005,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Ji Qi 齐济</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present@Z.ai</p>
+                        <p class="detail-subtitle">Postdoc, 2025 - Present@Z.ai</p>
                         <div class="detail-bio">
                             Ji Qi is a Postdoctoral Researcher jointly affiliated with Tsinghua University and Zhipu AI. He received his Ph.D. degree in June 2025 from the Knowledge Engineering Group, Department of Computer Science and Technology, Tsinghua University. His current research interests focus on the development of multimodal large language models.
                         </div>
@@ -2017,7 +2025,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Liying Tao 陶丽颖</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present@Z.ai</p>
+                        <p class="detail-subtitle">Postdoc, 2025 - Present@Z.ai</p>
                         <div class="detail-bio">
                             Liying Tao is a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. She received her Ph.D. from Institute of Microelectronics of the Chinese Academy of Sciences (IMECAS). Her current research interests lie in the evaluation of Large Language Models (LLMs), with a particular focus on automated assessment frameworks and role-playing evaluation.
                         </div>
@@ -2036,7 +2044,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xin Miao 苗心</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2025 - Present</p>
+                        <p class="detail-subtitle">Postdoc, 2025 - Present</p>
                         <div class="detail-bio">
                             Xin Miao is a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. She received her PhD from Tsinghua University’s Department of Psychological and Cognitive Sciences. Her research lies at the intersection of psychology and human–IA interaction, examining how people perceive and evaluate intelligent agents, how agent errors influence users’ judgments, and how recovery strategies help repair evaluations after failures.
                         </div>
@@ -2059,7 +2067,7 @@
                 </div>
                 <div class="profile-name">Xu Cheng</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Part-time Graduate Student, 2019 - Present</div>
+                    <div class="profile-subtitle">Part-time, 2019 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:chengx19@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">chengx19@mails.tsinghua.edu.cn</a>
@@ -2073,7 +2081,7 @@
                 </div>
                 <div class="profile-name">Xingyu Yan</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Part-time Graduate Student, 2022 - Present</div>
+                    <div class="profile-subtitle">Part-time, 2022 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:yxypriv@gmail.com" class="email-link" onclick="event.stopPropagation();">yxypriv@gmail.com</a>
@@ -2087,7 +2095,7 @@
                 </div>
                 <div class="profile-name">Tao Liu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Part-time Graduate Student, 2024 - Present</div>
+                    <div class="profile-subtitle">Part-time, 2024 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:liu-t24@mails.tsinghua.edu.cn" class="email-link" onclick="event.stopPropagation();">liu-t24@mails.tsinghua.edu.cn</a>
@@ -2101,7 +2109,7 @@
                 </div>
                 <div class="profile-name">Xunkai Zhang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Part-time Graduate Student, 2025 - Present</div>
+                    <div class="profile-subtitle">Part-time, 2025 - Present</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:xunkai55@gmail.com" class="email-link" onclick="event.stopPropagation();">xunkai55@gmail.com</a>
@@ -2119,7 +2127,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xu Cheng 程序</h2>
-                        <p class="detail-subtitle">Part-time Graduate Student, 2019 - Present</p>
+                        <p class="detail-subtitle">Part-time, 2019 - Present</p>
                         <div class="detail-bio">
                             Xu Cheng is a PhD student in the Innovation Leadership Engineering Program at Tsinghua University and a technical committee member at Tencent. Leveraging his expertise in knowledge graphs, social networks, and user profiling, his current research explores the integration of multimodal and world models to revolutionize AI-driven game development.
                         </div>
@@ -2138,7 +2146,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xingyu Yan 鄢兴雨</h2>
-                        <p class="detail-subtitle">Part-time Graduate Student, 2022 - Present</p>
+                        <p class="detail-subtitle">Part-time, 2022 - Present</p>
                         <div class="detail-bio">
                             Xingyu Yan is a PhD student in the Innovation Leadership Engineering Program at Tsinghua University and the Chief Architect at Zhipu AI. He is interested in large model engineering and AI Chip Adaptation & Evaluation. Prior to his current roles, he served as a software engineer at Google and was an early contributor to the Arnetminer project from 2010 to 2014.
                         </div>
@@ -2157,7 +2165,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Tao Liu 刘涛</h2>
-                        <p class="detail-subtitle">Part-time Graduate Student, 2024 - Present</p>
+                        <p class="detail-subtitle">Part-time, 2024 - Present</p>
                         <div class="detail-bio">
                             Liu Tao is a PhD student in the Department of Computer Science at Tsinghua University, with main research interests including large models, agents, and reinforcement learning.
                         </div>
@@ -2176,7 +2184,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Xunkai Zhang 张洵恺</h2>
-                        <p class="detail-subtitle">Part-time Graduate Student, 2025 - Present</p>
+                        <p class="detail-subtitle">Part-time, 2025 - Present</p>
                         <div class="detail-bio">
                             Xunkai Zhang is a part-time PhD student in the Innovation Leadership Engineering Program at Tsinghua University, and the head of Edge AI Department at Z.ai. His research interests lies in enabling AI abilities on devices. Prior to his current roles, he was a software engineer in Google and a founding engineer in TensorFlow Lite project.
                         </div>
@@ -2195,11 +2203,11 @@
         <div class="people-grid">
             <div class="profile-card" onclick="openModal('modal-yichen')">
                 <div class="profile-img-wrapper">
-                    <img src="people/yichen.png" alt="Xu Cheng" class="profile-img">
+                    <img src="people/yichen.png" alt="Xu Cheng" class="profile-img" style="object-position: 50% 200%;">
                 </div>
                 <div class="profile-name">Yichen Xu</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2021-present @Peking University</div>
+                    <div class="profile-subtitle">Undergraduate, 2021-present @Peking University</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:xuyc@stu.pku.edu.cn" class="email-link" onclick="event.stopPropagation();">xuyc@stu.pku.edu.cn</a>
                     </div>
@@ -2208,11 +2216,11 @@
 
             <div class="profile-card" onclick="openModal('modal-jingyi')">
                 <div class="profile-img-wrapper">
-                    <img src="people/jingyi.png" alt="Researcher" class="profile-img">
+                    <img src="people/jingyi.png" alt="Researcher" class="profile-img" style="object-position: 50% 80%;">
                 </div>
                 <div class="profile-name">Yi Jing</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Undergraduate Student, 2022-present @UESTC</div>
+                    <div class="profile-subtitle">Undergraduate, 2022-present @UESTC</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:jingy200501@gmail.com" class="email-link" onclick="event.stopPropagation();">jingy200501@gmail.com</a>
                     </div>
@@ -2225,7 +2233,7 @@
                 </div>
                 <div class="profile-name">Amine M'Charrak</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2021-present @University of Oxford</div>
+                    <div class="profile-subtitle">PhD, 2021-present @University of Oxford</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:" class="email-link" onclick="event.stopPropagation();"></a>
                     </div>
@@ -2242,7 +2250,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Yichen Xu 徐奕辰</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2021-present @Peking University</p>
+                        <p class="detail-subtitle">Undergraduate, 2021-present @Peking University</p>
                         <div class="detail-bio">
                             Yichen Xu is a senior undergraduate at Yuanpei College, Peking University and an incoming graduate student at Tsinghua University. His research interests lie in Agentic RL and Efficient Inference. He is particularly focused on developing robust agentic reinforcement learning frameworks, as well as optimizing LLM deployment through low-bit quantization.
                         </div>
@@ -2261,7 +2269,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Yi Jing 敬珆</h2>
-                        <p class="detail-subtitle">Undergraduate Student, 2022-present @UESTC</p>
+                        <p class="detail-subtitle">Undergraduate, 2022-present @UESTC</p>
                         <div class="detail-bio">
                             Yi Jing is a senior undergraduate student at the School of Computer Science and Engineering, University of Electronic Science and Technology of China, and an incoming graduate student at Tsinghua University. Her research interests focus mainly on LLM post-training and agents.
                         </div>
@@ -2280,7 +2288,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Amine M'Charrak 麦卡拉克 阿敏</h2>
-                        <p class="detail-subtitle">PhD Student, 2021-present @University of Oxford</p>
+                        <p class="detail-subtitle">PhD, 2021-present @University of Oxford</p>
                         <div class="detail-bio">
                             Amine M'Charrak
                         </div>
@@ -2303,7 +2311,7 @@
                 </div>
                 <div class="profile-name">Tao Feng</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2024-2025</div>
+                    <div class="profile-subtitle">Postdoc, 2024-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:fengtao.hi@gmail.com" class="email-link" onclick="event.stopPropagation();">fengtao.hi@gmail.com</a>
@@ -2317,7 +2325,7 @@
                 </div>
                 <div class="profile-name">Fanjin Zhang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2017-2023 & Postdoctoral Researcher, 2024-2025</div>
+                    <div class="profile-subtitle">PhD, 2017-2023 & Postdoc, 2024-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:fanjinz@ruc.edu.cn" class="email-link" onclick="event.stopPropagation();">fanjinz@ruc.edu.cn</a>
@@ -2331,7 +2339,7 @@
                 </div>
                 <div class="profile-name">Zhengxiao Du</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2020-2025</div>
+                    <div class="profile-subtitle">PhD, 2020-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <!-- <div class="profile-subtitle">
                         Email: <a href="mailto:fengtao.hi@gmail.com" class="email-link" onclick="event.stopPropagation();">fengtao.hi@gmail.com</a>
@@ -2341,11 +2349,11 @@
 
             <div class="profile-card" onclick="openModal('modal-zhouming')">
                 <div class="profile-img-wrapper">
-                    <img src="people/zhouming.png" alt="Xu Cheng" class="profile-img">
+                    <img src="people/zhouming.png" alt="Xu Cheng" class="profile-img" style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Ming Zhou</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2019-2025</div>
+                    <div class="profile-subtitle">PhD, 2019-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zhou-m19@tsinghua.org.cn" class="email-link" onclick="event.stopPropagation();">zhou-m19@tsinghua.org.cn</a>
@@ -2359,7 +2367,7 @@
                 </div>
                 <div class="profile-name">Dan Zhang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2021-2025</div>
+                    <div class="profile-subtitle">PhD, 2021-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:zd18@tsinghua.org.cn" class="email-link" onclick="event.stopPropagation();">zd18@tsinghua.org.cn</a>
@@ -2369,11 +2377,11 @@
 
             <div class="profile-card" onclick="openModal('modal-chenbo')">
                 <div class="profile-img-wrapper">
-                    <img src="people/chenbo.jpg" alt="Xu Cheng" class="profile-img">
+                    <img src="people/chenbo.jpg" alt="Xu Cheng" class="profile-img" style="object-position: 50% 0%;">
                 </div>
                 <div class="profile-name">Bo Chen</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">PhD Student, 2021-2025</div>
+                    <div class="profile-subtitle">PhD, 2021-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:allanchen224@gmail.com" class="email-link" onclick="event.stopPropagation();">allanchen224@gmail.com</a>
@@ -2387,7 +2395,7 @@
                 </div>
                 <div class="profile-name">Wei Wang</div>
                 <div class="profile-info-box">
-                    <div class="profile-subtitle">Postdoctoral Researcher, 2023-2025</div>
+                    <div class="profile-subtitle">Postdoc, 2023-2025</div>
                     <div class="profile-subtitle">Supervisor: Jie Tang</div>
                     <div class="profile-subtitle">
                         Email: <a href="mailto:weiwangorg@163.com" class="email-link" onclick="event.stopPropagation();">weiwangorg@163.com</a>
@@ -2405,7 +2413,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Tao Feng 冯涛, @THU</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2024-2025</p>
+                        <p class="detail-subtitle">Postdoc, 2024-2025</p>
                         <div class="detail-bio">
                             Tao Feng was a Postdoctoral Researcher in the Department of Computer Science and Technology at Tsinghua University. His research interests include Video Generation, Vision-Language Model, GUI Agent and Continual Learning.
                         </div>
@@ -2424,7 +2432,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Fanjin Zhang 张帆进, @Renmin University of China</h2>
-                        <p class="detail-subtitle">PhD Student, 2017-2023 & Postdoctoral Researcher, 2024-2025</p>
+                        <p class="detail-subtitle">PhD, 2017-2023 & Postdoc, 2024-2025</p>
                         <div class="detail-bio">
                             Fanjin Zhang is an Assistant Professor in the School of Information, Renmin University of China. She received her Ph.D. degree from Tsinghua University, advised by Prof. Jie Tang, and her bachelor degree from Nanjing University. Her research interests generally include data mining, knowledge graph, and large language models, with an emphasis on developing scalable and lightweight data mining algorithms primarily on academic knowledge graph to accelerate academic research and scientific innovation. 
                         </div>
@@ -2443,7 +2451,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Zhengxiao Du 杜政晓, @Z.ai</h2>
-                        <p class="detail-subtitle">PhD Student, 2020-2025</p>
+                        <p class="detail-subtitle">PhD, 2020-2025</p>
                         <div class="detail-bio">
                             Zhengxiao Du is currently co-leading the base model group for GLM. He received a PhD in the Department of Computer Science and Technology at Tsinghua University in 2025, advised by Prof. Jie Tang. His research interest is large language models.
                         </div>
@@ -2462,7 +2470,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Ming Zhou 周明, @Institute of Computing Technology, Chinese Academy of Sciences</h2>
-                        <p class="detail-subtitle">PhD Student, 2019-2025</p>
+                        <p class="detail-subtitle">PhD, 2019-2025</p>
                         <div class="detail-bio">
                             Ming Zhou is currently an assistant researcher at the Institute of Computing Technology (ICT), Chinese Academy of Sciences. He obtained my Ph.D. supervised by Prof. Jie Tang at the Knowledge Engineering Group, Department of Computer Science and Technology in Tsinghua University, Beijing, China. Before joining Tsinghua, he was a researcher at Baidu and Tencent. His research focuses on large language models (LLMs), AI for science, multi-modal data mining, graph representation learning, and social & information networks. He has published in premier venues of LLMs, AI for science, graph neural networks (GNNs), and social networks, including a best student paper in ECML-PKDD 2023. 
                         </div>
@@ -2481,7 +2489,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Dan Zhang 张丹, @National University of Singapore</h2>
-                        <p class="detail-subtitle">PhD Student, 2021-2025</p>
+                        <p class="detail-subtitle">PhD, 2021-2025</p>
                         <div class="detail-bio">
                             Dan Zhang is a postdoc research fellow at the National University of Singapore, working with Prof. Chua Tat-Seng. She finished her Ph.D. program and received the Doctoral degree in Engineering at Tsinghua, supervised by Prof. Jie Tang. Her interests include LLM, Agents, and RL.
                         </div>
@@ -2500,7 +2508,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Bo Chen 陈波, @ByteDance Seed</h2>
-                        <p class="detail-subtitle">PhD Student, 2021-2025</p>
+                        <p class="detail-subtitle">PhD, 2021-2025</p>
                         <div class="detail-bio">
                             Chen Bo is a research scientist at ByteDance Seed, working on building intelligent AI agents. Before that, he received his Ph.D. from the Knowledge Engineering Group (KEG) at Tsinghua University, where he was advised by Prof. Jie Tang. His research focuses on building intelligent AI agents, with a particular interest in autonomous learning, reasoning, and self-evolution.
                         </div>
@@ -2519,7 +2527,7 @@
                 <div class="detail-content">
                     <div class="detail-info">
                         <h2 class="detail-name">Wei Wang 王伟, @ Nankai University</h2>
-                        <p class="detail-subtitle">Postdoctoral Researcher, 2023-2025</p>
+                        <p class="detail-subtitle">Postdoc, 2023-2025</p>
                         <div class="detail-bio">
                             Wei Wang is an associate professor at Nankai University. Before that, he was a postdoc research fellow with Department of Computer Science and Technology, Tsinghua University from 2023 to 2025. He received the PhD degree at Tsinghua University in 2022, and received the bachelor degree at Yanshan University, in 2016. His research interests include artificial intelligence, natural language processing, and LLM evaluation. Recent work focuses on the application of LLM in education, data analysis, and game intelligence.
                         </div>

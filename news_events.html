@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Events | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= 核心变量 ================= */
+        :root {
+            --tsinghua-purple: #660099; 
+            --california-gold: #FFD200; 
+            --academic-blue: #1a2b5e; 
+            --white: #FFFFFF;
+            --light-bg: #F9FAFB;
+            --text-main: #1d1d1f;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* ================= 全局重置 ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-primary); color: var(--text-main); line-height: 1.7;
+            background-color: var(--white); -webkit-font-smoothing: antialiased;
+        }
+        h2 { font-weight: 800; letter-spacing: -0.03em; color: var(--academic-blue); margin-bottom: 1rem; }
+        p { color: #555; font-size: 1.05rem; }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* ================= 导航栏 ================= */
+        .navbar {
+            background-color: var(--white); box-shadow: 0 1px 0 rgba(0,0,0,0.05);
+            position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .navbar-brand { font-size: 1.6rem; font-weight: 800; color: #000; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link { color: #1d1d1f; font-weight: 500; font-size: 0.95rem; padding: 5px 0; position: relative; cursor: pointer; }
+        .nav-link:hover { color: var(--tsinghua-purple); }
+        .nav-link.active { color: var(--tsinghua-purple); font-weight: 700; }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--tsinghua-purple); transition: width 0.3s; }
+        .nav-link:hover::after { width: 100%; }
+
+        /* ================= Hero ================= */
+        .page-hero {
+            background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg');
+            background-size: cover; background-position: center bottom; background-repeat: no-repeat;
+            height: 600px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: var(--white); padding: 0 2rem; text-align: center; transition: all 0.3s ease;
+        }
+        .hero-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .hero-subtitle { color: #ffffff; font-size: 1.3rem; opacity: 0.95; font-weight: 300; max-width: 800px; line-height: 1.6; }
+
+        /* ================= 布局 & 工具 ================= */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        .section-py { padding: 2rem 0 4rem 0; }
+        .hidden-view { display: none !important; }
+        .source-container { display: none; }
+
+        /* ================= 🌟 一级大开关 (News vs Events) ================= */
+        .main-toggle-wrapper {
+            text-align: center; margin-top: 4rem; margin-bottom: 1rem;
+        }
+        .main-toggle {
+            display: inline-flex; background: #f0f0f5; border-radius: 50px; padding: 6px;
+        }
+        .toggle-btn {
+            padding: 10px 36px; border-radius: 50px; font-weight: 700; font-size: 1.1rem;
+            color: #666; cursor: pointer; transition: all 0.3s ease; user-select: none;
+        }
+        .toggle-btn.active {
+            background: var(--tsinghua-purple); color: #fff; box-shadow: 0 4px 12px rgba(102, 0, 153, 0.25);
+        }
+
+        /* ================= 🌟 二级小筛选 (仅News下显示) ================= */
+        .sub-filter-bar {
+            display: flex; justify-content: center; gap: 12px; margin-bottom: 3rem; flex-wrap: wrap;
+        }
+        .sub-filter-btn {
+            padding: 6px 18px; border-radius: 50px; font-size: 0.95rem; font-weight: 600;
+            color: #666; background: #fff; border: 1px solid #ddd; cursor: pointer; transition: all 0.2s;
+        }
+        .sub-filter-btn:hover { border-color: var(--tsinghua-purple); color: var(--tsinghua-purple); }
+        .sub-filter-btn.active {
+            background: #fdf5ff; color: var(--tsinghua-purple); border-color: var(--tsinghua-purple);
+        }
+
+        /* ================= NEWS 卡片样式 ================= */
+        .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        .news-card { background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #f0f0f0; transition: transform 0.3s, box-shadow 0.3s; display: flex; flex-direction: column; }
+        .news-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        .card-img-wrap { height: 300px; background: #eee; position: relative; width: 100%; }
+        .card-img { width: 100%; height: 100%; object-fit: cover; }
+        .card-content { padding: 1.5rem 1.8rem; flex: 1; display: flex; flex-direction: column; }
+        .news-meta { font-size: 0.85rem; font-weight: 700; color: var(--tsinghua-purple); margin-bottom: 1rem; display: flex; gap: 10px; align-items: center; }
+        .news-date { color: #888; font-weight: 500; }
+        .card-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.8rem; line-height: 1.4; color: #000; }
+        .card-desc { font-size: 0.95rem; color: #666; margin-bottom: 1.5rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+        .read-more-btn { margin-top: auto; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--tsinghua-purple); cursor: pointer; }
+        .read-more-btn:hover { text-decoration: underline; }
+
+        .news-card.featured-mode { display: grid; grid-template-columns: 1.2fr 1fr; gap: 0; min-height: 400px; flex-direction: row; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 4rem; }
+        .news-card.featured-mode .card-img-wrap { height: 100%; }
+        .news-card.featured-mode .card-content { padding: 3rem; justify-content: center; }
+        .news-card.featured-mode .card-title { font-size: 2rem; margin-bottom: 1rem; color: var(--academic-blue); }
+
+        /* ================= EVENTS 样式 ================= */
+        .event-filter { display: flex; gap: 20px; margin-bottom: 3rem; border-bottom: 1px solid #e0e0e0; padding-bottom: 1rem; }
+        .evt-filter-item { font-size: 1.1rem; font-weight: 600; color: #888; cursor: pointer; padding: 5px 10px; transition: color 0.3s; }
+        .evt-filter-item.active { color: var(--tsinghua-purple); border-bottom: 3px solid var(--tsinghua-purple); margin-bottom: -19px; }
+        .evt-filter-item:hover { color: var(--tsinghua-purple); }
+        h2[id] { scroll-margin-top: 100px; }
+
+        .upcoming-card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.06); display: flex; margin-bottom: 3rem; border-left: 6px solid var(--california-gold); }
+        .date-box { background: #fcfcfc; width: 140px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 1px solid #eee; padding: 2rem 0; flex-shrink: 0; }
+        .date-month { color: var(--tsinghua-purple); font-weight: 800; text-transform: uppercase; font-size: 1.2rem; letter-spacing: 1px; }
+        .date-day { font-size: 3.5rem; font-weight: 800; line-height: 1; color: #333; margin: 5px 0; }
+        .date-year { color: #888; font-weight: 500; }
+        .event-content { padding: 2.5rem; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .event-tags { margin-bottom: 1rem; display: flex; gap: 10px; }
+        .tag { font-size: 0.8rem; font-weight: 700; padding: 4px 10px; border-radius: 4px; text-transform: uppercase; }
+        .tag.seminar { background: #E3F2FD; color: #1976D2; }
+        .tag.conference { background: #F3E5F5; color: #7B1FA2; }
+        .tag.status-open { background: #E8F5E9; color: #2E7D32; border: 1px solid #C8E6C9; }
+        .event-heading { font-size: 1.8rem; font-weight: 800; color: var(--academic-blue); margin-bottom: 1rem; line-height: 1.3; }
+        .event-meta { font-size: 1rem; color: #666; margin-bottom: 1.5rem; display: flex; gap: 20px; align-items: center; }
+        .event-meta i { color: var(--tsinghua-purple); margin-right: 6px; }
+        .btn-register { align-self: flex-start; padding: 10px 24px; background: var(--tsinghua-purple); color: #fff; border-radius: 6px; font-weight: 600; font-size: 0.95rem; box-shadow: 0 4px 10px rgba(102, 0, 153, 0.3); }
+        .btn-register:hover { background: #4b0070; transform: translateY(-2px); }
+
+        .past-event-item { display: flex; background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; align-items: center; border: 1px solid #eee; transition: box-shadow 0.3s; }
+        .past-event-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .past-date { font-weight: 700; color: #888; min-width: 100px; border-right: 1px solid #eee; margin-right: 1.5rem; }
+        .past-info { flex: 1; }
+        .past-title { font-size: 1.2rem; font-weight: 700; color: #333; margin-bottom: 0.3rem; }
+        .past-title a { color: inherit; }
+        .past-title a:hover { color: var(--tsinghua-purple); }
+        .past-speaker { font-size: 0.95rem; color: #666; }
+
+        /* ================= 分页 ================= */
+        .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 4rem; }
+        .page-num { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: 600; color: #666; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+        .page-num:hover { background: #f0f0f0; color: #000; }
+        .page-num.active { background: var(--academic-blue); color: #fff; }
+
+        /* ================= 社区 & 页脚 ================= */
+        .community-section { background-color: #660099; color: #ffffff; padding: 4rem 2rem; text-align: center; } 
+        .community-container { max-width: 900px; margin: 0 auto; }
+        .community-title { color: #ffffff !important; font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; letter-spacing: -0.02em; }
+        .community-desc { color: #ffffff !important; font-size: 1.1rem; line-height: 1.6; opacity: 0.9; margin-bottom: 3rem; max-width: 750px; margin: 0 auto 3rem auto; }
+        .community-buttons { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .btn-community { padding: 12px 32px; border-radius: 6px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease; text-decoration: none; background: #FFD200; color: #1a2b5e; border: 1px solid #FFD200; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .btn-community:hover { background: #FFC107; border-color: #FFC107; transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+
+        footer { background-color: #1a2b5e; color: rgba(255,255,255,0.8); padding: 5rem 2rem 2rem; font-size: 0.95rem; }
+        .footer-content { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 3rem; margin-bottom: 4rem; }
+        .footer-brand h2 { color: #ffffff !important; font-size: 1.8rem; font-weight: 800; margin-bottom: 1rem; }
+        .footer-brand p { color: rgba(255, 255, 255, 0.75) !important; line-height: 1.6; margin-top: 1rem; }
+        .footer-col h3 { color: var(--white); margin-bottom: 1.5rem; font-size: 0.9rem; font-weight: 700; opacity: 0.9; }
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col a { color: rgba(255,255,255,0.6); font-weight: 400; }
+        .footer-col a:hover { color: var(--california-gold); opacity: 1; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; text-align: center; font-size: 0.85rem; }
+
+        /* ================= 响应式 ================= */
+        @media (max-width: 768px) {
+            .navbar { flex-direction: column; height: auto; padding: 1.5rem; }
+            .navbar-menu { margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; }
+            .news-grid { grid-template-columns: 1fr; }
+            .news-card.featured-mode { grid-template-columns: 1fr; display: flex; flex-direction: column; }
+            .news-card.featured-mode .card-img-wrap { height: 250px; }
+            .upcoming-card { flex-direction: column; }
+            .date-box { width: 100%; border-right: none; border-bottom: 1px solid #eee; flex-direction: row; gap: 15px; padding: 1rem; }
+            .date-day { font-size: 2rem; margin: 0; }
+            .past-event-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .past-date { border-right: none; margin-bottom: 5px; }
+            .footer-content { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li> 
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news_events.html" class="nav-link active">News & Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="course.html" class="nav-link">Courses</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-hero" id="page-hero">
+        <h1 class="hero-title" id="hero-title">News @ Tsinghua KEG</h1>
+        <p class="hero-subtitle" id="hero-subtitle">
+            Stay updated with the latest breakthroughs, academic activities, and community stories from Tsinghua KEG.
+        </p>
+    </header>
+
+    <div class="container main-toggle-wrapper">
+        <div class="main-toggle">
+            <div class="toggle-btn active" onclick="switchMainTab('news', this)">News</div>
+            <div class="toggle-btn" onclick="switchMainTab('events', this)">Events</div>
+        </div>
+    </div>
+
+    <section class="section-py" id="view-news">
+        <div class="container">
+            <div class="sub-filter-bar">
+                <div class="sub-filter-btn active" onclick="filterNewsSelection(this, 'all')">All</div>
+                <div class="sub-filter-btn" onclick="filterNewsSelection(this, 'research')">Research</div>
+                <div class="sub-filter-btn" onclick="filterNewsSelection(this, 'project')">Project</div>
+                <div class="sub-filter-btn" onclick="filterNewsSelection(this, 'awards')">Awards</div>
+                <div class="sub-filter-btn" onclick="filterNewsSelection(this, 'community')">Community</div>
+            </div>
+
+            <div id="featured-slot"></div>
+            <div class="news-grid" id="grid-slot"></div>
+            <div class="pagination" id="news-pagination"></div>
+        </div>
+    </section>
+
+    <section class="section-py hidden-view" id="view-events">
+        <div class="container" style="max-width: 1100px;">
+            <div class="event-filter">
+                <div class="evt-filter-item active" onclick="scrollToEventsSection('upcoming-section', this)">Upcoming</div>
+                <div class="evt-filter-item" onclick="scrollToEventsSection('past-section', this)">Past Events</div>
+            </div>
+            
+            <h2 id="upcoming-section" style="margin-bottom: 2rem; font-size: 1.5rem;">Upcoming Events</h2>
+            <div id="upcoming-slot"></div>
+            
+            <h2 id="past-section" style="margin-bottom: 2rem; font-size: 1.5rem; margin-top: 4rem;">Past Events</h2>
+            <div id="past-slot"></div>
+            
+            <div class="pagination" id="events-pagination"></div>
+        </div>
+    </section>
+
+    <div id="source-news" class="source-container">
+        <div class="news-card" data-category="research">
+            <div class="card-img-wrap"><img src="news_sec/glm-5.png" class="card-img"></div>
+            <div class="card-content">
+                <div class="news-meta"><span>Research</span> <span class="news-date">| Feb 12, 2026</span></div>
+                <h3 class="card-title">GLM-5: From Vibe Coding to Agentic Engineering</h3>
+                <p class="card-desc">We are proud to announce the release of GLM-5, targeting complex systems engineering and long-horizon agentic tasks.</p>
+                <a href="https://arxiv.org/pdf/2602.15763" class="read-more-btn">Read More <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+        <div class="news-card" data-category="research">
+            <div class="card-img-wrap"><img src="news_sec/glm-4.7.png" class="card-img"></div>
+            <div class="card-content">
+                <div class="news-meta"><span>Research</span> <span class="news-date">| Dec 12, 2025</span></div>
+                <h3 class="card-title">GLM-4.7: Advancing the Coding Capability</h3>
+                <p class="card-desc">We introduce the GLM-4.7, your new coding partner, is coming with the following features: Core Coding, Vibe Coding, Tool Using, and Complex Reasoning.</p>
+                <a href="https://z.ai/blog/glm-4.7" class="read-more-btn">Read More</a>
+            </div>
+        </div>
+        <div class="news-card" data-category="research">
+            <div class="card-img-wrap"><img src="news_sec/glm-4.6v.png" class="card-img"></div>
+            <div class="card-content">
+                <div class="news-meta"><span>Research</span> <span class="news-date">| Dec 8, 2025</span></div>
+                <h3 class="card-title">GLM-4.6V: Open Source Multimodal Models with Native Tool Use</h3>
+                <p class="card-desc">We officially introduce and open-source the GLM-4.6V series—our latest iteration in multimodal large language models.</p>
+                <a href="https://z.ai/blog/glm-4.6v" class="read-more-btn">Read More</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="source-upcoming" class="source-container">
+    </div>
+
+    <div id="source-past" class="source-container">
+        <div class="past-event-item">
+            <div class="past-date">Feb 11, 2026</div>
+            <div class="past-info">
+                <div class="past-title"><a href="event-detail.html?id=past-1">T^2-Bench: Evaluating ConversationalAgents in a Dual-Control Environment</a></div>
+                <div class="past-speaker">Speaker: Honghua Dong | Location: Online</div>
+            </div>
+        </div>
+        <div class="past-event-item">
+            <div class="past-date">Jan 20, 2026</div>
+            <div class="past-info">
+                <div class="past-title"><a href="event-detail.html?id=past-2">Test-Time Training</a></div>
+                <div class="past-speaker">Speaker: Yu Sun | Location: Online (Zoom)</div>
+            </div>
+        </div>
+        <div class="past-event-item">
+            <div class="past-date">Jan 12, 2026</div>
+            <div class="past-info">
+                <div class="past-title"><a href="event-detail.html?id=past-3">Titans + MIRAS: Helping AI Have Long-term Memory</a></div>
+                <div class="past-speaker">Speaker: Ali Behrouz | Location: Online</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="community-section">
+        <div class="community-container">
+            <h2 class="community-title">Join Our Community</h2>
+            <p class="community-desc">We invite researchers, students, and innovators to collaborate with us on the exciting area of Artificial General Intelligence.</p>
+            <div class="community-buttons">
+                <a href="subscribe_news.html" class="btn-community">Subscribe to Newsletter</a>
+                <a href="https://x.com/thukeg" class="btn-community">Follow KEG on X/Twitter</a>
+                <a href="join_us.html" class="btn-community">Join Our Lab</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h2>Tsinghua KEG</h2>
+                <p>Advancing the frontiers of Artificial General Intelligence (AGI) and empowering global academic discovery through AMiner.org.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Explore</h3>
+                <ul>
+                    <li><a href="people.html">People</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="news_events.html">News & Events</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Connect</h3>
+                <ul>
+                    <li><a href="https://github.com/thudm">GitHub</a></li>
+                    <li><a href="https://x.com/thukeg">Twitter / X</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li><a href="mailto:jas2015mine@163.com">Email Us</a></li>
+                    <li><a href="#" target="_blank">Location (FIT 1-308)</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>Copyright © 2026 Tsinghua KEG; all rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- 核心变量 ---
+        const newsCountPage1 = 7;     
+        const newsCountPageOther = 6; 
+        let newsCurrentPage = 1;
+        let newsCurrentCategory = 'all';
+
+        const eventsPerPage = 5; 
+        let eventsCurrentPage = 1;
+
+        // 🌟 1. 一级开关逻辑 (切换 News / Events 整个板块)
+        function switchMainTab(tab, btn) {
+            // 切换按钮状态
+            document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            const title = document.getElementById('hero-title');
+            const subtitle = document.getElementById('hero-subtitle');
+
+            if (tab === 'news') {
+                title.innerText = "News @ Tsinghua KEG";
+                subtitle.innerText = "Stay updated with the latest breakthroughs, academic activities, and community stories from Tsinghua KEG.";
+                document.getElementById('view-news').classList.remove('hidden-view');
+                document.getElementById('view-events').classList.add('hidden-view');
+            } else if (tab === 'events') {
+                title.innerText = "Events @ Tsinghua KEG";
+                subtitle.innerText = "Join our weekly seminars, workshops, and international conferences to engage with the forefront of AI research.";
+                document.getElementById('view-news').classList.add('hidden-view');
+                document.getElementById('view-events').classList.remove('hidden-view');
+            }
+        }
+
+        // 🌟 2. 二级筛选逻辑 (仅在 News 版块内生效)
+        function filterNewsSelection(btn, category) {
+            document.querySelectorAll(".sub-filter-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            
+            newsCurrentCategory = category;
+            newsCurrentPage = 1; 
+            renderNews();
+        }
+
+        // --- News 渲染逻辑 ---
+        function renderNews() {
+            const sourceContainer = document.getElementById('source-news');
+            const allItems = Array.from(sourceContainer.children);
+            const filteredItems = allItems.filter(item => {
+                const itemCat = item.getAttribute('data-category');
+                return newsCurrentCategory === 'all' || (itemCat && itemCat.includes(newsCurrentCategory));
+            });
+
+            let totalItems = filteredItems.length;
+            let totalPages = 1;
+            if (totalItems > newsCountPage1) {
+                let remainingItems = totalItems - newsCountPage1;
+                totalPages = 1 + Math.ceil(remainingItems / newsCountPageOther);
+            }
+
+            let startIndex, endIndex;
+            if (newsCurrentPage === 1) {
+                startIndex = 0; endIndex = newsCountPage1;
+            } else {
+                startIndex = newsCountPage1 + (newsCurrentPage - 2) * newsCountPageOther;
+                endIndex = startIndex + newsCountPageOther;
+            }
+            
+            const pageItems = filteredItems.slice(startIndex, endIndex);
+            const featuredSlot = document.getElementById('featured-slot');
+            const gridSlot = document.getElementById('grid-slot');
+            featuredSlot.innerHTML = '';
+            gridSlot.innerHTML = '';
+
+            if (pageItems.length > 0) {
+                if (newsCurrentPage === 1) {
+                    const featuredItem = pageItems[0].cloneNode(true);
+                    featuredItem.classList.add('featured-mode'); 
+                    featuredSlot.appendChild(featuredItem);
+                    featuredSlot.classList.remove('hidden-view');
+                    for (let i = 1; i < pageItems.length; i++) {
+                        gridSlot.appendChild(pageItems[i].cloneNode(true));
+                    }
+                } else {
+                    featuredSlot.classList.add('hidden-view');
+                    pageItems.forEach(item => gridSlot.appendChild(item.cloneNode(true)));
+                }
+            } else {
+                featuredSlot.classList.add('hidden-view');
+                gridSlot.innerHTML = '<p style="grid-column:1/-1; text-align:center; color:#999; padding:2rem;">No news found.</p>';
+            }
+            renderNewsPagination(totalPages);
+        }
+
+        function renderNewsPagination(totalPages) {
+            const container = document.getElementById('news-pagination');
+            container.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            if (newsCurrentPage > 1) {
+                const prevBtn = document.createElement('a');
+                prevBtn.className = "page-num";
+                prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prevBtn.onclick = () => { newsCurrentPage--; renderNews(); document.querySelector('.main-toggle-wrapper').scrollIntoView({ behavior: 'smooth' }); };
+                container.appendChild(prevBtn);
+            }
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('a');
+                btn.className = `page-num ${i === newsCurrentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { newsCurrentPage = i; renderNews(); document.querySelector('.main-toggle-wrapper').scrollIntoView({ behavior: 'smooth' }); };
+                container.appendChild(btn);
+            }
+            if (newsCurrentPage < totalPages) {
+                const nextBtn = document.createElement('a');
+                nextBtn.className = "page-num";
+                nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                nextBtn.onclick = () => { newsCurrentPage++; renderNews(); document.querySelector('.main-toggle-wrapper').scrollIntoView({ behavior: 'smooth' }); };
+                container.appendChild(nextBtn);
+            }
+        }
+
+        // --- Events 逻辑 ---
+        function scrollToEventsSection(sectionId, btn) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+            document.querySelectorAll('.evt-filter-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        function renderEventsUpcoming() {
+            const source = document.getElementById('source-upcoming');
+            const slot = document.getElementById('upcoming-slot');
+            slot.innerHTML = '';
+            const items = Array.from(source.children);
+            if(items.length > 0) {
+                items.forEach(item => slot.appendChild(item.cloneNode(true)));
+            } else {
+                slot.innerHTML = '<p style="color:#999;">No upcoming events at the moment.</p>';
+            }
+        }
+
+        function renderEventsPast() {
+            const source = document.getElementById('source-past');
+            const slot = document.getElementById('past-slot');
+            const items = Array.from(source.children);
+
+            const totalPages = Math.ceil(items.length / eventsPerPage);
+            const startIndex = (eventsCurrentPage - 1) * eventsPerPage;
+            const pageItems = items.slice(startIndex, startIndex + eventsPerPage);
+
+            slot.innerHTML = '';
+            if (pageItems.length > 0) {
+                pageItems.forEach(item => slot.appendChild(item.cloneNode(true)));
+            } else {
+                slot.innerHTML = '<p style="color:#999;">No past events found.</p>';
+            }
+            renderEventsPagination(totalPages);
+        }
+
+        function renderEventsPagination(totalPages) {
+            const container = document.getElementById('events-pagination');
+            container.innerHTML = '';
+            if (totalPages <= 1) return;
+
+            if (eventsCurrentPage > 1) {
+                const prev = document.createElement('a');
+                prev.className = 'page-num';
+                prev.innerHTML = '<i class="fas fa-chevron-left"></i>';
+                prev.onclick = () => { eventsCurrentPage--; renderEventsPast(); document.getElementById('past-section').scrollIntoView({behavior:'smooth'}); };
+                container.appendChild(prev);
+            }
+            for (let i = 1; i <= totalPages; i++) {
+                const btn = document.createElement('a');
+                btn.className = `page-num ${i === eventsCurrentPage ? 'active' : ''}`;
+                btn.innerText = i;
+                btn.onclick = () => { eventsCurrentPage = i; renderEventsPast(); document.getElementById('past-section').scrollIntoView({behavior:'smooth'}); };
+                container.appendChild(btn);
+            }
+            if (eventsCurrentPage < totalPages) {
+                const next = document.createElement('a');
+                next.className = 'page-num';
+                next.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                next.onclick = () => { eventsCurrentPage++; renderEventsPast(); document.getElementById('past-section').scrollIntoView({behavior:'smooth'}); };
+                container.appendChild(next);
+            }
+        }
+
+        // --- 初始化加载 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderNews();
+            renderEventsUpcoming();
+            renderEventsPast();
+        });
+    </script>
+</body>
+</html>

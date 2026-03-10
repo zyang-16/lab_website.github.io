@@ -158,9 +158,10 @@
         /* --- Blog Grid Layout --- */
         .blog-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            /* 核心修改：直接写死 3 列，每列均分宽度 (1fr) */
+            grid-template-columns: repeat(3, 1fr);
             gap: 30px;
-            margin-bottom: 3rem; /* 减小一点，留给分页 */
+            margin-bottom: 3rem; 
         }
 
         .blog-card {
@@ -287,9 +288,11 @@
             <li><a href="people.html" class="nav-link">People</a></li>
             <li><a href="research.html" class="nav-link">Research</a></li>
             <li><a href="publications.html" class="nav-link">Publications</a></li>
-            <li><a href="news.html" class="nav-link">News</a></li>
-            <li><a href="events.html" class="nav-link">Events</a></li>
+            <!-- <li><a href="news.html" class="nav-link">News & Events</a></li>
+            <li><a href="events.html" class="nav-link">Events</a></li> -->
+            <li><a href="news_events.html" class="nav-link">News & Events</a></li>
             <li><a href="blog.html" class="nav-link active">Blog</a></li>
+            <li><a href="course.html" class="nav-link">Courses</a></li>
             <li><a href="contact.html" class="nav-link">Contact</a></li>
             <li><a href="about.html" class="nav-link">About</a></li>
         </ul>
@@ -408,7 +411,7 @@
                 </div>
             </article>
 
-            <article class="blog-card" data-category="research">
+            <!-- <article class="blog-card" data-category="research">
                 <div class="blog-img-wrap"><img src="blog/VAEs-2.png" class="blog-img"></div>
                 <div class="blog-content">
                     <div class="meta-line"><span class="meta-tag">Research</span><span>Dec 5, 2025</span></div>
@@ -416,7 +419,7 @@
                     <p class="blog-excerpt"> We present a statistical analysis of video VAE latent spaces and identify two spectral properties essential for diffusion training: a spatio-temporal frequency spectrum biased toward low frequencies, and a channel-wise eigenspectrum dominated by a few modes. </p>
                     <div class="author-row"><span>CogVideo Team</span></div>
                 </div>
-            </article>
+            </article> -->
 
             <article class="blog-card" data-category="research">
                 <div class="blog-img-wrap"><img src="blog/glyph.png" class="blog-img"></div>
@@ -428,7 +431,7 @@
                 </div>
             </article>
 
-            <article class="blog-card" data-category="engineering">
+            <!-- <article class="blog-card" data-category="engineering">
                 <div class="blog-img-wrap"><img src="https://via.placeholder.com/400x250?text=Eng+2" class="blog-img"></div>
                 <div class="blog-content">
                     <div class="meta-line"><span class="meta-tag">Engineering</span><span>Jun 30, 2025</span></div>
@@ -476,7 +479,7 @@
                     <p class="blog-excerpt">Optimizing quantization for consumer-grade hardware.</p>
                     <div class="author-row"><span>System Group</span></div>
                 </div>
-            </article>
+            </article> -->
 
         </div>
         </div>

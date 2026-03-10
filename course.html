@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses & Projects | Tsinghua KEG</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* ================= 核心变量 ================= */
+        :root {
+            --tsinghua-purple: #660099; 
+            --academic-blue: #1a2b5e; 
+            --white: #FFFFFF;
+            --light-bg: #F9FAFB;
+            --text-main: #1d1d1f;
+            --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* ================= 全局重置 ================= */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: var(--font-primary); color: var(--text-main); line-height: 1.7; background-color: var(--light-bg); -webkit-font-smoothing: antialiased; }
+        a { text-decoration: none; transition: all 0.3s ease; }
+        ul { list-style: none; }
+
+        /* ================= 导航栏 (保持一致) ================= */
+        .navbar { background-color: var(--white); box-shadow: 0 1px 0 rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; padding: 0 2rem; height: 80px; display: flex; align-items: center; justify-content: space-between; }
+        .navbar-brand { font-size: 1.6rem; font-weight: 800; color: #000; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
+        .navbar-menu { display: flex; gap: 32px; }
+        .nav-link { color: #1d1d1f; font-weight: 500; font-size: 0.95rem; padding: 5px 0; position: relative; }
+        .nav-link:hover, .nav-link.active { color: var(--tsinghua-purple); }
+        .nav-link::after { content: ''; position: absolute; width: 0; height: 2px; bottom: 0; left: 0; background-color: var(--tsinghua-purple); transition: width 0.3s; }
+        .nav-link:hover::after, .nav-link.active::after { width: 100%; }
+
+        /* ================= Hero ================= */
+        .page-hero { background: linear-gradient(to bottom, rgba(102, 0, 153, 0.1), rgba(50, 0, 80, 0.2)), url('./banner06.jpg'); background-size: cover; background-position: center bottom; height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--white); text-align: center; }
+        .hero-title { font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem; text-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .hero-subtitle { font-size: 1.3rem; opacity: 0.95; font-weight: 300; max-width: 800px; line-height: 1.6; }
+
+        /* ================= 布局架构：侧边栏 + 内容区 ================= */
+        .course-layout { max-width: 1300px; margin: 4rem auto; padding: 0 2rem; display: flex; gap: 50px; align-items: flex-start; }
+
+        /* 左侧：固定的年份导航条 */
+        .sidebar-nav { flex: 0 0 200px; position: sticky; top: 120px; /* 距离顶部留出导航栏的空间 */ background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .sidebar-title { font-size: 1.1rem; font-weight: 800; color: var(--academic-blue); margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+        .year-link { display: block; padding: 10px 15px; color: #666; font-weight: 600; font-size: 1rem; border-radius: 6px; margin-bottom: 8px; transition: all 0.2s; }
+        .year-link:hover { background: #fdf5ff; color: var(--tsinghua-purple); }
+        .year-link.active { background: var(--tsinghua-purple); color: #fff; }
+
+        /* 右侧：历年内容流 */
+        .content-area { flex: 1; }
+        .year-section { margin-bottom: 5rem; scroll-margin-top: 100px; /* 防止被顶部导航栏挡住标题 */ }
+        .year-heading { font-size: 2.2rem; font-weight: 800; color: var(--academic-blue); border-bottom: 3px solid var(--tsinghua-purple); padding-bottom: 10px; margin-bottom: 2rem; display: inline-block; }
+
+        /* ================= 课程介绍卡片 ================= */
+        .course-info-card { background: #fff; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; border-left: 6px solid var(--tsinghua-purple); box-shadow: 0 5px 20px rgba(0,0,0,0.04); }
+        .course-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; color: #000; }
+        .course-meta { font-size: 0.95rem; color: #666; margin-bottom: 1rem; display: flex; gap: 20px; }
+        .course-meta i { color: var(--tsinghua-purple); margin-right: 5px; }
+        .course-desc { color: #555; font-size: 1rem; margin-bottom: 1.5rem; }
+        .btn-syllabus { padding: 8px 20px; background: #f0f0f0; color: #333; font-weight: 600; border-radius: 6px; font-size: 0.9rem; }
+        .btn-syllabus:hover { background: var(--tsinghua-purple); color: #fff; }
+
+        /* ================= 学生项目画廊 (Grid) ================= */
+        .projects-header { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; color: #333; display: flex; align-items: center; gap: 10px; }
+        .projects-header i { color: #FFD200; }
+        
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .project-card { background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #eee; transition: transform 0.3s, box-shadow 0.3s; }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        
+        .project-img-wrap { height: 160px; background: #f5f5f5; overflow: hidden; }
+        .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .project-card:hover .project-img { transform: scale(1.05); }
+        
+        .project-content { padding: 1.5rem; }
+        .project-title { font-size: 1.1rem; font-weight: 700; color: #000; margin-bottom: 8px; line-height: 1.3; }
+        .project-authors { font-size: 0.85rem; color: #888; margin-bottom: 15px; font-weight: 500; }
+        .project-links { display: flex; gap: 15px; }
+        .project-link { font-size: 0.9rem; font-weight: 600; color: var(--tsinghua-purple); }
+        .project-link:hover { text-decoration: underline; }
+
+        /* ================= 响应式 ================= */
+        @media (max-width: 900px) {
+            .course-layout { flex-direction: column; }
+            /* 手机端把左侧边栏变成横向滑动的标签栏 */
+            .sidebar-nav { flex: none; width: 100%; position: static; display: flex; overflow-x: auto; padding: 1rem; gap: 10px; white-space: nowrap; }
+            .sidebar-title { display: none; }
+            .year-link { margin-bottom: 0; background: #f0f0f0; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <img src="./keg.png" alt="Logo" style="height: 50px;">
+            <span style="color: var(--tsinghua-purple);">Tsinghua KEG</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="nav-link">Home</a></li>
+            <li><a href="people.html" class="nav-link">People</a></li>
+            <li><a href="research.html" class="nav-link">Research</a></li>
+            <li><a href="publications.html" class="nav-link">Publications</a></li>
+            <li><a href="news_events.html" class="nav-link">News & Events</a></li>
+            <li><a href="blog.html" class="nav-link">Blog</a></li>
+            <li><a href="course.html" class="nav-link active">Courses</a></li>
+            <li><a href="contact.html" class="nav-link">Contact</a></li>
+            <li><a href="about.html" class="nav-link">About</a></li>
+        </ul>
+    </nav>
+
+    <header class="page-hero">
+        <h1 class="hero-title">Teaching & Student Projects</h1>
+        <p class="hero-subtitle">Exploring our academic courses and the outstanding practical works built by our students.</p>
+    </header>
+
+    <div class="course-layout">
+        
+        <aside class="sidebar-nav">
+            <div class="sidebar-title">Archive</div>
+            <a href="#year-2025" class="year-link active" onclick="setActive(this)">2025 - 2026</a>
+            <a href="#year-2024" class="year-link" onclick="setActive(this)">2024 - 2025</a>
+            <a href="#year-2023" class="year-link" onclick="setActive(this)">2023 - 2024</a>
+        </aside>
+
+        <main class="content-area">
+
+            <section id="year-2025" class="year-section">
+                <h2 class="year-heading">2025 - 2026</h2>
+                
+                <div class="course-info-card">
+                    <h3 class="course-title">Data Mining: Principles and Algorithms</h3>
+                    <div class="course-meta">
+                        <span><i class="fas fa-chalkboard-teacher"></i> Instructor: Prof. Jie Tang</span>
+                        <span><i class="fas fa-calendar-alt"></i> Fall 2025</span>
+                    </div>
+                    <p class="course-desc">This course covers the fundamental concepts, algorithms, and systems in data mining and machine learning, with a strong emphasis on large language models and graph neural networks this semester.</p>
+                    <a href="#" class="btn-syllabus"><i class="fas fa-file-pdf"></i> Syllabus</a>
+                </div>
+
+                <h4 class="projects-header"><i class="fas fa-star"></i> Featured Student Projects</h4>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-img-wrap"><img src="https://via.placeholder.com/400x250?text=Project+Demo+1" class="project-img"></div>
+                        <div class="project-content">
+                            <h4 class="project-title">Multimodal Coding Agent UI</h4>
+                            <div class="project-authors">By: Rui Lu, Team A</div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
+                                <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i> Demo</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-img-wrap"><img src="https://via.placeholder.com/400x250?text=Project+Demo+2" class="project-img"></div>
+                        <div class="project-content">
+                            <h4 class="project-title">Graph-based Deep Search Tool</h4>
+                            <div class="project-authors">By: Student B, Student C</div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fab fa-github"></i> Code</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-img-wrap"><img src="https://via.placeholder.com/400x250?text=Project+Demo+3" class="project-img"></div>
+                        <div class="project-content">
+                            <h4 class="project-title">Video-to-Code Generator</h4>
+                            <div class="project-authors">By: Team C</div>
+                            <div class="project-links">
+                                <a href="#" class="project-link"><i class="fas fa-file-alt"></i> Report</a>
+                                <a href="#" class="project-link"><i class="fas fa-video"></i> Video</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="year-2024" class="year-section">
+                <h2 class="year-heading">2024 - 2025</h2>
+                
+                <div class="course-info-card">
+                    <h3 class="course-title">Social Network Analysis</h3>
+                    <div class="course-meta">
+                        <span><i class="fas fa-chalkboard-teacher"></i> Instructor: Prof. Jie Tang</span>
+                        <span><i class="fas fa-calendar-alt"></i> Spring 2024</span>
+                    </div>
+                    <p class="course-desc">An in-depth exploration of social network structures, information diffusion, and representation learning on graphs.</p>
+                </div>
+
+                <h4 class="projects-header"><i class="fas fa-star"></i> Featured Student Projects</h4>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-img-wrap"><img src="https://via.placeholder.com/400x250?text=Old+Project+1" class="project-img"></div>
+                        <div class="project-content">
+                            <h4 class="project-title">AMiner Author Disambiguation</h4>
+                            <div class="project-authors">By: Team D</div>
+                            <div class="project-links"><a href="#" class="project-link"><i class="fab fa-github"></i> Code</a></div>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-img-wrap"><img src="https://via.placeholder.com/400x250?text=Old+Project+2" class="project-img"></div>
+                        <div class="project-content">
+                            <h4 class="project-title">Network Influence Maximization</h4>
+                            <div class="project-authors">By: Student E</div>
+                            <div class="project-links"><a href="#" class="project-link"><i class="fas fa-file-pdf"></i> Poster</a></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script>
+        function setActive(clickedLink) {
+            document.querySelectorAll('.year-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            clickedLink.classList.add('active');
+        }
+    </script>
+</body>
+</html>
