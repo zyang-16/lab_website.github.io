@@ -540,10 +540,96 @@
 
         // --- 初始化加载 ---
         document.addEventListener('DOMContentLoaded', () => {
+            loadNewsFromAPI();
+            loadEventsFromAPI();
+        });
+
+        // --- API Integration (with fallback to static content) ---
+        async function loadNewsFromAPI() {
+            try {
+                var res = await fetch('/api/articles?type=news&limit=20');
+                if (!res.ok) throw new Error('API unavailable');
+                var data = await res.json();
+                if (!data.articles || data.articles.length === 0) throw new Error('No data');
+
+                // Replace source-news with API data
+                var sourceContainer = document.getElementById('source-news');
+                sourceContainer.innerHTML = '';
+
+                data.articles.forEach(function(article) {
+                    var card = document.createElement('div');
+                    card.className = 'news-card';
+                    card.setAttribute('data-category', article.category || 'general');
+                    card.innerHTML =
+                        '<div class="card-img-wrap">' + (article.cover_image ? '<img src="' + article.cover_image + '" class="card-img">' : '') + '</div>' +
+                        '<div class="card-content">' +
+                            '<div class="news-meta"><span>' + (article.category || 'General') + '</span> <span class="news-date">| ' +
+                            (article.published_at ? new Date(article.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '') + '</span></div>' +
+                            '<h3 class="card-title">' + article.title + '</h3>' +
+                            '<p class="card-desc">' + (article.excerpt || '') + '</p>' +
+                            '<a href="/api/articles/' + article.slug + '" class="read-more-btn">Read More <i class="fas fa-arrow-right"></i></a>' +
+                        '</div>';
+                    sourceContainer.appendChild(card);
+                });
+            } catch (err) {
+                console.log('News API not available, using static content');
+            }
             renderNews();
+        }
+
+        async function loadEventsFromAPI() {
+            try {
+                var res = await fetch('/api/events?limit=20');
+                if (!res.ok) throw new Error('API unavailable');
+                var data = await res.json();
+                if (!data.events || data.events.length === 0) throw new Error('No data');
+
+                var upcomingSource = document.getElementById('source-upcoming');
+                var pastSource = document.getElementById('source-past');
+                upcomingSource.innerHTML = '';
+                pastSource.innerHTML = '';
+
+                data.events.forEach(function(evt) {
+                    if (evt.is_upcoming) {
+                        var d = evt.event_date ? new Date(evt.event_date) : new Date();
+                        var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+                        var card = document.createElement('div');
+                        card.className = 'upcoming-card';
+                        card.innerHTML =
+                            '<div class="date-box">' +
+                                '<div class="date-month">' + months[d.getMonth()] + '</div>' +
+                                '<div class="date-day">' + d.getDate() + '</div>' +
+                                '<div class="date-year">' + d.getFullYear() + '</div>' +
+                            '</div>' +
+                            '<div class="event-content">' +
+                                '<div class="event-tags"><span class="tag ' + (evt.event_type || 'seminar') + '">' + (evt.event_type || 'Seminar') + '</span></div>' +
+                                '<h3 class="event-heading">' + evt.title + '</h3>' +
+                                '<div class="event-meta">' +
+                                    (evt.speaker ? '<span><i class="fas fa-user"></i>' + evt.speaker + '</span>' : '') +
+                                    (evt.location ? '<span><i class="fas fa-map-marker-alt"></i>' + evt.location + '</span>' : '') +
+                                '</div>' +
+                                (evt.description ? '<p>' + evt.description + '</p>' : '') +
+                            '</div>';
+                        upcomingSource.appendChild(card);
+                    } else {
+                        var item = document.createElement('div');
+                        item.className = 'past-event-item';
+                        var dateStr = evt.event_date ? new Date(evt.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+                        item.innerHTML =
+                            '<div class="past-date">' + dateStr + '</div>' +
+                            '<div class="past-info">' +
+                                '<div class="past-title">' + evt.title + '</div>' +
+                                '<div class="past-speaker">' + (evt.speaker ? 'Speaker: ' + evt.speaker : '') + (evt.location ? ' | Location: ' + evt.location : '') + '</div>' +
+                            '</div>';
+                        pastSource.appendChild(item);
+                    }
+                });
+            } catch (err) {
+                console.log('Events API not available, using static content');
+            }
             renderEventsUpcoming();
             renderEventsPast();
-        });
+        }
     </script>
 </body>
 </html>

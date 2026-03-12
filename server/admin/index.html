@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <span id="welcomeMsg"></span>
+      </div>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card"><div class="stat-value" id="statArticles">—</div><div class="stat-label">Published Articles</div></div>
+        <div class="stat-card"><div class="stat-value" id="statEvents">—</div><div class="stat-label">Upcoming Events</div></div>
+        <div class="stat-card"><div class="stat-value" id="statSubscribers">—</div><div class="stat-label">Subscribers</div></div>
+        <div class="stat-card"><div class="stat-value" id="statNewsletters">—</div><div class="stat-label">Newsletters Sent</div></div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:15px;">Recent Articles</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Type</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="recentArticles"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:15px;">Upcoming Events</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Speaker</th><th>Date</th><th>Type</th></tr></thead>
+            <tbody id="upcomingEvents"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    (async () => {
+      const me = await checkAuth();
+      document.getElementById('welcomeMsg').textContent = `Welcome, ${me.username}`;
+
+      // Load stats
+      const [articles, events, subs, nls] = await Promise.all([
+        api('/api/articles?limit=5'),
+        api('/api/events?upcoming=1&limit=5'),
+        api('/api/subscribers?limit=1'),
+        api('/api/newsletters?limit=1'),
+      ]);
+
+      document.getElementById('statArticles').textContent = articles.pagination.total;
+      document.getElementById('statEvents').textContent = events.pagination.total;
+      document.getElementById('statSubscribers').textContent = subs.pagination.total;
+      document.getElementById('statNewsletters').textContent = nls.pagination.total;
+
+      // Recent articles
+      const tbody1 = document.getElementById('recentArticles');
+      if (articles.articles.length === 0) {
+        tbody1.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;">No articles yet</td></tr>';
+      } else {
+        tbody1.innerHTML = articles.articles.map(a => `
+          <tr>
+            <td><a href="articles.html">${a.title}</a></td>
+            <td><span class="badge badge-info">${a.type}</span></td>
+            <td>${a.is_published ? '<span class="badge badge-success">Published</span>' : '<span class="badge badge-warning">Draft</span>'}</td>
+            <td>${formatDate(a.published_at || a.created_at)}</td>
+          </tr>
+        `).join('');
+      }
+
+      // Upcoming events
+      const tbody2 = document.getElementById('upcomingEvents');
+      if (events.events.length === 0) {
+        tbody2.innerHTML = '<tr><td colspan="4" style="text-align:center;color:#999;">No upcoming events</td></tr>';
+      } else {
+        tbody2.innerHTML = events.events.map(e => `
+          <tr>
+            <td>${e.title}</td>
+            <td>${e.speaker || '—'}</td>
+            <td>${formatDate(e.event_date)}</td>
+            <td><span class="badge badge-info">${e.event_type}</span></td>
+          </tr>
+        `).join('');
+      }
+    })();
+  </script>
+</body>
+</html>

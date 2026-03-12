@@ -1,0 +1,20 @@
+{
+  "name": "keg-website-server",
+  "version": "1.0.0",
+  "description": "Backend service for Tsinghua KEG website",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "init-db": "node db/init.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sql.js": "^1.10.0",
+    "bcryptjs": "^2.4.3",
+    "express-session": "^1.17.3",
+    "multer": "^1.4.5-lts.1",
+    "node-cron": "^3.0.3",
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
+    "dotenv": "^16.3.1"
+  }
+}

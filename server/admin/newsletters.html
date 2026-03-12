@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Newsletters | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html" class="active"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Newsletters</h1>
+        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> New Newsletter</button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Subject</th><th>Status</th><th>Scheduled</th><th>Sent</th><th>Actions</th></tr></thead>
+            <tbody id="newslettersList"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Newsletter</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="nlForm">
+        <input type="hidden" id="nlId">
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" class="form-control" id="nlSubject" required>
+        </div>
+        <div class="form-group">
+          <label>Body (HTML)</label>
+          <textarea class="form-control" id="nlBody" rows="12"></textarea>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Draft</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Schedule Modal -->
+  <div class="modal-overlay" id="scheduleModal">
+    <div class="modal" style="max-width:400px;">
+      <div class="modal-header">
+        <h2>Schedule Send</h2>
+        <button class="modal-close" onclick="document.getElementById('scheduleModal').classList.remove('active')">&times;</button>
+      </div>
+      <form id="scheduleForm">
+        <input type="hidden" id="scheduleNlId">
+        <div class="form-group">
+          <label>Send At (UTC)</label>
+          <input type="datetime-local" class="form-control" id="scheduleAt" required>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline" onclick="document.getElementById('scheduleModal').classList.remove('active')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Schedule</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    let currentPage = 1;
+
+    async function loadNewsletters(page = 1) {
+      currentPage = page;
+      const data = await api(`/api/newsletters?page=${page}&limit=10`);
+      const tbody = document.getElementById('newslettersList');
+
+      if (data.newsletters.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">No newsletters yet</td></tr>';
+      } else {
+        tbody.innerHTML = data.newsletters.map(n => {
+          const statusBadge = {
+            draft: '<span class="badge badge-warning">Draft</span>',
+            scheduled: '<span class="badge badge-info">Scheduled</span>',
+            sent: '<span class="badge badge-success">Sent</span>',
+          }[n.status];
+
+          const actions = n.status === 'sent'
+            ? '—'
+            : `<button class="btn btn-outline btn-sm" onclick="editNewsletter(${n.id})"><i class="fas fa-edit"></i></button>
+               <button class="btn btn-success btn-sm" onclick="sendNewsletter(${n.id})" title="Send Now"><i class="fas fa-paper-plane"></i></button>
+               <button class="btn btn-outline btn-sm" onclick="openSchedule(${n.id})" title="Schedule"><i class="fas fa-clock"></i></button>
+               <button class="btn btn-danger btn-sm" onclick="deleteNewsletter(${n.id})"><i class="fas fa-trash"></i></button>`;
+
+          return `<tr>
+            <td><strong>${n.subject}</strong></td>
+            <td>${statusBadge}</td>
+            <td>${formatDate(n.scheduled_at)}</td>
+            <td>${formatDate(n.sent_at)}</td>
+            <td>${actions}</td>
+          </tr>`;
+        }).join('');
+      }
+
+      renderPagination(document.getElementById('pagination'), data.pagination, loadNewsletters);
+    }
+
+    function openModal(nl = null) {
+      document.getElementById('modalTitle').textContent = nl ? 'Edit Newsletter' : 'New Newsletter';
+      document.getElementById('nlId').value = nl ? nl.id : '';
+      document.getElementById('nlSubject').value = nl ? nl.subject : '';
+      document.getElementById('nlBody').value = nl ? nl.body_html : '';
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('nlForm').reset();
+    }
+
+    async function editNewsletter(id) {
+      const nl = await api(`/api/newsletters/${id}`);
+      openModal(nl);
+    }
+
+    async function deleteNewsletter(id) {
+      if (!confirm('Delete this newsletter?')) return;
+      await api(`/api/newsletters/${id}`, { method: 'DELETE' });
+      toast('Newsletter deleted');
+      loadNewsletters(currentPage);
+    }
+
+    async function sendNewsletter(id) {
+      if (!confirm('Send this newsletter to all subscribers NOW?')) return;
+      try {
+        await api(`/api/newsletters/${id}/send`, { method: 'POST' });
+        toast('Newsletter sent!');
+        loadNewsletters(currentPage);
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    function openSchedule(id) {
+      document.getElementById('scheduleNlId').value = id;
+      document.getElementById('scheduleModal').classList.add('active');
+    }
+
+    document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('scheduleNlId').value;
+      const scheduled_at = document.getElementById('scheduleAt').value;
+      try {
+        await api(`/api/newsletters/${id}/schedule`, {
+          method: 'POST',
+          body: JSON.stringify({ scheduled_at: new Date(scheduled_at).toISOString() }),
+        });
+        toast('Newsletter scheduled');
+        document.getElementById('scheduleModal').classList.remove('active');
+        loadNewsletters(currentPage);
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    });
+
+    document.getElementById('nlForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('nlId').value;
+      const body = {
+        subject: document.getElementById('nlSubject').value,
+        body_html: document.getElementById('nlBody').value,
+      };
+
+      if (id) {
+        await api(`/api/newsletters/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        toast('Newsletter updated');
+      } else {
+        await api('/api/newsletters', { method: 'POST', body: JSON.stringify(body) });
+        toast('Newsletter created');
+      }
+
+      closeModal();
+      loadNewsletters(currentPage);
+    });
+
+    checkAuth().then(() => loadNewsletters());
+  </script>
+</body>
+</html>

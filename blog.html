@@ -553,8 +553,41 @@
         const itemsPerPage = 6; // 每页显示 6 篇
 
         document.addEventListener('DOMContentLoaded', () => {
-            render(); // 初始化渲染
+            loadBlogFromAPI();
         });
+
+        // --- API Integration ---
+        async function loadBlogFromAPI() {
+            try {
+                var res = await fetch('/api/articles?type=blog&limit=50');
+                if (!res.ok) throw new Error('API unavailable');
+                var data = await res.json();
+                if (!data.articles || data.articles.length === 0) throw new Error('No data');
+
+                var source = document.getElementById('source-pool');
+                source.innerHTML = '';
+
+                data.articles.forEach(function(article) {
+                    var card = document.createElement('div');
+                    card.className = 'blog-card';
+                    card.setAttribute('data-category', article.category || 'general');
+                    card.innerHTML =
+                        (article.cover_image ? '<div class="blog-img-wrap"><img src="' + article.cover_image + '" class="blog-img"></div>' : '<div class="blog-img-wrap"></div>') +
+                        '<div class="blog-body">' +
+                            '<div class="blog-meta">' +
+                                '<span class="blog-tag">' + (article.category || 'General') + '</span>' +
+                                '<span class="blog-date">' + (article.published_at ? new Date(article.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '') + '</span>' +
+                            '</div>' +
+                            '<h3 class="blog-heading">' + article.title + '</h3>' +
+                            '<p class="blog-excerpt">' + (article.excerpt || '') + '</p>' +
+                        '</div>';
+                    source.appendChild(card);
+                });
+            } catch (err) {
+                console.log('Blog API not available, using static content');
+            }
+            render();
+        }
 
         // --- 功能 1: 筛选 ---
         function filterBlog(element, category) {

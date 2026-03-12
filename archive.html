@@ -343,6 +343,64 @@
             alert("Comments are disabled for archives.");
             event.stopPropagation();
         }
+
+        // --- 5. API Integration ---
+        async function loadArchiveFromAPI() {
+            try {
+                var res = await fetch('/api/articles?type=weekly&limit=100');
+                if (!res.ok) return;
+                var data = await res.json();
+                if (!data.articles || data.articles.length === 0) return;
+
+                // Group articles by year
+                var byYear = {};
+                data.articles.forEach(function(article) {
+                    var year = article.published_at ? new Date(article.published_at).getFullYear() : 'Unknown';
+                    if (!byYear[year]) byYear[year] = [];
+                    byYear[year].push(article);
+                });
+
+                var container = document.querySelector('.archive-list');
+                if (!container) return;
+                container.innerHTML = '';
+
+                var years = Object.keys(byYear).sort(function(a, b) { return b - a; });
+                years.forEach(function(year) {
+                    var section = document.createElement('section');
+                    section.className = 'year-group';
+                    var h2 = document.createElement('h2');
+                    h2.className = 'year-label';
+                    h2.textContent = year;
+                    section.appendChild(h2);
+
+                    byYear[year].forEach(function(article) {
+                        var dateStr = article.published_at
+                            ? new Date(article.published_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).toUpperCase()
+                            : '';
+                        var el = document.createElement('article');
+                        el.className = 'archive-item';
+                        el.innerHTML =
+                            '<div class="item-main">' +
+                                '<a href="#" class="item-title">' + article.title + '</a>' +
+                                '<span class="item-desc">' + (article.excerpt || '') + '</span>' +
+                                '<div class="item-meta">' + dateStr + ' | Tsinghua KEG</div>' +
+                                '<div class="item-actions">' +
+                                    '<span class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">0</span></span>' +
+                                    '<span class="action-btn" onclick="handleShare(\'' + article.title.replace(/'/g, "\\'") + '\')"><i class="fas fa-share-nodes"></i> Share</span>' +
+                                '</div>' +
+                            '</div>' +
+                            (article.cover_image ? '<div class="item-thumb-box"><img src="' + article.cover_image + '" class="item-thumb" alt="Cover"></div>' : '');
+                        section.appendChild(el);
+                    });
+
+                    container.appendChild(section);
+                });
+            } catch (err) {
+                console.log('Archive API not available, using static content');
+            }
+        }
+
+        loadArchiveFromAPI();
     </script>
 
 </body>

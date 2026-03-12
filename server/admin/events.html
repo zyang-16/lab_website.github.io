@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html" class="active"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Events</h1>
+        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> New Event</button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Speaker</th><th>Date</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="eventsList"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Event</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="eventForm">
+        <input type="hidden" id="eventId">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" id="evtTitle" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Speaker</label>
+            <input type="text" class="form-control" id="evtSpeaker">
+          </div>
+          <div class="form-group">
+            <label>Location</label>
+            <input type="text" class="form-control" id="evtLocation">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Event Date</label>
+            <input type="datetime-local" class="form-control" id="evtDate">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="datetime-local" class="form-control" id="evtEndDate">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Type</label>
+          <select class="form-control" id="evtType">
+            <option value="seminar">Seminar</option>
+            <option value="workshop">Workshop</option>
+            <option value="conference">Conference</option>
+            <option value="lecture">Lecture</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" id="evtDescription" rows="4"></textarea>
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" id="evtUpcoming" checked> Upcoming</label>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    let currentPage = 1;
+
+    async function loadEvents(page = 1) {
+      currentPage = page;
+      const data = await api(`/api/events?page=${page}&limit=10`);
+      const tbody = document.getElementById('eventsList');
+
+      if (data.events.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">No events found</td></tr>';
+      } else {
+        tbody.innerHTML = data.events.map(e => `
+          <tr>
+            <td><strong>${e.title}</strong></td>
+            <td>${e.speaker || '—'}</td>
+            <td>${formatDate(e.event_date)}</td>
+            <td><span class="badge badge-info">${e.event_type}</span></td>
+            <td>${e.is_upcoming ? '<span class="badge badge-success">Upcoming</span>' : '<span class="badge badge-warning">Past</span>'}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="editEvent(${e.id})"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="deleteEvent(${e.id})"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      renderPagination(document.getElementById('pagination'), data.pagination, loadEvents);
+    }
+
+    function openModal(event = null) {
+      document.getElementById('modalTitle').textContent = event ? 'Edit Event' : 'New Event';
+      document.getElementById('eventId').value = event ? event.id : '';
+      document.getElementById('evtTitle').value = event ? event.title : '';
+      document.getElementById('evtSpeaker').value = event ? event.speaker : '';
+      document.getElementById('evtLocation').value = event ? event.location : '';
+      document.getElementById('evtDate').value = event && event.event_date ? event.event_date.slice(0, 16) : '';
+      document.getElementById('evtEndDate').value = event && event.event_end_date ? event.event_end_date.slice(0, 16) : '';
+      document.getElementById('evtType').value = event ? event.event_type : 'seminar';
+      document.getElementById('evtDescription').value = event ? event.description : '';
+      document.getElementById('evtUpcoming').checked = event ? !!event.is_upcoming : true;
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('eventForm').reset();
+    }
+
+    async function editEvent(id) {
+      const event = await api(`/api/events/${id}`);
+      openModal(event);
+    }
+
+    async function deleteEvent(id) {
+      if (!confirm('Delete this event?')) return;
+      await api(`/api/events/${id}`, { method: 'DELETE' });
+      toast('Event deleted');
+      loadEvents(currentPage);
+    }
+
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('eventId').value;
+      const body = {
+        title: document.getElementById('evtTitle').value,
+        speaker: document.getElementById('evtSpeaker').value,
+        location: document.getElementById('evtLocation').value,
+        event_date: document.getElementById('evtDate').value || null,
+        event_end_date: document.getElementById('evtEndDate').value || null,
+        event_type: document.getElementById('evtType').value,
+        description: document.getElementById('evtDescription').value,
+        is_upcoming: document.getElementById('evtUpcoming').checked,
+      };
+
+      if (id) {
+        await api(`/api/events/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        toast('Event updated');
+      } else {
+        await api('/api/events', { method: 'POST', body: JSON.stringify(body) });
+        toast('Event created');
+      }
+
+      closeModal();
+      loadEvents(currentPage);
+    });
+
+    checkAuth().then(() => loadEvents());
+  </script>
+</body>
+</html>

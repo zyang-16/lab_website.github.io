@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscribers | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="subscribers.html" class="active"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Subscribers</h1>
+        <button class="btn btn-outline" onclick="syncMailchimp()"><i class="fas fa-sync-alt"></i> Sync Mailchimp</button>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-value" id="statTotal">—</div><div class="stat-label">Total</div></div>
+        <div class="stat-card"><div class="stat-value" id="statActive">—</div><div class="stat-label">Active</div></div>
+        <div class="stat-card"><div class="stat-value" id="statUnsub">—</div><div class="stat-label">Unsubscribed</div></div>
+      </div>
+
+      <div class="card">
+        <div style="margin-bottom:15px;">
+          <select class="form-control" id="filterStatus" style="width:auto;" onchange="loadSubscribers()">
+            <option value="">All Status</option>
+            <option value="subscribed">Subscribed</option>
+            <option value="unsubscribed">Unsubscribed</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Email</th><th>Name</th><th>Status</th><th>Subscribed At</th><th>Mailchimp ID</th></tr></thead>
+            <tbody id="subscribersList"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    let currentPage = 1;
+
+    async function loadSubscribers(page = 1) {
+      currentPage = page;
+      const status = document.getElementById('filterStatus').value;
+      let url = `/api/subscribers?page=${page}&limit=20`;
+      if (status) url += `&status=${status}`;
+
+      const data = await api(url);
+      const tbody = document.getElementById('subscribersList');
+
+      if (data.subscribers.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:#999;">No subscribers found</td></tr>';
+      } else {
+        tbody.innerHTML = data.subscribers.map(s => `
+          <tr>
+            <td>${s.email}</td>
+            <td>${s.name || '—'}</td>
+            <td>${s.status === 'subscribed' ? '<span class="badge badge-success">Subscribed</span>' : '<span class="badge badge-danger">Unsubscribed</span>'}</td>
+            <td>${formatDate(s.subscribed_at)}</td>
+            <td style="font-size:0.75rem; color:#999;">${s.mailchimp_id || '—'}</td>
+          </tr>
+        `).join('');
+      }
+
+      renderPagination(document.getElementById('pagination'), data.pagination, loadSubscribers);
+    }
+
+    async function loadStats() {
+      const [all, active, unsub] = await Promise.all([
+        api('/api/subscribers?limit=1'),
+        api('/api/subscribers?status=subscribed&limit=1'),
+        api('/api/subscribers?status=unsubscribed&limit=1'),
+      ]);
+      document.getElementById('statTotal').textContent = all.pagination.total;
+      document.getElementById('statActive').textContent = active.pagination.total;
+      document.getElementById('statUnsub').textContent = unsub.pagination.total;
+    }
+
+    async function syncMailchimp() {
+      try {
+        const data = await api('/api/subscribers/sync', { method: 'POST' });
+        toast(`Synced ${data.synced} subscribers from Mailchimp`);
+        loadSubscribers(currentPage);
+        loadStats();
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    checkAuth().then(() => { loadSubscribers(); loadStats(); });
+  </script>
+</body>
+</html>

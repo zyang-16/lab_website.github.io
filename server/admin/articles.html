@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Articles | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html" class="active"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Articles</h1>
+        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> New Article</button>
+      </div>
+
+      <div class="card" style="margin-bottom:15px; display:flex; gap:10px; align-items:center;">
+        <select class="form-control" id="filterType" style="width:auto;" onchange="loadArticles()">
+          <option value="">All Types</option>
+          <option value="news">News</option>
+          <option value="blog">Blog</option>
+          <option value="weekly">Weekly</option>
+        </select>
+        <select class="form-control" id="filterCategory" style="width:auto;" onchange="loadArticles()">
+          <option value="">All Categories</option>
+          <option value="general">General</option>
+          <option value="research">Research</option>
+          <option value="announcement">Announcement</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Type</th><th>Category</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="articlesList"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Article</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="articleForm">
+        <input type="hidden" id="articleId">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" id="artTitle" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Type</label>
+            <select class="form-control" id="artType">
+              <option value="news">News</option>
+              <option value="blog">Blog</option>
+              <option value="weekly">Weekly</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control" id="artCategory">
+              <option value="general">General</option>
+              <option value="research">Research</option>
+              <option value="announcement">Announcement</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Excerpt</label>
+          <textarea class="form-control" id="artExcerpt" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Content (HTML)</label>
+          <textarea class="form-control" id="artContent" rows="8"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Cover Image</label>
+          <input type="file" id="artImageFile" accept="image/*" onchange="handleImageUpload(this)">
+          <input type="hidden" id="artCoverImage">
+          <img id="artImagePreview" style="max-height:100px; margin-top:8px; display:none; border-radius:4px;">
+        </div>
+        <div class="form-group">
+          <label><input type="checkbox" id="artPublished"> Published</label>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    let currentPage = 1;
+
+    async function loadArticles(page = 1) {
+      currentPage = page;
+      const type = document.getElementById('filterType').value;
+      const category = document.getElementById('filterCategory').value;
+      let url = `/api/articles?page=${page}&limit=10`;
+      if (type) url += `&type=${type}`;
+      if (category) url += `&category=${category}`;
+
+      const data = await api(url);
+      const tbody = document.getElementById('articlesList');
+
+      if (data.articles.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">No articles found</td></tr>';
+      } else {
+        tbody.innerHTML = data.articles.map(a => `
+          <tr>
+            <td style="max-width:300px;"><strong>${a.title}</strong></td>
+            <td><span class="badge badge-info">${a.type}</span></td>
+            <td>${a.category}</td>
+            <td>${a.is_published ? '<span class="badge badge-success">Published</span>' : '<span class="badge badge-warning">Draft</span>'}</td>
+            <td>${formatDate(a.published_at || a.created_at)}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="editArticle('${a.slug}')"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="deleteArticle(${a.id})"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      renderPagination(document.getElementById('pagination'), data.pagination, loadArticles);
+    }
+
+    function openModal(article = null) {
+      document.getElementById('modalTitle').textContent = article ? 'Edit Article' : 'New Article';
+      document.getElementById('articleId').value = article ? article.id : '';
+      document.getElementById('artTitle').value = article ? article.title : '';
+      document.getElementById('artType').value = article ? article.type : 'news';
+      document.getElementById('artCategory').value = article ? article.category : 'general';
+      document.getElementById('artExcerpt').value = article ? article.excerpt : '';
+      document.getElementById('artContent').value = article ? article.content : '';
+      document.getElementById('artCoverImage').value = article ? (article.cover_image || '') : '';
+      document.getElementById('artPublished').checked = article ? !!article.is_published : false;
+
+      const preview = document.getElementById('artImagePreview');
+      if (article && article.cover_image) {
+        preview.src = article.cover_image;
+        preview.style.display = 'block';
+      } else {
+        preview.style.display = 'none';
+      }
+
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('articleForm').reset();
+    }
+
+    async function editArticle(slug) {
+      const article = await api(`/api/articles/${slug}`);
+      openModal(article);
+    }
+
+    async function deleteArticle(id) {
+      if (!confirm('Delete this article?')) return;
+      await api(`/api/articles/${id}`, { method: 'DELETE' });
+      toast('Article deleted');
+      loadArticles(currentPage);
+    }
+
+    async function handleImageUpload(input) {
+      if (!input.files[0]) return;
+      try {
+        const url = await uploadImage(input.files[0]);
+        document.getElementById('artCoverImage').value = url;
+        const preview = document.getElementById('artImagePreview');
+        preview.src = url;
+        preview.style.display = 'block';
+        toast('Image uploaded');
+      } catch (err) {
+        toast(err.message, 'error');
+      }
+    }
+
+    document.getElementById('articleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('articleId').value;
+      const body = {
+        title: document.getElementById('artTitle').value,
+        type: document.getElementById('artType').value,
+        category: document.getElementById('artCategory').value,
+        excerpt: document.getElementById('artExcerpt').value,
+        content: document.getElementById('artContent').value,
+        cover_image: document.getElementById('artCoverImage').value,
+        is_published: document.getElementById('artPublished').checked,
+      };
+
+      if (id) {
+        await api(`/api/articles/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        toast('Article updated');
+      } else {
+        await api('/api/articles', { method: 'POST', body: JSON.stringify(body) });
+        toast('Article created');
+      }
+
+      closeModal();
+      loadArticles(currentPage);
+    });
+
+    checkAuth().then(() => loadArticles());
+  </script>
+</body>
+</html>

@@ -17,7 +17,7 @@
             --bg-body: #FFFFFF;
             --bg-accent: #F9F9F9;
             --border-color: #E6E6E6;
-            
+
             --font-ui: "Inter", sans-serif;
             --font-serif: "Merriweather", serif;
         }
@@ -46,7 +46,7 @@
             width: 100%; max-width: 1100px;
             display: flex; justify-content: space-between; align-items: center;
         }
-        
+
         .pub-logo {
             font-family: var(--font-ui);
             font-weight: 700; font-size: 1.1rem;
@@ -58,7 +58,7 @@
         .nav-actions { display: flex; align-items: center; gap: 15px; }
         .nav-link { font-size: 0.9rem; color: var(--text-gray); font-weight: 500; }
         .nav-link:hover { color: var(--brand-color); }
-        
+
         .btn-subscribe-sm {
             background: var(--brand-color); color: #fff;
             padding: 6px 16px; border-radius: 4px; font-weight: 600; font-size: 0.85rem;
@@ -74,7 +74,7 @@
         }
         .hero-title {
             font-family: var(--font-serif);
-            font-size: 3rem; font-weight: 900; 
+            font-size: 3rem; font-weight: 900;
             color: var(--brand-color);
             margin-bottom: 15px; line-height: 1.1;
         }
@@ -89,24 +89,23 @@
             gap: 60px; padding: 40px 20px;
         }
 
-        /* --- 👇 搜索 + 分享 组合栏样式 --- */
         .toolbar-wrapper {
             margin-bottom: 40px;
             display: flex;
-            gap: 12px; /* 搜索框和按钮之间的间距 */
+            gap: 12px;
         }
 
         .search-box {
             position: relative;
-            flex: 1; /* 搜索框占据剩余空间 */
+            flex: 1;
         }
 
         .search-input {
             width: 100%;
-            padding: 12px 15px 12px 42px; /* 左边留空给图标 */
+            padding: 12px 15px 12px 42px;
             font-size: 0.95rem;
             border: 1px solid var(--border-color);
-            border-radius: 50px; /* 圆角胶囊 */
+            border-radius: 50px;
             font-family: var(--font-ui);
             background-color: var(--bg-accent);
             transition: all 0.2s;
@@ -126,13 +125,13 @@
             padding: 0 24px;
             background: #fff;
             border: 1px solid var(--border-color);
-            border-radius: 50px; /* 圆角胶囊 */
+            border-radius: 50px;
             font-weight: 600;
             color: var(--text-gray);
             font-size: 0.9rem;
             display: flex; align-items: center; gap: 8px;
             transition: all 0.2s;
-            white-space: nowrap; /* 防止文字换行 */
+            white-space: nowrap;
         }
         .btn-toolbar-share:hover {
             border-color: var(--brand-color);
@@ -149,12 +148,12 @@
             transition: opacity 0.3s;
         }
         .post-card:last-child { border-bottom: none; }
-        
+
         .post-meta-top {
-            font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase; 
+            font-size: 0.8rem; color: var(--text-gray); text-transform: uppercase;
             letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600;
         }
-        
+
         .post-title {
             font-family: var(--font-serif);
             font-size: 1.6rem; font-weight: 700; color: #111;
@@ -167,14 +166,14 @@
             font-size: 1.05rem; color: #555; line-height: 1.6; margin-bottom: 15px;
             font-family: var(--font-serif);
         }
-        
+
         .post-footer {
             display: flex; align-items: center; justify-content: space-between;
             font-size: 0.9rem; color: var(--text-gray);
         }
 
         .post-byline {
-            font-size: 0.85rem; color: var(--text-gray); font-weight: 500; 
+            font-size: 0.85rem; color: var(--text-gray); font-weight: 500;
             text-transform: uppercase; letter-spacing: 0.5px;
         }
 
@@ -189,8 +188,8 @@
         .action-btn.liked i { font-weight: 900; }
 
         .featured-post .post-title { font-size: 2rem; }
-        .featured-img { 
-            width: 100%; height: 350px; object-fit: cover; border-radius: 8px; 
+        .featured-img {
+            width: 100%; height: 350px; object-fit: cover; border-radius: 8px;
             margin-bottom: 20px; border: 1px solid #eee;
         }
 
@@ -198,7 +197,7 @@
         .sidebar { padding-top: 10px; }
         .widget { margin-bottom: 40px; }
         .widget-title {
-            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; 
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase;
             letter-spacing: 1px; color: var(--text-gray); margin-bottom: 15px;
             border-bottom: 2px solid var(--brand-color); display: inline-block; padding-bottom: 4px;
         }
@@ -246,7 +245,7 @@
             <a href="index.html" class="pub-logo">
                 <i class="fas fa-chevron-left" style="font-size: 0.8rem; margin-right: 5px;"></i> Lab Home
             </a>
-            
+
             <div class="nav-actions">
                 <a href="archive.html" class="nav-link">Archive</a>
                 <a href="archive_about.html" class="nav-link">About</a>
@@ -264,21 +263,22 @@
     </header>
 
     <div class="container">
-        
-        <main class="post-list">
-            
+
+        <main class="post-list" id="postList">
+
             <div class="toolbar-wrapper">
                 <div class="search-box">
                     <i class="fas fa-search search-icon"></i>
                     <input type="text" id="weeklySearch" class="search-input" placeholder="Search articles..." onkeyup="filterPosts()">
                 </div>
-                
+
                 <button class="btn-toolbar-share" onclick="sharePage('The Agentic AI Weekly')" title="Share this page">
                     <i class="fas fa-share-nodes"></i> Share
                 </button>
             </div>
-            
-            <article class="post-card featured-post">
+
+            <!-- Static fallback articles (replaced by API data when available) -->
+            <article class="post-card featured-post" data-static>
                 <div class="post-meta-top">LATEST ISSUE · JAN 14, 2026</div>
                 <img src="https://via.placeholder.com/800x400?text=AgentBeats+Competition" class="featured-img" alt="Cover">
                 <h2 class="post-title">AgentBeats Phase 1 Deadline & New Benchmarks</h2>
@@ -295,7 +295,7 @@
                 </div>
             </article>
 
-            <article class="post-card">
+            <article class="post-card" data-static>
                 <div class="post-meta-top">ISSUE #41</div>
                 <h2 class="post-title">Prize Updates & Custom Tracks for OpenDev</h2>
                 <p class="post-excerpt">
@@ -311,7 +311,7 @@
                 </div>
             </article>
 
-            <article class="post-card">
+            <article class="post-card" data-static>
                 <div class="post-meta-top">YEAR IN REVIEW</div>
                 <h2 class="post-title">2025: A Year of Agentic Innovation</h2>
                 <p class="post-excerpt">
@@ -340,9 +340,11 @@
                     <p style="font-size:0.9rem; color:#555; margin-bottom:15px; line-height:1.4;">
                         Join 5,000+ researchers getting our weekly updates directly in their inbox.
                     </p>
-                    <form action="https://YOUR_LAB_MAILCHIMP_URL" method="POST" target="_blank">
-                        <input type="email" name="EMAIL" class="sub-input sidebar-input" placeholder="Type your email..." required>
-                        <button type="submit" class="sub-btn-full">Subscribe</button>
+
+                    <form id="subscribeForm" onsubmit="handleSubscribe(event)">
+                        <input type="email" class="sub-input sidebar-input" id="subEmail" placeholder="Type your email..." required>
+                        <button type="submit" class="sub-btn-full" id="subBtn">Subscribe</button>
+                        <div id="subMessage" style="font-size:0.85rem; margin-top:8px; display:none;"></div>
                     </form>
                 </div>
             </div>
@@ -365,19 +367,19 @@
         <div class="footer-nav">
             <a href="#">Subscribe</a>
         </div>
-        <p>© 2026 Tsinghua KEG. All rights reserved.</p>
+        <p>&copy; 2026 Tsinghua KEG. All rights reserved.</p>
         <p style="margin-top:10px; font-size:0.75rem; opacity:0.6;">Published with standalone pride.</p>
     </footer>
 
     <script>
         function filterPosts() {
-            const input = document.getElementById('weeklySearch');
-            const filter = input.value.toLowerCase();
-            const cards = document.querySelectorAll('.post-card');
+            var input = document.getElementById('weeklySearch');
+            var filter = input.value.toLowerCase();
+            var cards = document.querySelectorAll('.post-card');
 
-            cards.forEach(card => {
-                const title = card.querySelector('.post-title').innerText.toLowerCase();
-                const excerpt = card.querySelector('.post-excerpt').innerText.toLowerCase();
+            cards.forEach(function(card) {
+                var title = card.querySelector('.post-title').innerText.toLowerCase();
+                var excerpt = card.querySelector('.post-excerpt').innerText.toLowerCase();
                 if (title.includes(filter) || excerpt.includes(filter)) {
                     card.style.display = "flex";
                 } else {
@@ -387,9 +389,9 @@
         }
 
         function handleLike(btn) {
-            const icon = btn.querySelector('i');
-            const countSpan = btn.querySelector('.count');
-            let count = parseInt(countSpan.innerText);
+            var icon = btn.querySelector('i');
+            var countSpan = btn.querySelector('.count');
+            var count = parseInt(countSpan.innerText);
 
             if (btn.classList.contains('liked')) {
                 count--;
@@ -406,18 +408,91 @@
         }
 
         function handleComment() {
-            const userResponse = confirm("Join the discussion on our Discord channel?");
+            var userResponse = confirm("Join the discussion on our Discord channel?");
             if (userResponse) {
                 window.open("https://discord.gg/your-invite-code", "_blank");
             }
         }
 
         function sharePage(title) {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                alert(`🔗 Link copied!\nReady to share: "${title}"`);
+            var url = window.location.href;
+            navigator.clipboard.writeText(url).then(function() {
+                alert('Link copied! Ready to share: "' + title + '"');
             });
         }
+
+        // --- API Integration ---
+        async function handleSubscribe(e) {
+            e.preventDefault();
+            var email = document.getElementById('subEmail').value;
+            var btn = document.getElementById('subBtn');
+            var msg = document.getElementById('subMessage');
+
+            btn.disabled = true;
+            btn.textContent = 'Subscribing...';
+
+            try {
+                var res = await fetch('/api/subscribers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email }),
+                });
+                var data = await res.json();
+                msg.style.display = 'block';
+                msg.style.color = '#2e7d32';
+                msg.textContent = data.message || 'Subscribed successfully!';
+                document.getElementById('subEmail').value = '';
+            } catch (err) {
+                msg.style.display = 'block';
+                msg.style.color = '#c62828';
+                msg.textContent = 'Subscription failed. Please try again.';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Subscribe';
+            }
+        }
+
+        // Load weekly articles from API (falls back to static content)
+        async function loadArticlesFromAPI() {
+            try {
+                var res = await fetch('/api/articles?type=weekly&limit=5');
+                if (!res.ok) return;
+                var data = await res.json();
+                if (!data.articles || data.articles.length === 0) return;
+
+                // Remove static fallback articles
+                document.querySelectorAll('.post-card[data-static]').forEach(function(el) { el.remove(); });
+
+                var postList = document.getElementById('postList');
+                var archiveLink = postList.querySelector('div[style*="text-align"]');
+
+                data.articles.forEach(function(article, i) {
+                    var card = document.createElement('article');
+                    card.className = 'post-card' + (i === 0 ? ' featured-post' : '');
+                    var dateStr = article.published_at
+                        ? new Date(article.published_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }).toUpperCase()
+                        : '';
+                    var metaText = i === 0 ? 'LATEST ISSUE \u00B7 ' + dateStr : 'ISSUE #' + (data.pagination.total - i);
+                    var imgHtml = (i === 0 && article.cover_image) ? '<img src="' + article.cover_image + '" class="featured-img" alt="Cover">' : '';
+
+                    card.innerHTML =
+                        '<div class="post-meta-top">' + metaText + '</div>' + imgHtml +
+                        '<h2 class="post-title">' + article.title + '</h2>' +
+                        '<p class="post-excerpt">' + (article.excerpt || '') + '</p>' +
+                        '<div class="post-footer"><div class="post-byline">' + dateStr + ' | Tsinghua KEG</div>' +
+                        '<div class="post-actions"><button class="action-btn" onclick="handleLike(this)"><i class="far fa-heart"></i> <span class="count">0</span></button>' +
+                        '<button class="action-btn" onclick="sharePage(\'' + article.title.replace(/'/g, "\\'") + '\')"><i class="fas fa-share-nodes"></i> Share</button></div></div>';
+
+                    if (archiveLink) postList.insertBefore(card, archiveLink);
+                    else postList.appendChild(card);
+                });
+            } catch (err) {
+                // Silently fail, static content remains as fallback
+                console.log('API not available, using static content');
+            }
+        }
+
+        loadArticlesFromAPI();
     </script>
 
 </body>

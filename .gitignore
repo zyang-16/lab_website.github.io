@@ -1,0 +1,14 @@
+# Dependencies
+server/node_modules/
+
+# Environment
+server/.env
+
+# Database
+server/db/*.db
+
+# Uploads
+server/uploads/
+
+# OS
+.DS_Store
