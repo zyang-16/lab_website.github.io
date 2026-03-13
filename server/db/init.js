@@ -54,6 +54,35 @@ async function main() {
     console.log('Sample events seeded.');
   }
 
+  // Seed faculty
+  const peopleCount = db.prepare('SELECT COUNT(*) as cnt FROM people').get();
+  if (peopleCount.cnt === 0) {
+    const faculty = [
+      ['Juanzi Li', 'Professor', 'faculty', 'faculty/juanzi.png', '50% 0%', 'https://keg.cs.tsinghua.edu.cn/persons/ljz/', 1],
+      ['Jie Tang', 'Professor', 'faculty', 'faculty/jie.png', '50% 90%', 'https://keg.cs.tsinghua.edu.cn/jietang/', 2],
+      ['Bin Xu', 'Professor', 'faculty', 'faculty/bin.png', null, 'https://keg.cs.tsinghua.edu.cn/persons/xubin/', 3],
+      ['Yuxiao Dong', 'Associate Professor', 'faculty', 'faculty/yuxiao.png', '50% 60%', 'https://keg.cs.tsinghua.edu.cn/yuxiao/', 4],
+      ['Lei Hou', 'Associate Professor', 'faculty', 'faculty/lei.png', '20% 20%', null, 5],
+    ];
+    for (const f of faculty) {
+      db.prepare('INSERT INTO people (name, title, role, photo, photo_position, link, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)').run(...f);
+    }
+    console.log('Faculty seeded.');
+  }
+
+  // Seed recruitments
+  const recruitCount = db.prepare('SELECT COUNT(*) as cnt FROM recruitments').get();
+  if (recruitCount.cnt === 0) {
+    const positions = [
+      ['Postdoctoral Fellow: Quantization, Inference Infrastructure Optimization & GPU Optimization', 'postdoc', 'Research on quantization techniques, inference infrastructure optimization, and GPU kernel development for large language models.', 'tangjie@tsinghua.edu.cn', 1],
+      ['Postdoctoral Fellow: AI for Science & Academic Big Data', 'postdoc', 'Research on AI for scientific discovery and large-scale academic knowledge graph construction.', 'tangjie@tsinghua.edu.cn', 1],
+    ];
+    for (const p of positions) {
+      db.prepare('INSERT INTO recruitments (title, position_type, description, contact_email, is_featured) VALUES (?, ?, ?, ?, ?)').run(...p);
+    }
+    console.log('Recruitments seeded.');
+  }
+
   console.log('Database initialized successfully at:', config.dbPath);
 }
 

@@ -62,6 +62,40 @@ CREATE TABLE IF NOT EXISTS newsletters (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- People
+CREATE TABLE IF NOT EXISTS people (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  title TEXT,
+  role TEXT NOT NULL DEFAULT 'phd',
+  photo TEXT,
+  photo_position TEXT,
+  link TEXT,
+  supervisor TEXT,
+  email TEXT,
+  bio TEXT,
+  year_start INTEGER,
+  year_end INTEGER,
+  sort_order INTEGER DEFAULT 0,
+  is_active INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Recruitments
+CREATE TABLE IF NOT EXISTS recruitments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  position_type TEXT DEFAULT 'general',
+  description TEXT,
+  content_html TEXT,
+  contact_email TEXT,
+  is_featured INTEGER DEFAULT 0,
+  is_active INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_articles_type ON articles(type);
 CREATE INDEX IF NOT EXISTS idx_articles_slug ON articles(slug);
@@ -69,3 +103,7 @@ CREATE INDEX IF NOT EXISTS idx_articles_published ON articles(is_published);
 CREATE INDEX IF NOT EXISTS idx_events_upcoming ON events(is_upcoming);
 CREATE INDEX IF NOT EXISTS idx_subscribers_status ON subscribers(status);
 CREATE INDEX IF NOT EXISTS idx_newsletters_status ON newsletters(status);
+CREATE INDEX IF NOT EXISTS idx_people_role ON people(role);
+CREATE INDEX IF NOT EXISTS idx_people_active ON people(is_active);
+CREATE INDEX IF NOT EXISTS idx_recruitments_type ON recruitments(position_type);
+CREATE INDEX IF NOT EXISTS idx_recruitments_active ON recruitments(is_active);

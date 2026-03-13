@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recruitments | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="people.html"><i class="fas fa-user-friends"></i> People</a>
+        <a href="recruitments.html" class="active"><i class="fas fa-briefcase"></i> Recruitments</a>
+        <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Recruitments</h1>
+        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> New Position</button>
+      </div>
+
+      <div class="card" style="margin-bottom:15px; display:flex; gap:10px; align-items:center;">
+        <select class="form-control" id="filterType" style="width:auto;" onchange="loadRecruitments()">
+          <option value="">All Types</option>
+          <option value="student">Student</option>
+          <option value="postdoc">Postdoc</option>
+          <option value="featured">Featured</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Type</th><th>Featured</th><th>Active</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="recruitmentsList"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Position</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="recruitmentForm">
+        <input type="hidden" id="recId">
+        <div class="form-group">
+          <label>Title *</label>
+          <input type="text" class="form-control" id="recTitle" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Position Type</label>
+            <select class="form-control" id="recType">
+              <option value="general">General</option>
+              <option value="student">Student</option>
+              <option value="postdoc">Postdoc</option>
+              <option value="featured">Featured</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Contact Email</label>
+            <input type="email" class="form-control" id="recEmail">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" id="recDescription" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Content HTML</label>
+          <textarea class="form-control" id="recContentHtml" rows="8" placeholder="Full HTML content for the position..."></textarea>
+        </div>
+        <div style="display:flex; gap:20px;">
+          <div class="form-group">
+            <label><input type="checkbox" id="recFeatured"> Featured</label>
+          </div>
+          <div class="form-group">
+            <label><input type="checkbox" id="recActive" checked> Active</label>
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    let currentPage = 1;
+
+    async function loadRecruitments(page = 1) {
+      currentPage = page;
+      const type = document.getElementById('filterType').value;
+      let url = `/api/recruitments?page=${page}&limit=20`;
+      if (type) url += `&type=${type}`;
+
+      const data = await api(url);
+      const tbody = document.getElementById('recruitmentsList');
+
+      if (data.recruitments.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">No positions found</td></tr>';
+      } else {
+        tbody.innerHTML = data.recruitments.map(r => `
+          <tr>
+            <td style="max-width:350px;"><strong>${r.title}</strong></td>
+            <td><span class="badge badge-info">${r.position_type}</span></td>
+            <td>${r.is_featured ? '<span class="badge badge-success">Yes</span>' : '—'}</td>
+            <td>${r.is_active ? '<span class="badge badge-success">Yes</span>' : '<span class="badge badge-warning">No</span>'}</td>
+            <td>${formatDate(r.created_at)}</td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="editRecruitment(${r.id})"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="deleteRecruitment(${r.id})"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      renderPagination(document.getElementById('pagination'), data.pagination, loadRecruitments);
+    }
+
+    function openModal(recruitment = null) {
+      document.getElementById('modalTitle').textContent = recruitment ? 'Edit Position' : 'New Position';
+      document.getElementById('recId').value = recruitment ? recruitment.id : '';
+      document.getElementById('recTitle').value = recruitment ? recruitment.title : '';
+      document.getElementById('recType').value = recruitment ? recruitment.position_type : 'general';
+      document.getElementById('recEmail').value = recruitment ? (recruitment.contact_email || '') : '';
+      document.getElementById('recDescription').value = recruitment ? (recruitment.description || '') : '';
+      document.getElementById('recContentHtml').value = recruitment ? (recruitment.content_html || '') : '';
+      document.getElementById('recFeatured').checked = recruitment ? !!recruitment.is_featured : false;
+      document.getElementById('recActive').checked = recruitment ? !!recruitment.is_active : true;
+
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('recruitmentForm').reset();
+    }
+
+    async function editRecruitment(id) {
+      const recruitment = await api(`/api/recruitments/${id}`);
+      openModal(recruitment);
+    }
+
+    async function deleteRecruitment(id) {
+      if (!confirm('Delete this position?')) return;
+      await api(`/api/recruitments/${id}`, { method: 'DELETE' });
+      toast('Position deleted');
+      loadRecruitments(currentPage);
+    }
+
+    document.getElementById('recruitmentForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('recId').value;
+      const body = {
+        title: document.getElementById('recTitle').value,
+        position_type: document.getElementById('recType').value,
+        contact_email: document.getElementById('recEmail').value,
+        description: document.getElementById('recDescription').value,
+        content_html: document.getElementById('recContentHtml').value,
+        is_featured: document.getElementById('recFeatured').checked,
+        is_active: document.getElementById('recActive').checked,
+      };
+
+      if (id) {
+        await api(`/api/recruitments/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        toast('Position updated');
+      } else {
+        await api('/api/recruitments', { method: 'POST', body: JSON.stringify(body) });
+        toast('Position created');
+      }
+
+      closeModal();
+      loadRecruitments(currentPage);
+    });
+
+    checkAuth().then(() => loadRecruitments());
+  </script>
+</body>
+</html>

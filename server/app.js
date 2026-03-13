@@ -48,6 +48,8 @@ async function startServer() {
   app.use('/api', require('./routes/api-events'));
   app.use('/api', require('./routes/api-subscribers'));
   app.use('/api', require('./routes/api-newsletters'));
+  app.use('/api', require('./routes/api-people'));
+  app.use('/api', require('./routes/api-recruitments'));
   app.use('/api', require('./routes/api-upload'));
 
   // Start scheduler

@@ -16,6 +16,8 @@
         <a href="index.html" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
         <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
         <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="people.html"><i class="fas fa-user-friends"></i> People</a>
+        <a href="recruitments.html"><i class="fas fa-briefcase"></i> Recruitments</a>
         <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
         <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
         <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
@@ -34,6 +36,8 @@
         <div class="stat-card"><div class="stat-value" id="statEvents">—</div><div class="stat-label">Upcoming Events</div></div>
         <div class="stat-card"><div class="stat-value" id="statSubscribers">—</div><div class="stat-label">Subscribers</div></div>
         <div class="stat-card"><div class="stat-value" id="statNewsletters">—</div><div class="stat-label">Newsletters Sent</div></div>
+        <div class="stat-card"><div class="stat-value" id="statPeople">—</div><div class="stat-label">People</div></div>
+        <div class="stat-card"><div class="stat-value" id="statRecruitments">—</div><div class="stat-label">Active Recruitments</div></div>
       </div>
 
       <div class="card">
@@ -65,17 +69,21 @@
       document.getElementById('welcomeMsg').textContent = `Welcome, ${me.username}`;
 
       // Load stats
-      const [articles, events, subs, nls] = await Promise.all([
+      const [articles, events, subs, nls, people, recruitments] = await Promise.all([
         api('/api/articles?limit=5'),
         api('/api/events?upcoming=1&limit=5'),
         api('/api/subscribers?limit=1'),
         api('/api/newsletters?limit=1'),
+        api('/api/people?limit=1'),
+        api('/api/recruitments?active=1&limit=1'),
       ]);
 
       document.getElementById('statArticles').textContent = articles.pagination.total;
       document.getElementById('statEvents').textContent = events.pagination.total;
       document.getElementById('statSubscribers').textContent = subs.pagination.total;
       document.getElementById('statNewsletters').textContent = nls.pagination.total;
+      document.getElementById('statPeople').textContent = people.pagination.total;
+      document.getElementById('statRecruitments').textContent = recruitments.pagination.total;
 
       // Recent articles
       const tbody1 = document.getElementById('recentArticles');
