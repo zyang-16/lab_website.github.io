@@ -276,14 +276,84 @@
         </p>
     </header>
 
-    <div class="container">
+    <div class="container" id="publicationsContainer">
+        <p style="text-align:center; padding:3rem; color:#999;">Loading publications...</p>
+    </div>
 
-        <div class="pub-category-wrapper">
-            <h2 class="category-main-title">Journal Publications</h2>
+    <script>
+    (async function() {
+      try {
+        const res = await fetch('/api/publications?limit=200');
+        const data = await res.json();
+        const pubs = data.publications;
 
-            <div class="year-section">
+        // Group by category then by year
+        const categoryOrder = ['journal', 'conference', 'prior'];
+        const categoryLabels = { journal: 'Journal Publications', conference: 'Conference Publications', prior: 'Selected Prior Work' };
+        const categoryIcons = { journal: 'fa-file-alt', conference: 'fa-network-wired', prior: 'fa-star' };
 
-                <div class="year-header"><span>2025</span></div>
+        let html = '';
+        for (const cat of categoryOrder) {
+          const catPubs = pubs.filter(p => p.category === cat);
+          if (catPubs.length === 0) continue;
+
+          html += `<div class="pub-category-wrapper"${cat !== 'journal' ? ' style="margin-top: 5rem;"' : ''}>`;
+          html += `<h2 class="category-main-title">${categoryLabels[cat]}</h2>`;
+
+          if (cat === 'prior') {
+            // Prior work: no year grouping
+            html += '<div class="year-section">';
+            html += '<div class="year-header"><span>Selected Prior Work</span></div>';
+            catPubs.forEach(p => { html += renderPub(p, categoryIcons[cat]); });
+            html += '</div>';
+          } else {
+            // Group by year descending
+            const years = [...new Set(catPubs.map(p => p.year))].sort((a, b) => b - a);
+            html += '<div class="year-section">';
+            for (const yr of years) {
+              const label = yr > new Date().getFullYear() ? yr + ' / In Press' : String(yr);
+              html += `<div class="year-header"><span>${label}</span></div>`;
+              catPubs.filter(p => p.year === yr).forEach(p => { html += renderPub(p, categoryIcons[cat]); });
+            }
+            html += '</div>';
+          }
+          html += '</div>';
+        }
+
+        document.getElementById('publicationsContainer').innerHTML = html;
+      } catch (err) {
+        document.getElementById('publicationsContainer').innerHTML = '<p style="text-align:center; padding:3rem; color:#c00;">Failed to load publications.</p>';
+      }
+
+      function renderPub(p, icon) {
+        const pdfLink = p.pdf_url ? `<a href="${esc(p.pdf_url)}"><i class="far fa-file-pdf"></i> PDF</a>` : '';
+        const codeLink = p.code_url ? `<a href="${esc(p.code_url)}"><i class="fab fa-github"></i> Code</a>` : '';
+        const tierClass = p.venue_tier === 'top-tier' ? 'top-tier' : (p.venue_tier === 'ai-tier' ? 'ai-tier' : '');
+        return `
+          <div class="pub-item">
+            <div class="pub-img-wrap"><i class="fas ${icon}"></i></div>
+            <div class="pub-content">
+              <div class="pub-heading">
+                ${p.pdf_url ? `<a href="${esc(p.pdf_url)}">${esc(p.title)}</a>` : esc(p.title)}
+              </div>
+              <div class="pub-authors"><b>${esc(p.authors)}</b></div>
+              <div class="pub-meta">
+                <span class="venue-badge ${tierClass}">${esc(p.venue)}</span>
+                <div class="pub-links">${pdfLink}${codeLink}</div>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      function esc(s) {
+        if (!s) return '';
+        return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+    })();
+    </script>
+
+    <!-- Keep below for reference, replaced by dynamic loading above
+    <div class="container-static-removed">
                 
                     <div class="pub-item">
                         <div class="pub-img-wrap">
@@ -1054,6 +1124,7 @@
         </div>
 
     </div>
+    end of static removed -->
 
 
     <section class="community-section">

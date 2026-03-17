@@ -96,6 +96,23 @@ CREATE TABLE IF NOT EXISTS recruitments (
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Publications
+CREATE TABLE IF NOT EXISTS publications (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  title TEXT NOT NULL,
+  authors TEXT NOT NULL,
+  venue TEXT,
+  year INTEGER NOT NULL,
+  category TEXT NOT NULL DEFAULT 'conference' CHECK(category IN ('journal','conference','prior')),
+  venue_tier TEXT DEFAULT 'normal' CHECK(venue_tier IN ('top-tier','ai-tier','normal')),
+  pdf_url TEXT,
+  code_url TEXT,
+  sort_order INTEGER DEFAULT 0,
+  is_active INTEGER DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Indexes
 CREATE INDEX IF NOT EXISTS idx_articles_type ON articles(type);
 CREATE INDEX IF NOT EXISTS idx_articles_slug ON articles(slug);
@@ -107,3 +124,6 @@ CREATE INDEX IF NOT EXISTS idx_people_role ON people(role);
 CREATE INDEX IF NOT EXISTS idx_people_active ON people(is_active);
 CREATE INDEX IF NOT EXISTS idx_recruitments_type ON recruitments(position_type);
 CREATE INDEX IF NOT EXISTS idx_recruitments_active ON recruitments(is_active);
+CREATE INDEX IF NOT EXISTS idx_publications_category ON publications(category);
+CREATE INDEX IF NOT EXISTS idx_publications_year ON publications(year);
+CREATE INDEX IF NOT EXISTS idx_publications_active ON publications(is_active);

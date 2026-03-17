@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publications | KEG Admin</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <nav class="sidebar">
+      <div class="sidebar-logo"><span>KEG</span> Admin</div>
+      <div class="sidebar-nav">
+        <a href="index.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        <a href="articles.html"><i class="fas fa-newspaper"></i> Articles</a>
+        <a href="events.html"><i class="fas fa-calendar-alt"></i> Events</a>
+        <a href="people.html"><i class="fas fa-user-friends"></i> People</a>
+        <a href="publications.html" class="active"><i class="fas fa-book"></i> Publications</a>
+        <a href="recruitments.html"><i class="fas fa-briefcase"></i> Recruitments</a>
+        <a href="subscribers.html"><i class="fas fa-users"></i> Subscribers</a>
+        <a href="newsletters.html"><i class="fas fa-envelope"></i> Newsletters</a>
+        <a href="/" target="_blank"><i class="fas fa-external-link-alt"></i> View Site</a>
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+    </nav>
+
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Publications</h1>
+        <button class="btn btn-primary" onclick="openModal()"><i class="fas fa-plus"></i> New Publication</button>
+      </div>
+
+      <div class="card" style="margin-bottom:15px; display:flex; gap:10px; align-items:center;">
+        <select class="form-control" id="filterCategory" style="width:auto;" onchange="loadPublications()">
+          <option value="">All Categories</option>
+          <option value="journal">Journal</option>
+          <option value="conference">Conference</option>
+          <option value="prior">Selected Prior Work</option>
+        </select>
+        <select class="form-control" id="filterYear" style="width:auto;" onchange="loadPublications()">
+          <option value="">All Years</option>
+        </select>
+        <input type="text" class="form-control" id="searchInput" placeholder="Search..." style="width:200px;" onkeyup="if(event.key==='Enter')loadPublications()">
+        <button class="btn btn-outline btn-sm" onclick="loadPublications()"><i class="fas fa-search"></i></button>
+      </div>
+
+      <div class="card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Title</th><th>Authors</th><th>Venue</th><th>Year</th><th>Category</th><th>Actions</th></tr></thead>
+            <tbody id="pubList"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">New Publication</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="pubForm">
+        <input type="hidden" id="pubId">
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" class="form-control" id="pubTitleInput" required>
+        </div>
+        <div class="form-group">
+          <label>Authors</label>
+          <textarea class="form-control" id="pubAuthors" rows="2" required></textarea>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Venue</label>
+            <input type="text" class="form-control" id="pubVenue">
+          </div>
+          <div class="form-group">
+            <label>Year</label>
+            <input type="number" class="form-control" id="pubYear" min="1990" max="2030">
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Category</label>
+            <select class="form-control" id="pubCategory">
+              <option value="journal">Journal</option>
+              <option value="conference">Conference</option>
+              <option value="prior">Selected Prior Work</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Venue Tier</label>
+            <select class="form-control" id="pubTier">
+              <option value="top-tier">Top Tier</option>
+              <option value="ai-tier">AI Tier</option>
+              <option value="normal">Normal</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>PDF URL</label>
+            <input type="url" class="form-control" id="pubPdf">
+          </div>
+          <div class="form-group">
+            <label>Code URL</label>
+            <input type="url" class="form-control" id="pubCode">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Sort Order</label>
+          <input type="number" class="form-control" id="pubSort" value="0">
+        </div>
+        <div style="display:flex; gap:10px; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+  <script>
+    let currentPage = 1;
+
+    // Populate year filter
+    const yearSelect = document.getElementById('filterYear');
+    const currentYear = new Date().getFullYear();
+    for (let y = currentYear + 1; y >= 2000; y--) {
+      yearSelect.innerHTML += `<option value="${y}">${y}</option>`;
+    }
+
+    async function loadPublications(page = 1) {
+      currentPage = page;
+      const category = document.getElementById('filterCategory').value;
+      const year = document.getElementById('filterYear').value;
+      const search = document.getElementById('searchInput').value;
+      let url = `/api/publications?page=${page}&limit=20`;
+      if (category) url += `&category=${category}`;
+      if (year) url += `&year=${year}`;
+      if (search) url += `&search=${encodeURIComponent(search)}`;
+
+      const data = await api(url);
+      const tbody = document.getElementById('pubList');
+
+      if (data.publications.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#999;">No publications found</td></tr>';
+      } else {
+        tbody.innerHTML = data.publications.map(p => `
+          <tr>
+            <td style="max-width:300px;"><strong>${escapeHtml(p.title)}</strong></td>
+            <td style="max-width:200px; font-size:0.85em;">${escapeHtml(p.authors).substring(0, 80)}...</td>
+            <td><span class="badge badge-info">${escapeHtml(p.venue)}</span></td>
+            <td>${p.year}</td>
+            <td><span class="badge badge-success">${p.category}</span></td>
+            <td>
+              <button class="btn btn-outline btn-sm" onclick="editPub(${p.id})"><i class="fas fa-edit"></i></button>
+              <button class="btn btn-danger btn-sm" onclick="deletePub(${p.id})"><i class="fas fa-trash"></i></button>
+            </td>
+          </tr>
+        `).join('');
+      }
+
+      renderPagination(document.getElementById('pagination'), data.pagination, loadPublications);
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    function openModal(pub = null) {
+      document.getElementById('modalTitle').textContent = pub ? 'Edit Publication' : 'New Publication';
+      document.getElementById('pubId').value = pub ? pub.id : '';
+      document.getElementById('pubTitleInput').value = pub ? pub.title : '';
+      document.getElementById('pubAuthors').value = pub ? pub.authors : '';
+      document.getElementById('pubVenue').value = pub ? pub.venue : '';
+      document.getElementById('pubYear').value = pub ? pub.year : currentYear;
+      document.getElementById('pubCategory').value = pub ? pub.category : 'conference';
+      document.getElementById('pubTier').value = pub ? pub.venue_tier : 'top-tier';
+      document.getElementById('pubPdf').value = pub ? (pub.pdf_url || '') : '';
+      document.getElementById('pubCode').value = pub ? (pub.code_url || '') : '';
+      document.getElementById('pubSort').value = pub ? pub.sort_order : 0;
+      document.getElementById('modalOverlay').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('modalOverlay').classList.remove('active');
+      document.getElementById('pubForm').reset();
+    }
+
+    async function editPub(id) {
+      const pub = await api(`/api/publications/${id}`);
+      openModal(pub);
+    }
+
+    async function deletePub(id) {
+      if (!confirm('Delete this publication?')) return;
+      await api(`/api/publications/${id}`, { method: 'DELETE' });
+      toast('Publication deleted');
+      loadPublications(currentPage);
+    }
+
+    document.getElementById('pubForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('pubId').value;
+      const body = {
+        title: document.getElementById('pubTitleInput').value,
+        authors: document.getElementById('pubAuthors').value,
+        venue: document.getElementById('pubVenue').value,
+        year: parseInt(document.getElementById('pubYear').value),
+        category: document.getElementById('pubCategory').value,
+        venue_tier: document.getElementById('pubTier').value,
+        pdf_url: document.getElementById('pubPdf').value,
+        code_url: document.getElementById('pubCode').value,
+        sort_order: parseInt(document.getElementById('pubSort').value),
+      };
+
+      if (id) {
+        await api(`/api/publications/${id}`, { method: 'PUT', body: JSON.stringify(body) });
+        toast('Publication updated');
+      } else {
+        await api('/api/publications', { method: 'POST', body: JSON.stringify(body) });
+        toast('Publication created');
+      }
+
+      closeModal();
+      loadPublications(currentPage);
+    });
+
+    checkAuth().then(() => loadPublications());
+  </script>
+</body>
+</html>
